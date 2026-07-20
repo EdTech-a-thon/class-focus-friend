@@ -25,7 +25,7 @@ The hackathon version of Class Focus Friend will include:
 * [ ] Focus session timer
 * [ ] Session setup controls
 * [ ] Classroom noise meter
-* [ ] Classroom pet
+* [ ] Classroom focus friend
 * [ ] Points system
 * [ ] Reward shop
 * [ ] Session history
@@ -43,7 +43,7 @@ components/
     Timer/
     SessionSetup/
     NoiseMeter/
-    ClassroomPet/
+    Classroomfocus friend/
     PointsDisplay/
     RewardShop/
     SessionCompleteModal/
@@ -78,7 +78,7 @@ CLASS FOCUS FRIEND
 
         15:00
 
-      Classroom Pet
+      Classroom focus friend
 
        Points: 40
 
@@ -187,9 +187,9 @@ AnalyserNode
 
 ---
 
-## 🐾 Classroom Pet Component
+## 🐾 Classroom focus friend Component
 
-The classroom pet is the primary gamification mechanic.
+The classroom focus friend is the primary gamification mechanic.
 
 ### Responsibilities
 
@@ -199,14 +199,14 @@ The classroom pet is the primary gamification mechanic.
 
 ### MVP Assets
 
-* 3 pet bodies
+* 3 focus friend bodies
 * 3 hats
 * 3 accessories
 
 Example:
 
 ```javascript
-const pet = {
+const focus friend = {
     hat: "party-hat",
     accessory: "glasses"
 }
@@ -350,7 +350,7 @@ Points are awarded
         ↓
 Teacher unlocks classroom rewards
         ↓
-Classroom pet gets new accessories
+Classroom focus friend gets new accessories
         ↓
 Session is saved to history
 ```
@@ -383,10 +383,11 @@ Session is saved to history
 
 ---
 
-### Phase 4: Classroom Pet
+### Phase 4: Classroom focus friend
 
-* [ ] Build pet component
+* [ ] Build focus friend component
 * [ ] Add cosmetic accessories
+* [ ] Add initial environment - house
 * [ ] Add equip functionality
 
 ---
@@ -396,6 +397,7 @@ Session is saved to history
 * [ ] Create reward data
 * [ ] Implement purchasing logic
 * [ ] Display unlocked items
+* [ ] House decor
 
 ---
 
@@ -437,6 +439,7 @@ Ideas for future versions of Class Focus Friend:
 * Shared classroom progress across devices
 * Exportable classroom reports
 * Accessibility improvements
+* Expanded shop offerings - new locations
 
 ---
 
@@ -444,6 +447,6 @@ Ideas for future versions of Class Focus Friend:
 
 The MVP goal is intentionally small and polished.
 
-> Teachers can run a classroom focus session, monitor classroom noise levels, reward students with points, and customize a classroom pet that celebrates their progress.
+> Teachers can run a classroom focus session, monitor classroom noise levels, reward students with points, and customize a classroom focus friend that celebrates their progress.
 
 By focusing on a single-page React application and leveraging browser APIs and localStorage, Class Focus Friend can deliver a complete and engaging classroom experience within the constraints of a hackathon timeline.
