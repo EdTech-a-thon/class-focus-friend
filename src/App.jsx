@@ -1,12 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { accessories } from "./data/accessories";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useMicrophone } from "./hooks/useMicrophone";
 import { useTimer } from "./hooks/useTimer";
 
 const activities = {
-  independent: { label: "Independent work", detail: "Very quiet" },
-  partner: { label: "Partner work", detail: "Moderate voices" },
-  presentation: { label: "Presentation", detail: "One clear speaker" },
+  independent: { label: "Independent work", detail: "Very quiet", threshold: 22 },
+  partner: { label: "Partner work", detail: "Moderate voices", threshold: 48 },
+  presentation: { label: "Presentation", detail: "One clear speaker", threshold: 68 },
 };
 
 function formatTime(seconds) {
@@ -45,7 +46,10 @@ export default function App() {
   const [showComplete, setShowComplete] = useState(false);
   const recordedCompletion = useRef(false);
   const timer = useTimer(15);
+  const microphone = useMicrophone();
   const expectation = activities[activity];
+  const noiseTone = microphone.status !== "on" ? "neutral" : microphone.level <= expectation.threshold ? "good" : microphone.level <= expectation.threshold + 18 ? "warn" : "loud";
+  const noiseMessage = microphone.status !== "on" ? "Ready when you are" : noiseTone === "good" ? "On track" : noiseTone === "warn" ? "Getting loud" : "Too loud";
 
   useEffect(() => {
     if (!timer.isComplete) {
@@ -130,6 +134,23 @@ export default function App() {
               ))}
             </div>
           </fieldset>
+        </section>
+
+        <section className="card noise-card">
+          <div className="card-heading">
+            <div><p className="card-label">Classroom sound</p><h2>{noiseMessage}</h2></div>
+            <i className={`status-dot ${noiseTone}`} aria-hidden="true" />
+          </div>
+          <p className="noise-expectation">Goal for {expectation.label.toLowerCase()}: <b>{expectation.detail}</b></p>
+          <div className="meter" role="meter" aria-label="Current classroom sound" aria-valuemin="0" aria-valuemax="100" aria-valuenow={microphone.level}>
+            <span className={noiseTone} style={{ width: `${microphone.level}%` }} />
+          </div>
+          <div className="noise-scale"><span>Quiet</span><span>Talking</span><span>Lively</span></div>
+          <button className="outline" onClick={microphone.status === "on" ? microphone.stop : microphone.start}>
+            {microphone.status === "on" ? "Stop sound meter" : "Turn on sound meter"}
+          </button>
+          {microphone.status === "denied" && <p className="help-text">Microphone access was not available. You can still run a focus session.</p>}
+          {microphone.status === "unsupported" && <p className="help-text">This browser cannot use the sound meter. The other classroom tools still work.</p>}
         </section>
 
         <section className="card shop-card">
