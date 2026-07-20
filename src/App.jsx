@@ -37,7 +37,8 @@ function Pet({ equipped }) {
 }
 
 export default function App() {
-  const [activity, setActivity] = useState("independent");
+  const [activity, setActivity] = useLocalStorage("class-focus-activity", "independent");
+  const [preferredMinutes, setPreferredMinutes] = useLocalStorage("class-focus-minutes", 15);
   const [points, setPoints] = useLocalStorage("class-focus-points", 0);
   const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
   const [history, setHistory] = useLocalStorage("class-focus-history", []);
@@ -45,7 +46,7 @@ export default function App() {
   const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
   const [showComplete, setShowComplete] = useState(false);
   const recordedCompletion = useRef(false);
-  const timer = useTimer(15);
+  const timer = useTimer(preferredMinutes);
   const microphone = useMicrophone();
   const expectation = activities[activity];
   const noiseTone = microphone.status !== "on" ? "neutral" : microphone.level <= expectation.threshold ? "good" : microphone.level <= expectation.threshold + 18 ? "warn" : "loud";
@@ -71,6 +72,15 @@ export default function App() {
     setShowComplete(true);
   }, [activity, setHistory, setPoints, setTotalPoints, timer.isComplete, timer.minutes]);
 
+  useEffect(() => {
+    if (!showComplete) return;
+    function closeOnEscape(event) {
+      if (event.key === "Escape") setShowComplete(false);
+    }
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [showComplete]);
+
   const totalMinutes = history.reduce((sum, session) => sum + session.minutes, 0);
 
   function buyOrEquip(item) {
@@ -82,6 +92,11 @@ export default function App() {
     setPoints((value) => value - item.cost);
     setUnlocked((items) => [...items, item.id]);
     setEquipped((items) => [...items, item.id]);
+  }
+
+  function chooseMinutes(value) {
+    timer.chooseMinutes(value);
+    setPreferredMinutes(value);
   }
 
   return (
@@ -106,10 +121,10 @@ export default function App() {
             {timer.isRunning ? "Your class is building focus stamina." : `${timer.minutes} minute ${expectation.label.toLowerCase()} session`}
           </p>
           <div className="button-row">
-            <button className="primary" onClick={timer.toggle} disabled={timer.isComplete}>
+            <button className="primary" type="button" onClick={timer.toggle} disabled={timer.isComplete}>
               {timer.isRunning ? "Pause session" : timer.isComplete ? "Session complete" : "Start session"}
             </button>
-            <button className="plain-button" onClick={timer.reset}>Reset</button>
+            <button className="plain-button" type="button" onClick={timer.reset}>Reset</button>
           </div>
         </section>
 
@@ -120,7 +135,7 @@ export default function App() {
             <legend>Length</legend>
             <div className="choice-row">
               {[5, 10, 15, 20].map((value) => (
-                <button className={timer.minutes === value ? "selected" : ""} type="button" key={value} onClick={() => timer.chooseMinutes(value)}>{value} min</button>
+                <button className={timer.minutes === value ? "selected" : ""} aria-pressed={timer.minutes === value} type="button" key={value} onClick={() => chooseMinutes(value)}>{value} min</button>
               ))}
             </div>
           </fieldset>
@@ -128,7 +143,7 @@ export default function App() {
             <legend>Activity</legend>
             <div className="activity-list">
               {Object.entries(activities).map(([key, item]) => (
-                <button className={activity === key ? "selected" : ""} type="button" key={key} onClick={() => setActivity(key)}>
+                <button className={activity === key ? "selected" : ""} aria-pressed={activity === key} type="button" key={key} onClick={() => setActivity(key)}>
                   <b>{item.label}</b><span>{item.detail}</span>
                 </button>
               ))}
@@ -146,7 +161,7 @@ export default function App() {
             <span className={noiseTone} style={{ width: `${microphone.level}%` }} />
           </div>
           <div className="noise-scale"><span>Quiet</span><span>Talking</span><span>Lively</span></div>
-          <button className="outline" onClick={microphone.status === "on" ? microphone.stop : microphone.start}>
+          <button className="outline" type="button" aria-pressed={microphone.status === "on"} onClick={microphone.status === "on" ? microphone.stop : microphone.start}>
             {microphone.status === "on" ? "Stop sound meter" : "Turn on sound meter"}
           </button>
           {microphone.status === "denied" && <p className="help-text">Microphone access was not available. You can still run a focus session.</p>}
@@ -166,7 +181,7 @@ export default function App() {
                 <article className="reward" key={item.id}>
                   <span className="reward-icon" aria-hidden="true">{item.icon}</span>
                   <div><b>{item.name}</b><small>{owned ? wearing ? "Wearing now" : "Unlocked" : `${item.cost} points`}</small></div>
-                  <button disabled={!owned && points < item.cost} onClick={() => buyOrEquip(item)}>
+                  <button type="button" disabled={!owned && points < item.cost} onClick={() => buyOrEquip(item)}>
                     {owned ? wearing ? "Remove" : "Wear" : "Unlock"}
                   </button>
                 </article>
@@ -202,7 +217,7 @@ export default function App() {
             <p className="eyebrow">Focus session complete</p>
             <h2 id="complete-title">Beautiful work, class!</h2>
             <p>You earned <b>{timer.minutes} class points</b> for {timer.minutes} minutes of shared focus.</p>
-            <button className="primary" onClick={() => setShowComplete(false)}>Celebrate</button>
+            <button className="primary" type="button" autoFocus onClick={() => setShowComplete(false)}>Celebrate</button>
           </section>
         </div>
       )}
