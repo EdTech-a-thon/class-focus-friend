@@ -67,6 +67,18 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
 .activity-list button { align-items: center; background: transparent; border: 1px solid #ded7ca; border-radius: 14px; color: #25433d; display: flex; justify-content: space-between; padding: 12px 14px; text-align: left; }
 .activity-list button span { color: #75867f; font-size: .79rem; font-weight: 500; }
 .activity-list button.selected { background: #f8e8de; border-color: #df8a71; }
+.noise-card { display: flex; flex-direction: column; justify-content: center; }
+.status-dot { background: #b8bebc; border-radius: 50%; box-shadow: 0 0 0 7px rgba(184, 190, 188, .2); height: 17px; width: 17px; }
+.status-dot.good { background: #5ea47c; box-shadow: 0 0 0 7px rgba(94, 164, 124, .16); }
+.status-dot.warn { background: #e6b84f; box-shadow: 0 0 0 7px rgba(230, 184, 79, .18); }
+.status-dot.loud { background: #db694f; box-shadow: 0 0 0 7px rgba(219, 105, 79, .17); }
+.noise-expectation { color: #75867f; font-size: .86rem; margin: 12px 0 25px; }
+.meter { background: linear-gradient(90deg, #cce2d3 0 34%, #f3dda4 34% 67%, #efc0b0 67%); border-radius: 999px; height: 22px; overflow: hidden; padding: 5px; }
+.meter span { background: #99a7a2; border-radius: inherit; display: block; height: 100%; min-width: 0; transition: width .18s linear; }
+.meter span.good { background: #39765d; }.meter span.warn { background: #ce9224; }.meter span.loud { background: #c94f35; }
+.noise-scale { color: #84928d; display: flex; font-size: .69rem; justify-content: space-between; margin: 7px 0 24px; }
+.noise-card .outline { align-self: flex-start; }
+.help-text { color: #a94d3c; font-size: .78rem; line-height: 1.4; margin: 13px 0 0; }
 .shop-card { background: #f3e8dc; }
 .points-badge { background: #25433d; border-radius: 999px; color: #f8d97a; font-size: .8rem; font-weight: 700; padding: 8px 12px; white-space: nowrap; }
 .reward-list { display: grid; gap: 10px; margin-top: 24px; }
