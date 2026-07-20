@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useTimer } from "./hooks/useTimer";
 
 const activities = {
@@ -28,14 +29,41 @@ function Pet() {
 
 export default function App() {
   const [activity, setActivity] = useState("independent");
+  const [points, setPoints] = useLocalStorage("class-focus-points", 0);
+  const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
+  const [history, setHistory] = useLocalStorage("class-focus-history", []);
+  const [showComplete, setShowComplete] = useState(false);
+  const recordedCompletion = useRef(false);
   const timer = useTimer(15);
   const expectation = activities[activity];
+
+  useEffect(() => {
+    if (!timer.isComplete) {
+      recordedCompletion.current = false;
+      return;
+    }
+    if (recordedCompletion.current) return;
+    recordedCompletion.current = true;
+    const completedSession = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      minutes: timer.minutes,
+      activity,
+      pointsEarned: timer.minutes,
+    };
+    setPoints((value) => value + timer.minutes);
+    setTotalPoints((value) => value + timer.minutes);
+    setHistory((sessions) => [completedSession, ...sessions].slice(0, 20));
+    setShowComplete(true);
+  }, [activity, setHistory, setPoints, setTotalPoints, timer.isComplete, timer.minutes]);
+
+  const totalMinutes = history.reduce((sum, session) => sum + session.minutes, 0);
 
   return (
     <main className="app-shell">
       <header className="app-header">
         <a className="brand" href="#dashboard"><span>✦</span> Class Focus Friend</a>
-        <p>Ready for a fresh start</p>
+        <p><b>★</b> {points} class points</p>
       </header>
       <section className="welcome" id="dashboard">
         <div>
@@ -82,7 +110,38 @@ export default function App() {
             </div>
           </fieldset>
         </section>
+
+        <section className="card history-card">
+          <div className="card-heading">
+            <div><p className="card-label">Class progress</p><h2>{totalMinutes} focused minutes</h2></div>
+            <span className="session-count">{history.length} sessions</span>
+          </div>
+          <div className="progress-summary"><span><b>{totalPoints}</b> total points earned</span><span><b>{points}</b> available now</span></div>
+          {history.length ? (
+            <ul>
+              {history.slice(0, 5).map((session) => (
+                <li key={session.id}>
+                  <span>{new Date(session.date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
+                  <b>{session.minutes} min</b>
+                  <em>{activities[session.activity]?.label ?? "Focus session"}</em>
+                  <strong>+{session.pointsEarned} ★</strong>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="empty-state">Completed focus sessions will appear here.</p>}
+        </section>
       </div>
+      {showComplete && (
+        <div className="modal-backdrop">
+          <section className="completion-modal" role="dialog" aria-modal="true" aria-labelledby="complete-title">
+            <span className="celebration-mark" aria-hidden="true">✦</span>
+            <p className="eyebrow">Focus session complete</p>
+            <h2 id="complete-title">Beautiful work, class!</h2>
+            <p>You earned <b>{timer.minutes} class points</b> for {timer.minutes} minutes of shared focus.</p>
+            <button className="primary" onClick={() => setShowComplete(false)}>Celebrate</button>
+          </section>
+        </div>
+      )}
     </main>
   );
 }

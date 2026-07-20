@@ -64,6 +64,22 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
 .activity-list button { align-items: center; background: transparent; border: 1px solid #ded7ca; border-radius: 14px; color: #25433d; display: flex; justify-content: space-between; padding: 12px 14px; text-align: left; }
 .activity-list button span { color: #75867f; font-size: .79rem; font-weight: 500; }
 .activity-list button.selected { background: #f8e8de; border-color: #df8a71; }
+.history-card { grid-column: 1 / -1; }
+.session-count { background: #dce9d9; border-radius: 999px; color: #44675d; font-size: .78rem; font-weight: 700; padding: 7px 11px; }
+.progress-summary { display: flex; gap: 10px; margin: 22px 0 15px; }
+.progress-summary span { background: #f4eee3; border-radius: 12px; color: #657972; font-size: .82rem; padding: 10px 12px; }
+.progress-summary b { color: #25433d; }
+.history-card ul { list-style: none; margin: 0; padding: 0; }
+.history-card li { align-items: center; border-top: 1px solid #e9e1d5; display: grid; font-size: .86rem; gap: 14px; grid-template-columns: 75px 55px 1fr auto; padding: 13px 2px; }
+.history-card li span, .history-card li em { color: #75867f; }
+.history-card li em { font-style: normal; }
+.history-card li strong { color: #cb654e; }
+.empty-state { color: #75867f; margin: 28px 0 4px; }
+.modal-backdrop { align-items: center; background: rgba(25, 48, 42, .65); display: flex; inset: 0; justify-content: center; padding: 20px; position: fixed; z-index: 10; }
+.completion-modal { background: #fffaf0; border-radius: 28px; box-shadow: 0 25px 80px rgba(18, 42, 35, .35); max-width: 460px; padding: 42px; text-align: center; }
+.completion-modal h2 { font-size: 2.4rem; }
+.completion-modal > p:not(.eyebrow) { color: #60756e; line-height: 1.6; margin: 17px 0 25px; }
+.celebration-mark { align-items: center; background: #f8d97a; border-radius: 50%; color: #25433d; display: inline-flex; font-size: 1.6rem; height: 58px; justify-content: center; margin-bottom: 20px; width: 58px; }
 
 @media (max-width: 760px) {
   .app-header { padding: 20px; }
@@ -72,6 +88,10 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
   .pet-scene { height: 220px; transform: scale(.86); transform-origin: bottom center; }
   .dashboard-grid, .dashboard-placeholder { grid-template-columns: 1fr; margin: 0 18px; }
   .card { padding: 24px; }
+  .history-card { grid-column: auto; }
+  .history-card li { grid-template-columns: 60px 45px 1fr; }
+  .history-card li em { display: none; }
+  .progress-summary { flex-direction: column; }
 }
 
 @media (prefers-reduced-motion: reduce) {
