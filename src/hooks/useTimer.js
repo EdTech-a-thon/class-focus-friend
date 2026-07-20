@@ -28,12 +28,17 @@ export function useTimer(initialMinutes) {
     setSecondsRemaining(minutes * 60);
   }
 
+  function pause() {
+    setIsRunning(false);
+  }
+
   return {
     minutes,
     secondsRemaining,
     isRunning,
     isComplete: secondsRemaining === 0,
     chooseMinutes,
+    pause,
     reset,
     toggle: () => setIsRunning((running) => !running),
   };

@@ -14,6 +14,27 @@ function formatTime(seconds) {
   return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 }
 
+function playNoiseAlert() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+
+  const context = new AudioContextClass();
+  const gain = context.createGain();
+  gain.gain.setValueAtTime(0.16, context.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.45);
+  gain.connect(context.destination);
+
+  [0, 0.18].forEach((delay) => {
+    const oscillator = context.createOscillator();
+    oscillator.frequency.value = 660;
+    oscillator.connect(gain);
+    oscillator.start(context.currentTime + delay);
+    oscillator.stop(context.currentTime + delay + 0.12);
+  });
+
+  window.setTimeout(() => context.close(), 700);
+}
+
 function Friend({ equipped }) {
   return (
     <div className="friend-scene" aria-label="A cheerful classroom friend">
@@ -46,11 +67,24 @@ export default function App() {
   const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
   const [showComplete, setShowComplete] = useState(false);
   const recordedCompletion = useRef(false);
+  const redAlertPlayed = useRef(false);
   const timer = useTimer(preferredMinutes);
   const microphone = useMicrophone();
   const expectation = activities[activity];
   const noiseTone = microphone.status !== "on" ? "neutral" : microphone.level <= expectation.threshold ? "good" : microphone.level <= expectation.threshold + 18 ? "warn" : "loud";
   const noiseMessage = microphone.status !== "on" ? "Ready when you are" : noiseTone === "good" ? "On track" : noiseTone === "warn" ? "Getting loud" : "Too loud";
+  const pauseTimer = timer.pause;
+
+  useEffect(() => {
+    if (noiseTone !== "loud") {
+      redAlertPlayed.current = false;
+      return;
+    }
+    if (redAlertPlayed.current) return;
+    redAlertPlayed.current = true;
+    pauseTimer();
+    playNoiseAlert();
+  }, [noiseTone, pauseTimer]);
 
   useEffect(() => {
     if (!timer.isComplete) {
