@@ -53,3 +53,29 @@ These are valuable possibilities, but are not needed for the first version:
 - Motivate the whole class without relying on physical rewards.
 - Make the noise meter useful for different learning situations, not only silent work.
 - Keep the first version focused on one classroom before adding more complex options.
+
+## Local Setup and Development
+
+You will need [Bun](https://bun.sh/) installed on your computer.
+
+1. In this project folder, install the project tools:
+
+   ```bash
+   bun install
+   ```
+
+2. Start the app for local development:
+
+   ```bash
+   bun run dev
+   ```
+
+3. Open the local address shown in your terminal to view the app.
+
+There are no environment variables or configuration files required for the current version of the app.
+
+To create a production build, run:
+
+```bash
+bun run build
+```
