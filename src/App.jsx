@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { accessories } from "./data/accessories";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useTimer } from "./hooks/useTimer";
 
@@ -39,7 +40,8 @@ export default function App() {
   const [points, setPoints] = useLocalStorage("class-focus-points", 0);
   const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
   const [history, setHistory] = useLocalStorage("class-focus-history", []);
-  const [equipped] = useLocalStorage("class-focus-equipped", []);
+  const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
+  const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
   const [showComplete, setShowComplete] = useState(false);
   const recordedCompletion = useRef(false);
   const timer = useTimer(15);
@@ -66,6 +68,17 @@ export default function App() {
   }, [activity, setHistory, setPoints, setTotalPoints, timer.isComplete, timer.minutes]);
 
   const totalMinutes = history.reduce((sum, session) => sum + session.minutes, 0);
+
+  function buyOrEquip(item) {
+    if (unlocked.includes(item.id)) {
+      setEquipped((items) => items.includes(item.id) ? items.filter((id) => id !== item.id) : [...items, item.id]);
+      return;
+    }
+    if (points < item.cost) return;
+    setPoints((value) => value - item.cost);
+    setUnlocked((items) => [...items, item.id]);
+    setEquipped((items) => [...items, item.id]);
+  }
 
   return (
     <main className="app-shell">
@@ -117,6 +130,28 @@ export default function App() {
               ))}
             </div>
           </fieldset>
+        </section>
+
+        <section className="card shop-card">
+          <div className="card-heading">
+            <div><p className="card-label">Reward shelf</p><h2>Dress up your class friend.</h2></div>
+            <span className="points-badge">★ {points}</span>
+          </div>
+          <div className="reward-list">
+            {accessories.map((item) => {
+              const owned = unlocked.includes(item.id);
+              const wearing = equipped.includes(item.id);
+              return (
+                <article className="reward" key={item.id}>
+                  <span className="reward-icon" aria-hidden="true">{item.icon}</span>
+                  <div><b>{item.name}</b><small>{owned ? wearing ? "Wearing now" : "Unlocked" : `${item.cost} points`}</small></div>
+                  <button disabled={!owned && points < item.cost} onClick={() => buyOrEquip(item)}>
+                    {owned ? wearing ? "Remove" : "Wear" : "Unlock"}
+                  </button>
+                </article>
+              );
+            })}
+          </div>
         </section>
 
         <section className="card history-card">

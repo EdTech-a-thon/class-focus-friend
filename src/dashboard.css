@@ -67,6 +67,15 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
 .activity-list button { align-items: center; background: transparent; border: 1px solid #ded7ca; border-radius: 14px; color: #25433d; display: flex; justify-content: space-between; padding: 12px 14px; text-align: left; }
 .activity-list button span { color: #75867f; font-size: .79rem; font-weight: 500; }
 .activity-list button.selected { background: #f8e8de; border-color: #df8a71; }
+.shop-card { background: #f3e8dc; }
+.points-badge { background: #25433d; border-radius: 999px; color: #f8d97a; font-size: .8rem; font-weight: 700; padding: 8px 12px; white-space: nowrap; }
+.reward-list { display: grid; gap: 10px; margin-top: 24px; }
+.reward { align-items: center; background: #fffaf0; border-radius: 15px; display: grid; gap: 12px; grid-template-columns: 48px 1fr auto; padding: 11px 12px; }
+.reward-icon { align-items: center; background: #dce9d9; border-radius: 12px; display: flex; font-family: monospace; font-size: 15px; height: 44px; justify-content: center; overflow: hidden; width: 44px; }
+.reward div { display: grid; gap: 3px; }
+.reward small { color: #75867f; }
+.reward button { background: #25433d; border: 0; color: #fffaf0; font-size: .76rem; padding: 8px 12px; }
+.reward button:disabled { background: #d4d1c8; color: #7e817d; cursor: not-allowed; }
 .history-card { grid-column: 1 / -1; }
 .session-count { background: #dce9d9; border-radius: 999px; color: #44675d; font-size: .78rem; font-weight: 700; padding: 7px 11px; }
 .progress-summary { display: flex; gap: 10px; margin: 22px 0 15px; }
