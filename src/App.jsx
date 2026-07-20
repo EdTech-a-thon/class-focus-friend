@@ -14,22 +14,22 @@ function formatTime(seconds) {
   return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 }
 
-function Pet({ equipped }) {
+function Friend({ equipped }) {
   return (
-    <div className="pet-scene" aria-label="A cheerful classroom friend">
+    <div className="friend-scene" aria-label="A cheerful classroom friend">
       <span className="sparkle one" aria-hidden="true">*</span>
       <span className="sparkle two" aria-hidden="true">*</span>
-      <div className="pet" aria-hidden="true">
-        {equipped.includes("party-hat") && <span className="pet-hat">▲</span>}
-        <span className="pet-ear left" />
-        <span className="pet-ear right" />
-        <div className="pet-face">
+      <div className="friend" aria-hidden="true">
+        {equipped.includes("party-hat") && <span className="friend-hat">▲</span>}
+        <span className="friend-ear left" />
+        <span className="friend-ear right" />
+        <div className="friend-face">
           • &nbsp; •<b>⌣</b>
-          {equipped.includes("glasses") && <i className="pet-glasses">⌐■-■</i>}
+          {equipped.includes("glasses") && <i className="friend-glasses">⌐■-■</i>}
         </div>
-        <div className="pet-body">
+        <div className="friend-body">
           ♥
-          {equipped.includes("bow-tie") && <i className="pet-bow">◆</i>}
+          {equipped.includes("bow-tie") && <i className="friend-bow">◆</i>}
         </div>
       </div>
     </div>
@@ -111,7 +111,7 @@ export default function App() {
           <h1>Let&apos;s make space for focus.</h1>
           <p>Set a shared work session, notice the room&apos;s energy, and celebrate every small win together.</p>
         </div>
-        <Pet equipped={equipped} />
+        <Friend equipped={equipped} />
       </section>
       <div className="dashboard-grid">
         <section className="card timer-card">

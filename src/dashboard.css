@@ -25,17 +25,17 @@ h1 { font-size: clamp(2.6rem, 5vw, 4.6rem); }
 h2 { font-size: 1.65rem; }
 .welcome p:last-child { color: #506a62; font-size: 1.02rem; line-height: 1.6; margin: 20px 0 0; max-width: 590px; }
 
-.pet-scene { align-self: end; height: 250px; justify-self: center; position: relative; width: 230px; }
-.pet { bottom: -18px; height: 235px; left: 10px; position: absolute; width: 210px; }
-.pet-ear { background: #f4b969; border: 5px solid #25433d; height: 68px; position: absolute; top: 27px; width: 65px; }
-.pet-ear.left { border-radius: 70% 25% 55% 30%; left: 2px; transform: rotate(-20deg); }
-.pet-ear.right { border-radius: 25% 70% 30% 55%; right: 2px; transform: rotate(20deg); }
-.pet-face { align-items: center; background: #f8c278; border: 5px solid #25433d; border-radius: 48%; display: flex; font-size: 18px; height: 155px; justify-content: center; left: 25px; position: absolute; top: 14px; width: 160px; z-index: 2; }
-.pet-face b { bottom: 29px; font-size: 28px; font-weight: 400; left: 66px; position: absolute; }
-.pet-body { background: #e98769; border: 5px solid #25433d; border-radius: 45% 45% 25% 25%; bottom: 0; color: #fff7e9; font-size: 28px; height: 115px; left: 33px; padding-top: 35px; position: absolute; text-align: center; width: 145px; }
-.pet-hat { color: #7198d2; font-size: 95px; left: 60px; line-height: .65; position: absolute; text-shadow: -4px 0 #25433d, 0 -4px #25433d, 4px 0 #25433d; top: -29px; transform: scaleX(1.15); z-index: 4; }
-.pet-glasses { color: #25433d; font-family: monospace; font-size: 22px; font-style: normal; left: 39px; letter-spacing: -5px; position: absolute; top: 52px; }
-.pet-bow { bottom: -2px; color: #f8d97a; font-size: 33px; font-style: normal; left: 51px; position: absolute; text-shadow: 0 2px #25433d; transform: scaleX(1.5) rotate(45deg); }
+.friend-scene { align-self: end; height: 250px; justify-self: center; position: relative; width: 230px; }
+.friend { bottom: -18px; height: 235px; left: 10px; position: absolute; width: 210px; }
+.friend-ear { background: #f4b969; border: 5px solid #25433d; height: 68px; position: absolute; top: 27px; width: 65px; }
+.friend-ear.left { border-radius: 70% 25% 55% 30%; left: 2px; transform: rotate(-20deg); }
+.friend-ear.right { border-radius: 25% 70% 30% 55%; right: 2px; transform: rotate(20deg); }
+.friend-face { align-items: center; background: #f8c278; border: 5px solid #25433d; border-radius: 48%; display: flex; font-size: 18px; height: 155px; justify-content: center; left: 25px; position: absolute; top: 14px; width: 160px; z-index: 2; }
+.friend-face b { bottom: 29px; font-size: 28px; font-weight: 400; left: 66px; position: absolute; }
+.friend-body { background: #e98769; border: 5px solid #25433d; border-radius: 45% 45% 25% 25%; bottom: 0; color: #fff7e9; font-size: 28px; height: 115px; left: 33px; padding-top: 35px; position: absolute; text-align: center; width: 145px; }
+.friend-hat { color: #7198d2; font-size: 95px; left: 60px; line-height: .65; position: absolute; text-shadow: -4px 0 #25433d, 0 -4px #25433d, 4px 0 #25433d; top: -29px; transform: scaleX(1.15); z-index: 4; }
+.friend-glasses { color: #25433d; font-family: monospace; font-size: 22px; font-style: normal; left: 39px; letter-spacing: -5px; position: absolute; top: 52px; }
+.friend-bow { bottom: -2px; color: #f8d97a; font-size: 33px; font-style: normal; left: 51px; position: absolute; text-shadow: 0 2px #25433d; transform: scaleX(1.5) rotate(45deg); }
 .sparkle { color: #d76d54; font-size: 28px; position: absolute; }.sparkle.one { right: 0; top: 35px; }.sparkle.two { left: 0; top: 110px; }
 
 .dashboard-grid, .dashboard-placeholder { display: grid; gap: 22px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 auto; max-width: 1116px; width: calc(100% - 48px); }
@@ -109,7 +109,7 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
   .app-header { padding: 20px; }
   .app-header p { display: none; }
   .welcome { border-radius: 0 0 28px 28px; grid-template-columns: 1fr; margin-top: 0; padding: 40px 24px 0; width: 100%; }
-  .pet-scene { height: 220px; transform: scale(.86); transform-origin: bottom center; }
+  .friend-scene { height: 220px; transform: scale(.86); transform-origin: bottom center; }
   .dashboard-grid, .dashboard-placeholder { grid-template-columns: 1fr; margin: 0 18px; width: auto; }
   .card { padding: 24px; }
   .history-card { grid-column: auto; }
