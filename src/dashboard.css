@@ -45,6 +45,25 @@ h2 { font-size: 1.65rem; }
 .plain-button { background: transparent; border: 0; color: #526a63; padding: 12px 16px; }
 .outline { background: transparent; border: 1px solid #9eaea8; color: #25433d; padding: 10px 16px; }
 .button-row { align-items: center; display: flex; gap: 8px; justify-content: center; }
+.primary:disabled { cursor: default; opacity: .55; }
+.timer-card { align-items: center; background: #25433d; color: #fffaf0; display: flex; flex-direction: column; justify-content: center; min-height: 410px; text-align: center; }
+.timer-card .card-label { color: #f4c968; }
+.timer-display { font-family: Fraunces, Georgia, serif; font-size: clamp(4.5rem, 10vw, 7.5rem); font-variant-numeric: tabular-nums; letter-spacing: -.07em; line-height: 1; margin: 18px 0 10px; }
+.timer-caption { color: #c9d7d0; margin: 0 0 28px; }
+.timer-card .primary { background: #f8d97a; color: #25433d; }
+.timer-card .plain-button { color: #dce9d9; }
+.setup-card h2 { margin-bottom: 27px; }
+fieldset { border: 0; margin: 0 0 25px; padding: 0; }
+fieldset:last-child { margin-bottom: 0; }
+fieldset:disabled { opacity: .55; }
+legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
+.choice-row { display: grid; gap: 8px; grid-template-columns: repeat(4, 1fr); }
+.choice-row button { background: #f4eee3; border: 1px solid transparent; color: #526a63; padding: 10px 6px; }
+.choice-row button.selected { background: #dce9d9; border-color: #6e9588; color: #25433d; }
+.activity-list { display: grid; gap: 8px; }
+.activity-list button { align-items: center; background: transparent; border: 1px solid #ded7ca; border-radius: 14px; color: #25433d; display: flex; justify-content: space-between; padding: 12px 14px; text-align: left; }
+.activity-list button span { color: #75867f; font-size: .79rem; font-weight: 500; }
+.activity-list button.selected { background: #f8e8de; border-color: #df8a71; }
 
 @media (max-width: 760px) {
   .app-header { padding: 20px; }
