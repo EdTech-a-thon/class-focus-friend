@@ -33,6 +33,9 @@ h2 { font-size: 1.65rem; }
 .pet-face { align-items: center; background: #f8c278; border: 5px solid #25433d; border-radius: 48%; display: flex; font-size: 18px; height: 155px; justify-content: center; left: 25px; position: absolute; top: 14px; width: 160px; z-index: 2; }
 .pet-face b { bottom: 29px; font-size: 28px; font-weight: 400; left: 66px; position: absolute; }
 .pet-body { background: #e98769; border: 5px solid #25433d; border-radius: 45% 45% 25% 25%; bottom: 0; color: #fff7e9; font-size: 28px; height: 115px; left: 33px; padding-top: 35px; position: absolute; text-align: center; width: 145px; }
+.pet-hat { color: #7198d2; font-size: 95px; left: 60px; line-height: .65; position: absolute; text-shadow: -4px 0 #25433d, 0 -4px #25433d, 4px 0 #25433d; top: -29px; transform: scaleX(1.15); z-index: 4; }
+.pet-glasses { color: #25433d; font-family: monospace; font-size: 22px; font-style: normal; left: 39px; letter-spacing: -5px; position: absolute; top: 52px; }
+.pet-bow { bottom: -2px; color: #f8d97a; font-size: 33px; font-style: normal; left: 51px; position: absolute; text-shadow: 0 2px #25433d; transform: scaleX(1.5) rotate(45deg); }
 .sparkle { color: #d76d54; font-size: 28px; position: absolute; }.sparkle.one { right: 0; top: 35px; }.sparkle.two { left: 0; top: 110px; }
 
 .dashboard-grid, .dashboard-placeholder { display: grid; gap: 22px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 auto; max-width: 1116px; }

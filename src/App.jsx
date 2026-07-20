@@ -12,16 +12,23 @@ function formatTime(seconds) {
   return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 }
 
-function Pet() {
+function Pet({ equipped }) {
   return (
     <div className="pet-scene" aria-label="A cheerful classroom friend">
       <span className="sparkle one" aria-hidden="true">*</span>
       <span className="sparkle two" aria-hidden="true">*</span>
       <div className="pet" aria-hidden="true">
+        {equipped.includes("party-hat") && <span className="pet-hat">▲</span>}
         <span className="pet-ear left" />
         <span className="pet-ear right" />
-        <div className="pet-face">• &nbsp; •<b>⌣</b></div>
-        <div className="pet-body">♥</div>
+        <div className="pet-face">
+          • &nbsp; •<b>⌣</b>
+          {equipped.includes("glasses") && <i className="pet-glasses">⌐■-■</i>}
+        </div>
+        <div className="pet-body">
+          ♥
+          {equipped.includes("bow-tie") && <i className="pet-bow">◆</i>}
+        </div>
       </div>
     </div>
   );
@@ -32,6 +39,7 @@ export default function App() {
   const [points, setPoints] = useLocalStorage("class-focus-points", 0);
   const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
   const [history, setHistory] = useLocalStorage("class-focus-history", []);
+  const [equipped] = useLocalStorage("class-focus-equipped", []);
   const [showComplete, setShowComplete] = useState(false);
   const recordedCompletion = useRef(false);
   const timer = useTimer(15);
@@ -71,7 +79,7 @@ export default function App() {
           <h1>Let&apos;s make space for focus.</h1>
           <p>Set a shared work session, notice the room&apos;s energy, and celebrate every small win together.</p>
         </div>
-        <Pet />
+        <Pet equipped={equipped} />
       </section>
       <div className="dashboard-grid">
         <section className="card timer-card">
