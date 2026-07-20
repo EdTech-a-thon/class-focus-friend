@@ -37,6 +37,9 @@ h1 { font-size: clamp(3.3rem, 6vw, 5.45rem); max-width: 560px; }
 .timer-line { background: #e5eee5; border-radius: 8px; height: 6px; margin-top: 10px; overflow: hidden; }
 .timer-line span { background: #e98769; border-radius: inherit; display: block; height: 100%; width: 66%; }
 .friend { bottom: 52px; height: 263px; position: absolute; right: 93px; width: 216px; z-index: 2; }
+.friend-hat { background: #7198d2; border: 5px solid #25433d; border-bottom: 0; border-radius: 90px 90px 18px 18px; height: 66px; left: 48px; position: absolute; top: -27px; width: 123px; z-index: 4; }
+.hat-pom { background: #e98769; border: 5px solid #25433d; border-radius: 50%; height: 28px; left: 39px; position: absolute; top: -27px; width: 28px; }
+.hat-band { background: #f8d97a; border: 5px solid #25433d; border-radius: 11px; bottom: -12px; height: 22px; left: -5px; position: absolute; width: 132px; }
 .friend-face { background: #f8c278; border: 5px solid #25433d; border-radius: 49% 51% 47% 50%; height: 163px; left: 27px; position: absolute; top: 0; width: 164px; z-index: 2; }
 .friend-ear { background: #f8c278; border: 5px solid #25433d; height: 61px; position: absolute; top: 15px; width: 58px; }
 .left-ear { border-radius: 68% 28% 58% 30%; left: 3px; transform: rotate(-22deg); }
