@@ -1,0 +1,60 @@
+:root {
+  color: #25433d;
+  background: #f7f1e5;
+  font-family: "DM Sans", Arial, sans-serif;
+  font-synthesis: none;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; min-width: 320px; }
+button { font: inherit; }
+button:focus-visible, a:focus-visible { outline: 3px solid #efad4f; outline-offset: 3px; }
+
+.app-shell { min-height: 100vh; overflow: hidden; padding-bottom: 64px; }
+.app-header { align-items: center; display: flex; justify-content: space-between; margin: 0 auto; max-width: 1180px; padding: 24px 32px; }
+.app-header p { color: #60756e; font-size: .86rem; margin: 0; }
+.brand { align-items: center; color: inherit; display: inline-flex; font-size: 1.05rem; font-weight: 700; gap: 9px; letter-spacing: -.02em; text-decoration: none; }
+.brand span { align-items: center; background: #e98769; border-radius: 50%; color: #fffaf0; display: inline-flex; font-size: .8rem; height: 29px; justify-content: center; width: 29px; }
+
+.welcome { align-items: center; background: #dce9d9; border-radius: 34px; display: grid; gap: 40px; grid-template-columns: 1.35fr .65fr; margin: 12px auto 30px; max-width: 1116px; min-height: 300px; overflow: hidden; padding: 45px 58px; position: relative; }
+.welcome > div:first-child { max-width: 650px; position: relative; z-index: 2; }
+.eyebrow, .card-label { color: #cb654e; font-size: .72rem; font-weight: 700; letter-spacing: .11em; margin: 0 0 12px; text-transform: uppercase; }
+h1, h2 { font-family: Fraunces, Georgia, serif; letter-spacing: -.045em; line-height: 1.08; margin: 0; }
+h1 { font-size: clamp(2.6rem, 5vw, 4.6rem); }
+h2 { font-size: 1.65rem; }
+.welcome p:last-child { color: #506a62; font-size: 1.02rem; line-height: 1.6; margin: 20px 0 0; max-width: 590px; }
+
+.pet-scene { align-self: end; height: 250px; justify-self: center; position: relative; width: 230px; }
+.pet { bottom: -18px; height: 235px; left: 10px; position: absolute; width: 210px; }
+.pet-ear { background: #f4b969; border: 5px solid #25433d; height: 68px; position: absolute; top: 27px; width: 65px; }
+.pet-ear.left { border-radius: 70% 25% 55% 30%; left: 2px; transform: rotate(-20deg); }
+.pet-ear.right { border-radius: 25% 70% 30% 55%; right: 2px; transform: rotate(20deg); }
+.pet-face { align-items: center; background: #f8c278; border: 5px solid #25433d; border-radius: 48%; display: flex; font-size: 18px; height: 155px; justify-content: center; left: 25px; position: absolute; top: 14px; width: 160px; z-index: 2; }
+.pet-face b { bottom: 29px; font-size: 28px; font-weight: 400; left: 66px; position: absolute; }
+.pet-body { background: #e98769; border: 5px solid #25433d; border-radius: 45% 45% 25% 25%; bottom: 0; color: #fff7e9; font-size: 28px; height: 115px; left: 33px; padding-top: 35px; position: absolute; text-align: center; width: 145px; }
+.sparkle { color: #d76d54; font-size: 28px; position: absolute; }.sparkle.one { right: 0; top: 35px; }.sparkle.two { left: 0; top: 110px; }
+
+.dashboard-grid, .dashboard-placeholder { display: grid; gap: 22px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 auto; max-width: 1116px; }
+.dashboard-placeholder { background: #fffaf0; border: 1px solid #e7ded0; border-radius: 24px; display: block; padding: 34px; }
+.card { background: #fffaf0; border: 1px solid #e7ded0; border-radius: 24px; box-shadow: 0 10px 30px rgba(56, 75, 66, .06); padding: 30px; }
+.card-heading { align-items: flex-start; display: flex; justify-content: space-between; }
+.primary, .outline, .plain-button, .choice-row button, .activity-list button, .reward button { border-radius: 999px; cursor: pointer; font-weight: 700; }
+.primary { background: #25433d; border: 0; color: #fffaf0; padding: 13px 22px; }
+.primary:hover { background: #39675b; }
+.plain-button { background: transparent; border: 0; color: #526a63; padding: 12px 16px; }
+.outline { background: transparent; border: 1px solid #9eaea8; color: #25433d; padding: 10px 16px; }
+.button-row { align-items: center; display: flex; gap: 8px; justify-content: center; }
+
+@media (max-width: 760px) {
+  .app-header { padding: 20px; }
+  .app-header p { display: none; }
+  .welcome { border-radius: 0 0 28px 28px; grid-template-columns: 1fr; margin-top: 0; padding: 40px 24px 0; }
+  .pet-scene { height: 220px; transform: scale(.86); transform-origin: bottom center; }
+  .dashboard-grid, .dashboard-placeholder { grid-template-columns: 1fr; margin: 0 18px; }
+  .card { padding: 24px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+}
