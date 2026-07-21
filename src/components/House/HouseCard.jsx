@@ -16,8 +16,7 @@ const HouseCard = ({ house, rewards }) => {
     houseItems,
     houseItemsOwned,
     buyHouseItem,
-    roomsOwned,
-    buyRoom,
+    completedSessions,
     equipped,
     isCelebrating,
     isFocusing,
@@ -25,7 +24,7 @@ const HouseCard = ({ house, rewards }) => {
     noiseTone,
   } = house;
 
-  const nextRoom = houseRooms.find((room) => !roomsOwned.includes(room.id));
+  const nextRoom = houseRooms.find((room) => completedSessions < room.sessionsRequired);
 
   useEffect(() => {
     if (!openShop) return;
@@ -46,14 +45,14 @@ const HouseCard = ({ house, rewards }) => {
           <h2>{activeRoomDetails.name} is ready for focus</h2>
         </div>
         <div className="house-progress">
-          <b>{roomsOwned.length}</b> rooms owned
-          <small>{nextRoom ? `${nextRoom.cost} points for ${nextRoom.name}` : "Every room unlocked!"}</small>
+          <b>{completedSessions}</b> sessions
+          <small>{nextRoom ? `${nextRoom.sessionsRequired - completedSessions} until ${nextRoom.name}` : "Every room unlocked!"}</small>
         </div>
       </div>
 
       <div className="house-actions">
         <button className="outline" type="button" onClick={() => setOpenShop("rooms")}>Choose room</button>
-        <button className="outline" type="button" disabled={!roomsOwned.includes(activeRoom)} onClick={() => setOpenShop("decorations")}>Decorate room</button>
+        <button className="outline" type="button" disabled={completedSessions < activeRoomDetails.sessionsRequired} onClick={() => setOpenShop("decorations")}>Decorate room</button>
         <button className="outline" type="button" onClick={() => setOpenShop("accessories")}>Dress up friend</button>
       </div>
 
@@ -84,9 +83,7 @@ const HouseCard = ({ house, rewards }) => {
                     setActiveRoom(room);
                     setOpenShop(null);
                   }}
-                  roomsOwned={roomsOwned}
-                  points={points}
-                  buyRoom={buyRoom}
+                  completedSessions={completedSessions}
                 />
               </div>
             ) : openShop === "decorations" ? (

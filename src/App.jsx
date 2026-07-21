@@ -20,8 +20,8 @@ export default function App() {
   const [points, setPoints] = useLocalStorage("class-focus-points", 0);
   const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
   const [history, setHistory] = useLocalStorage("class-focus-history", []);
+  const [completedSessions, setCompletedSessions] = useLocalStorage("class-focus-completed-sessions", null);
   const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
-  const [roomsOwned, setRoomsOwned] = useLocalStorage("class-focus-rooms", []);
   const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
   const [houseItemsOwned, setHouseItemsOwned] = useLocalStorage("class-focus-house-items", []);
   const [activeRoom, setActiveRoom] = useState("living");
@@ -64,9 +64,10 @@ export default function App() {
     };
     setPoints((value) => value + timer.minutes);
     setTotalPoints((value) => value + timer.minutes);
+    setCompletedSessions((value) => value + 1);
     setHistory((sessions) => [completedSession, ...sessions].slice(0, 20));
     setShowComplete(true);
-  }, [activity, setHistory, setPoints, setTotalPoints, timer.isComplete, timer.minutes]);
+  }, [activity, setCompletedSessions, setHistory, setPoints, setTotalPoints, timer.isComplete, timer.minutes]);
 
   useEffect(() => {
     if (!showComplete) return;
@@ -78,6 +79,7 @@ export default function App() {
   }, [showComplete]);
 
   const totalMinutes = history.reduce((sum, session) => sum + session.minutes, 0);
+  const sessionCount = completedSessions ?? history.length;
 
   function buyOrEquip(item) {
     if (unlocked.includes(item.id)) {
@@ -96,16 +98,10 @@ export default function App() {
   }
 
   function buyHouseItem(item) {
-    if (!roomsOwned.includes(item.room) || houseItemsOwned.includes(item.id) || points < item.cost) return;
+    const room = houseRooms.find((room) => room.id === item.room);
+    if (sessionCount < room.sessionsRequired || houseItemsOwned.includes(item.id) || points < item.cost) return;
     setPoints((value) => value - item.cost);
     setHouseItemsOwned((items) => [...items, item.id]);
-  }
-
-  function buyRoom(room) {
-    if (roomsOwned.includes(room.id) || points < room.cost) return;
-    setPoints((value) => value - room.cost);
-    setRoomsOwned((rooms) => [...rooms, room.id]);
-    setActiveRoom(room.id);
   }
 
   const activeRoomDetails = houseRooms.find((room) => room.id === activeRoom);
@@ -169,8 +165,7 @@ export default function App() {
     houseItems,
     houseItemsOwned,
     buyHouseItem,
-    roomsOwned,
-    buyRoom,
+    completedSessions: sessionCount,
     equipped,
     isCelebrating: showComplete,
     isFocusing: timer.isRunning,

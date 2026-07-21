@@ -73,18 +73,18 @@ House decorations become more expensive as the class moves through the house, fr
 
 Some decorations are part of milestones. Buying all the listed pieces for the current milestone completes it and moves the class to the next milestone.
 
-## Buying Rooms
+## Room Unlocks
 
-Rooms are purchased with points, just like decorations. The class can buy rooms in any order, but each room must be owned before it can be decorated.
+Rooms open as the class completes focus sessions. Spending points does not affect room unlocks.
 
-| Room | Cost |
+| Room | When it is available |
 | --- | --- |
-| Living Room | 100 points |
-| Bedroom | 250 points |
-| Kitchen | 400 points |
-| Bathroom | 550 points |
+| Living Room | Available from the start |
+| Bedroom | After 25 completed sessions |
+| Kitchen | After 50 completed sessions |
+| Bathroom | After 75 completed sessions |
 
-The class can use **Choose room** to buy a room once it has enough points, or visit a room it already owns.
+The class can use **Choose room** to visit any room it has unlocked.
 
 ## Milestones in Order
 
@@ -94,35 +94,35 @@ There is no extra point prize for completing a milestone. The reward is seeing t
 
 ### Living Room Milestones
 
-The Living Room costs 100 points.
+The Living Room is available from the start.
 
-1. **Sunny Plant Corner**: Leafy Plant (15), Window Curtains (20), and Rainbow Rug (20). **55 points total.**
-2. **Cozy Reading Nook**: Book Nook (30), Story Lamp (15), and Cloud Pillows (15). **60 points total.**
-3. **Class Celebration Space**: Record Player (30), Little Tea Table (20), and Friendship Frame (10). **60 points total.**
+1. **Sunny Plant Corner**: Leafy Plant (25), Window Curtains (40), and Rainbow Rug (30). **95 points total.**
+2. **Cozy Reading Nook**: Book Nook (35), Story Lamp (20), and Cloud Pillows (45). **100 points total.**
+3. **Class Celebration Space**: Record Player (55), Little Tea Table (60), and Friendship Frame (50). **165 points total.**
 
 ### Bedroom Milestones
 
-The Bedroom costs 250 points.
+The Bedroom opens after 25 completed sessions.
 
-4. **Sweet Dreams Setup**: Cozy Bed (30), Soft Blanket (15), and Moon Lamp (20). **65 points total.**
-5. **Stargazing Corner**: Star Rug (15), Dream Mobile (20), and Comfy Chair (25). **60 points total.**
-6. **Creative Sleepover**: Art Wall (25), Toy Basket (10), and Colorful Closet (30). **65 points total.**
+4. **Sweet Dreams Setup**: Cozy Bed (65), Soft Blanket (85), and Moon Lamp (80). **230 points total.**
+5. **Stargazing Corner**: Star Rug (70), Dream Mobile (90), and Comfy Chair (100). **260 points total.**
+6. **Creative Sleepover**: Art Wall (95), Toy Basket (105), and Colorful Closet (110). **310 points total.**
 
 ### Kitchen Milestones
 
-The Kitchen costs 400 points.
+The Kitchen opens after 50 completed sessions.
 
-7. **Cheerful Breakfast**: Sunny Table (30), Fruit Bowl (10), and Happy Toaster (20). **60 points total.**
-8. **Host a Class Dinner**: Dining Table (35), Place Settings (20), Kitchen Utensils (15), and Dinner Feast (30). **100 points total.**
-9. **Class Bake-Off**: Mixing Bowls (15), Cookie Jar (15), Recipe Board (10), and Cake Stand (25). **65 points total.**
+7. **Cheerful Breakfast**: Sunny Table (135), Fruit Bowl (115), and Happy Toaster (155). **405 points total.**
+8. **Host a Class Dinner**: Dining Table (165), Place Settings (170), Kitchen Utensils (175), and Dinner Feast (180). **690 points total.**
+9. **Class Bake-Off**: Mixing Bowls (125), Cookie Jar (130), Recipe Board (150), and Cake Stand (160). **565 points total.**
 
 ### Bathroom Milestones
 
-The Bathroom costs 550 points.
+The Bathroom opens after 75 completed sessions.
 
-10. **Fresh and Ready**: Soft Towels (10), Round Mirror (20), and Sweet Soap Set (15). **45 points total.**
-11. **Spa Day**: Face Masks (15), Skin Care Set (20), Fuzzy Robe (25), and Bubble Bath (15). **75 points total.**
-12. **Calm Garden Bath**: Bathroom Plant (15), Bath Mat (15), Shower Curtain (25), and Rubber Duck (10). **65 points total.**
+10. **Fresh and Ready**: Soft Towels (220), Round Mirror (225), and Sweet Soap Set (240). **685 points total.**
+11. **Spa Day**: Face Masks (265), Skin Care Set (270), Fuzzy Robe (325), and Bubble Bath (215). **1,075 points total.**
+12. **Calm Garden Bath**: Bathroom Plant (260), Bath Mat (235), Shower Curtain (250), and Rubber Duck (255). **1,000 points total.**
 
 The milestones remain a helpful order for choosing decorations, but classes can buy any available piece when they have enough points.
 
@@ -132,12 +132,12 @@ These decorations can also be purchased, but they are not required for any miles
 
 | Room | Optional decorations |
 | --- | --- |
-| Living Room | Sunny Sofa (25 points) |
-| Bedroom | Nightstand (15 points) |
-| Kitchen | Tea Kettle (20), Wall Clock (15), Herb Garden (20) |
-| Bathroom | Toothbrush Cup (10), Wash Basket (20) |
+| Living Room | Sunny Sofa (15 points) |
+| Bedroom | Nightstand (75 points) |
+| Kitchen | Tea Kettle (120), Wall Clock (140), Herb Garden (145) |
+| Bathroom | Toothbrush Cup (230), Wash Basket (245) |
 
-Optional decorations, rooms, and Focus Friend accessories use the same available points as milestone pieces. Buying every room, decoration, and accessory costs exactly **8,000 points**: a full 160-day school year at an average of 50 points per day.
+Optional decorations and Focus Friend accessories use the same available points as milestone pieces. Rooms unlock through completed sessions and do not cost points.
 
 ## Helpful Classroom Routine
 
