@@ -45,7 +45,7 @@ const HouseCard = ({ house, rewards }) => {
           <h2>{activeRoomDetails.name} is ready for focus</h2>
         </div>
         <div className="house-progress">
-          <b>{completedSessions}</b> sessions
+          <span><b>{completedSessions}</b> total sessions completed</span>
           <small>{nextRoom ? `${nextRoom.sessionsRequired - completedSessions} until ${nextRoom.name}` : "Every room unlocked!"}</small>
         </div>
       </div>
