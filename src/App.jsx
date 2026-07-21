@@ -9,7 +9,6 @@ import { formatTime } from "./utils/formatTime";
 import { playNoiseAlert } from "./utils/playNoiseAlert";
 import Header from "./components/Header/Header";
 import Friend from "./components/Friend/Friend";
-import SessionSettingsCard from "./components/SessionSettings/SessionSettingsCard";
 import NoiseCard from "./components/NoiseMeter/NoiseCard";
 import TimerCard from "./components/Timer/TimerCard";
 import RewardShop from "./components/Rewards/RewardShop";
@@ -192,9 +191,7 @@ export default function App() {
       </section>
 
       <div className="dashboard-grid">
-        <TimerCard timerSettings={timerSettings} music={music}/>
-
-        <SessionSettingsCard session={session}/>
+        <TimerCard timerSettings={timerSettings} music={music} session={session}/>
 
         <NoiseCard noise={noise}/>
 

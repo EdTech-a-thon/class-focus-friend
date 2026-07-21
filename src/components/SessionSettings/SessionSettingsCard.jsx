@@ -1,4 +1,4 @@
-const SessionSettingsCard = ({ session }) => {
+const SessionSettingsCard = ({ session, onClose }) => {
   const {
     timer,
     activity,
@@ -7,9 +7,19 @@ const SessionSettingsCard = ({ session }) => {
     setActivity,
   } = session;
   return (
-    <section className="card setup-card">
-          <p className="card-label">Session settings</p>
-          <h2>Set the room up for success.</h2>
+    <section
+      className="setup-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settings-title"
+    >
+          <div className="settings-heading">
+            <div>
+              <p className="card-label">Session settings</p>
+              <h2 id="settings-title">Set the room up for success.</h2>
+            </div>
+            <button className="modal-close" type="button" aria-label="Close session settings" autoFocus onClick={onClose}>&times;</button>
+          </div>
           <fieldset disabled={timer.isRunning}>
             <legend>Length</legend>
             <div className="choice-row">
