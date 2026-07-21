@@ -227,33 +227,33 @@ export default function App() {
           <p className="timer-caption">
             {timer.isRunning ? "Your class is building focus stamina." : `${timer.minutes} minute ${expectation.label.toLowerCase()} session`}
           </p>
-          <div className="button-row">
+           <div className="button-row">
             <button className="primary" type="button" onClick={timer.toggle} disabled={timer.isComplete}>
               {timer.isRunning ? "Pause session" : timer.isComplete ? "Session complete" : "Start session"}
             </button>
-            <button className="plain-button" type="button" onClick={timer.reset}>Reset</button>
-          </div>
-          <button
-            className={`music-button ${musicEnabled ? "playing" : ""}`}
-            type="button"
-            aria-pressed={musicEnabled}
-            onClick={() => setMusicEnabled((enabled) => !enabled)}
-          >
-            <span aria-hidden="true">♫</span> {musicEnabled ? "Lo-fi music playing" : "Play lo-fi music"}
-          </button>
-          <label className="volume-control">
-            <span>Music volume</span>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={musicVolume}
-              onChange={(event) => setMusicVolume(Number(event.target.value))}
-            />
-            <output>{musicVolume}%</output>
-          </label>
-          <p className="music-note">Optional background music, available before, during, or after a session.</p>
-        </section>
+             <button className="plain-button" type="button" onClick={timer.reset}>Reset</button>
+           </div>
+           <button
+             className={`music-button ${musicEnabled ? "playing" : ""}`}
+             type="button"
+             aria-pressed={musicEnabled}
+             onClick={() => setMusicEnabled((enabled) => !enabled)}
+           >
+             <span aria-hidden="true">♫</span> {musicEnabled ? "Lo-fi music playing" : "Play lo-fi music"}
+           </button>
+           <label className="volume-control">
+             <span>Music volume</span>
+             <input
+               type="range"
+               min="0"
+               max="100"
+               value={musicVolume}
+               onChange={(event) => setMusicVolume(Number(event.target.value))}
+             />
+             <output>{musicVolume}%</output>
+           </label>
+           <p className="music-note">Optional background music, available before, during, or after a session.</p>
+         </section>
 
         <section className="card setup-card">
           <p className="card-label">Session settings</p>
