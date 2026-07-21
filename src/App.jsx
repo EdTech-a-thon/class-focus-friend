@@ -41,7 +41,9 @@ export default function App() {
   });
 
   const { activity, preferredMinutes } = settings;
-  const { points, totalPoints, completedSessions, history } = progressData;
+  const { points, totalPoints, history = [] } = progressData;
+  // Older saved classrooms may only have session history, not this total.
+  const completedSessions = progressData.completedSessions ?? history.length;
   const { unlocked, equipped } = rewardData;
   const { activeRoom, houseItemsOwned } = houseData;
   const { musicEnabled, musicVolume } = preferences;
