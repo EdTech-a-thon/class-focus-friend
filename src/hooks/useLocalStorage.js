@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
+import { loadData, saveData } from "../utils/storage.js";
 
 export function useLocalStorage(key, initialValue) {
   const [value, setValue] = useState(() => {
     try {
-      const saved = localStorage.getItem(key);
-      return saved ? JSON.parse(saved) : initialValue;
+      return loadData(key, initialValue);
     } catch {
       return initialValue;
     }
@@ -12,7 +12,7 @@ export function useLocalStorage(key, initialValue) {
 
   useEffect(() => {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
+      saveData(key, value);
     } catch {
       // The app still works when browser storage is unavailable.
     }

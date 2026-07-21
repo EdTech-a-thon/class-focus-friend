@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SessionSettingsCard from "../SessionSettings/SessionSettingsCard";
 import MusicControls from "./MusicControls";
 import TimerControls from "./TimerControls";
+import Modal from "../Modal/Modal";
 
 const TimerCard = ({ timerSettings, music, session }) => {
   const [showSettings, setShowSettings] = useState(false);
@@ -36,14 +37,13 @@ const TimerCard = ({ timerSettings, music, session }) => {
         </section>
 
         {showSettings && (
-          <div className="modal-backdrop" onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setShowSettings(false);
-          }}>
-            <SessionSettingsCard
-              session={session}
-              onClose={() => setShowSettings(false)}
-            />
-          </div>
+          <Modal
+            isOpen={showSettings}
+            onClose={() => setShowSettings(false)}
+            className="setup-modal"
+          >
+            <SessionSettingsCard session={session} />
+          </Modal>
         )}
     </>
   )

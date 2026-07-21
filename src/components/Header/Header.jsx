@@ -1,5 +1,5 @@
 const Header = ({ header }) => {
-  const { points } = header;
+  const { points, onOpenExportImport } = header;
   return (
     <header className="app-header">
       <a className="brand" href="#dashboard">
@@ -11,8 +11,9 @@ const Header = ({ header }) => {
         <b>★</b>
         {points} class points
       </p>
-
+      <button className="export-import-trigger" type="button" onClick={onOpenExportImport}>Save Classroom Setup</button>
     </header>
+
   )
 }
 

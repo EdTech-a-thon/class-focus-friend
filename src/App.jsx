@@ -13,30 +13,66 @@ import TimerCard from "./components/Timer/TimerCard";
 import HouseCard from "./components/House/HouseCard";
 import ProgressCard from "./components/Progress/ProgressCard";
 import SessionCompletionModal from "./components/SessionCompleteModal/SessionCompletionModal";
+import ExportImportModal from "./components/ExportImport/ExportImportModal";
 
 export default function App() {
-  const [activity, setActivity] = useLocalStorage("class-focus-activity", "independent");
-  const [preferredMinutes, setPreferredMinutes] = useLocalStorage("class-focus-minutes", 15);
-  const [points, setPoints] = useLocalStorage("class-focus-points", 0);
-  const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
-  const [history, setHistory] = useLocalStorage("class-focus-history", []);
-  const [completedSessions, setCompletedSessions] = useLocalStorage("class-focus-completed-sessions", null);
-  const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
-  const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
-  const [houseItemsOwned, setHouseItemsOwned] = useLocalStorage("class-focus-house-items", []);
-  const [activeRoom, setActiveRoom] = useState("living");
-  const [musicEnabled, setMusicEnabled] = useState(false);
-  const [musicVolume, setMusicVolume] = useLocalStorage("class-focus-music-volume", 55);
+  // persistent classroom data
+  const [settings, setSettings] = useLocalStorage("focusFriendSettings", {
+    activity: "independent",
+    preferredMinutes: 15,
+  });
+  const [progressData, setProgressData] = useLocalStorage("focusFriendProgress", {
+    points: 0,
+    totalPoints: 0,
+    completedSessions: 0,
+    history: [],
+  });
+  const [rewardData, setRewardData] = useLocalStorage("focusFriendRewards", {
+    unlocked: [],
+    equipped: [],
+  });
+  const [houseData, setHouseData] = useLocalStorage("focusFriendHouse", {
+    activeRoom: "living",
+    houseItemsOwned: [],
+  });
+  const [preferences, setPreferences] = useLocalStorage("focusFriendPreferences", {
+    musicEnabled: false,
+    musicVolume: 55,
+  });
+
+  const { activity, preferredMinutes } = settings;
+  const { points, totalPoints, completedSessions, history } = progressData;
+  const { unlocked, equipped } = rewardData;
+  const { activeRoom, houseItemsOwned } = houseData;
+  const { musicEnabled, musicVolume } = preferences;
+
+  const setActivity = (value) => setSettings((current) => ({ ...current, activity: typeof value === "function" ? value(current.activity) : value }));
+  const setPreferredMinutes = (value) => setSettings((current) => ({ ...current, preferredMinutes: typeof value === "function" ? value(current.preferredMinutes) : value }));
+  const setPoints = (value) => setProgressData((current) => ({ ...current, points: typeof value === "function" ? value(current.points) : value }));
+  const setTotalPoints = (value) => setProgressData((current) => ({ ...current, totalPoints: typeof value === "function" ? value(current.totalPoints) : value }));
+  const setCompletedSessions = (value) => setProgressData((current) => ({ ...current, completedSessions: typeof value === "function" ? value(current.completedSessions) : value }));
+  const setHistory = (value) => setProgressData((current) => ({ ...current, history: typeof value === "function" ? value(current.history) : value }));
+  const setUnlocked = (value) => setRewardData((current) => ({ ...current, unlocked: typeof value === "function" ? value(current.unlocked) : value }));
+  const setEquipped = (value) => setRewardData((current) => ({ ...current, equipped: typeof value === "function" ? value(current.equipped) : value }));
+  const setActiveRoom = (value) => setHouseData((current) => ({ ...current, activeRoom: typeof value === "function" ? value(current.activeRoom) : value }));
+  const setHouseItemsOwned = (value) => setHouseData((current) => ({ ...current, houseItemsOwned: typeof value === "function" ? value(current.houseItemsOwned) : value }));
+  const setMusicEnabled = (value) => setPreferences((current) => ({ ...current, musicEnabled: typeof value === "function" ? value(current.musicEnabled) : value }));
+  const setMusicVolume = (value) => setPreferences((current) => ({ ...current, musicVolume: typeof value === "function" ? value(current.musicVolume) : value }));
+  
+  // temporary session state
   const [showComplete, setShowComplete] = useState(false);
-  const recordedCompletion = useRef(false);
-  const redAlertPlayed = useRef(false);
-  const timer = useTimer(preferredMinutes);
-  const microphone = useMicrophone();
+  const [showExportImport, setShowExportImport] = useState(false);
+  
+  // runtime state
   const expectation = activities[activity];
+  const microphone = useMicrophone();
   const noiseTone = microphone.status !== "on" ? "neutral" : microphone.level <= expectation.threshold ? "good" : microphone.level <= expectation.threshold + 18 ? "warn" : "loud";
   const noiseMessage = microphone.status !== "on" ? "Ready when you are" : noiseTone === "good" ? "On track" : noiseTone === "warn" ? "Getting loud" : "Too loud";
+  const timer = useTimer(preferredMinutes);
   const pauseTimer = timer.pause;
-
+  const recordedCompletion = useRef(false);
+  const redAlertPlayed = useRef(false);
+  
   useEffect(() => {
     if (noiseTone !== "loud") {
       redAlertPlayed.current = false;
@@ -79,7 +115,7 @@ export default function App() {
   }, [showComplete]);
 
   const totalMinutes = history.reduce((sum, session) => sum + session.minutes, 0);
-  const sessionCount = completedSessions ?? history.length;
+  const sessionCount = completedSessions;
 
   function buyOrEquip(item) {
     if (unlocked.includes(item.id)) {
@@ -175,8 +211,23 @@ export default function App() {
 
   const header = {
     points,
+    onOpenExportImport: () => setShowExportImport(true),
+  };
 
-  }
+  const classroomData = {
+    focusFriendSettings: settings,
+    focusFriendProgress: progressData,
+    focusFriendRewards: rewardData,
+    focusFriendHouse: houseData,
+    focusFriendPreferences: preferences,
+  };
+
+  const validSaveIds = {
+    activities: Object.keys(activities),
+    accessories: accessories.map((item) => item.id),
+    houseItems: houseItems.map((item) => item.id),
+    rooms: houseRooms.map((room) => room.id),
+  };
 
   return (
     <main className="app-shell">
@@ -197,7 +248,14 @@ export default function App() {
         setShowComplete={setShowComplete}
         minutes={timer.minutes}
       />
-      
+
+      {showExportImport && (
+        <ExportImportModal
+          classroomData={classroomData}
+          validIds={validSaveIds}
+          onClose={() => setShowExportImport(false)}
+        />
+      )}
     </main>
   );
 }
