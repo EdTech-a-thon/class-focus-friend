@@ -1,0 +1,226 @@
+import { useEffect, useRef, useState } from "react";
+import { accessories } from "./data/accessories";
+import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useMicrophone } from "./hooks/useMicrophone";
+import { useTimer } from "./hooks/useTimer";
+
+const activities = {
+  independent: { label: "Independent work", detail: "Very quiet", threshold: 22 },
+  partner: { label: "Partner work", detail: "Moderate voices", threshold: 48 },
+  presentation: { label: "Presentation", detail: "One clear speaker", threshold: 68 },
+};
+
+function formatTime(seconds) {
+  return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+}
+
+function Friend({ equipped }) {
+  return (
+    <div className="friend-scene" aria-label="A cheerful classroom friend">
+      <span className="sparkle one" aria-hidden="true">*</span>
+      <span className="sparkle two" aria-hidden="true">*</span>
+      <div className="friend" aria-hidden="true">
+        {equipped.includes("party-hat") && <span className="friend-hat">▲</span>}
+        <span className="friend-ear left" />
+        <span className="friend-ear right" />
+        <div className="friend-face">
+          • &nbsp; •<b>⌣</b>
+          {equipped.includes("glasses") && <i className="friend-glasses">⌐■-■</i>}
+        </div>
+        <div className="friend-body">
+          ♥
+          {equipped.includes("bow-tie") && <i className="friend-bow">◆</i>}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  const [activity, setActivity] = useLocalStorage("class-focus-activity", "independent");
+  const [preferredMinutes, setPreferredMinutes] = useLocalStorage("class-focus-minutes", 15);
+  const [points, setPoints] = useLocalStorage("class-focus-points", 0);
+  const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
+  const [history, setHistory] = useLocalStorage("class-focus-history", []);
+  const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
+  const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
+  const [showComplete, setShowComplete] = useState(false);
+  const recordedCompletion = useRef(false);
+  const timer = useTimer(preferredMinutes);
+  const microphone = useMicrophone();
+  const expectation = activities[activity];
+  const noiseTone = microphone.status !== "on" ? "neutral" : microphone.level <= expectation.threshold ? "good" : microphone.level <= expectation.threshold + 18 ? "warn" : "loud";
+  const noiseMessage = microphone.status !== "on" ? "Ready when you are" : noiseTone === "good" ? "On track" : noiseTone === "warn" ? "Getting loud" : "Too loud";
+
+  useEffect(() => {
+    if (!timer.isComplete) {
+      recordedCompletion.current = false;
+      return;
+    }
+    if (recordedCompletion.current) return;
+    recordedCompletion.current = true;
+    const completedSession = {
+      id: Date.now(),
+      date: new Date().toISOString(),
+      minutes: timer.minutes,
+      activity,
+      pointsEarned: timer.minutes,
+    };
+    setPoints((value) => value + timer.minutes);
+    setTotalPoints((value) => value + timer.minutes);
+    setHistory((sessions) => [completedSession, ...sessions].slice(0, 20));
+    setShowComplete(true);
+  }, [activity, setHistory, setPoints, setTotalPoints, timer.isComplete, timer.minutes]);
+
+  useEffect(() => {
+    if (!showComplete) return;
+    function closeOnEscape(event) {
+      if (event.key === "Escape") setShowComplete(false);
+    }
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [showComplete]);
+
+  const totalMinutes = history.reduce((sum, session) => sum + session.minutes, 0);
+
+  function buyOrEquip(item) {
+    if (unlocked.includes(item.id)) {
+      setEquipped((items) => items.includes(item.id) ? items.filter((id) => id !== item.id) : [...items, item.id]);
+      return;
+    }
+    if (points < item.cost) return;
+    setPoints((value) => value - item.cost);
+    setUnlocked((items) => [...items, item.id]);
+    setEquipped((items) => [...items, item.id]);
+  }
+
+  function chooseMinutes(value) {
+    timer.chooseMinutes(value);
+    setPreferredMinutes(value);
+  }
+
+  return (
+    <main className="app-shell">
+      <header className="app-header">
+        <a className="brand" href="#dashboard"><span>✦</span> Class Focus Friend</a>
+        <p><b>★</b> {points} class points</p>
+      </header>
+      <section className="welcome" id="dashboard">
+        <div>
+          <p className="eyebrow">Today&apos;s classroom goal</p>
+          <h1>Let&apos;s make space for focus.</h1>
+          <p>Set a shared work session, notice the room&apos;s energy, and celebrate every small win together.</p>
+        </div>
+        <Friend equipped={equipped} />
+      </section>
+      <div className="dashboard-grid">
+        <section className="card timer-card">
+          <p className="card-label">Focus session</p>
+          <div className="timer-display" aria-live="off">{formatTime(timer.secondsRemaining)}</div>
+          <p className="timer-caption">
+            {timer.isRunning ? "Your class is building focus stamina." : `${timer.minutes} minute ${expectation.label.toLowerCase()} session`}
+          </p>
+          <div className="button-row">
+            <button className="primary" type="button" onClick={timer.toggle} disabled={timer.isComplete}>
+              {timer.isRunning ? "Pause session" : timer.isComplete ? "Session complete" : "Start session"}
+            </button>
+            <button className="plain-button" type="button" onClick={timer.reset}>Reset</button>
+          </div>
+        </section>
+
+        <section className="card setup-card">
+          <p className="card-label">Session settings</p>
+          <h2>Set the room up for success.</h2>
+          <fieldset disabled={timer.isRunning}>
+            <legend>Length</legend>
+            <div className="choice-row">
+              {[5, 10, 15, 20].map((value) => (
+                <button className={timer.minutes === value ? "selected" : ""} aria-pressed={timer.minutes === value} type="button" key={value} onClick={() => chooseMinutes(value)}>{value} min</button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset disabled={timer.isRunning}>
+            <legend>Activity</legend>
+            <div className="activity-list">
+              {Object.entries(activities).map(([key, item]) => (
+                <button className={activity === key ? "selected" : ""} aria-pressed={activity === key} type="button" key={key} onClick={() => setActivity(key)}>
+                  <b>{item.label}</b><span>{item.detail}</span>
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        </section>
+
+        <section className="card noise-card">
+          <div className="card-heading">
+            <div><p className="card-label">Classroom sound</p><h2>{noiseMessage}</h2></div>
+            <i className={`status-dot ${noiseTone}`} aria-hidden="true" />
+          </div>
+          <p className="noise-expectation">Goal for {expectation.label.toLowerCase()}: <b>{expectation.detail}</b></p>
+          <div className="meter" role="meter" aria-label="Current classroom sound" aria-valuemin="0" aria-valuemax="100" aria-valuenow={microphone.level}>
+            <span className={noiseTone} style={{ width: `${microphone.level}%` }} />
+          </div>
+          <div className="noise-scale"><span>Quiet</span><span>Talking</span><span>Lively</span></div>
+          <button className="outline" type="button" aria-pressed={microphone.status === "on"} onClick={microphone.status === "on" ? microphone.stop : microphone.start}>
+            {microphone.status === "on" ? "Stop sound meter" : "Turn on sound meter"}
+          </button>
+          {microphone.status === "denied" && <p className="help-text">Microphone access was not available. You can still run a focus session.</p>}
+          {microphone.status === "unsupported" && <p className="help-text">This browser cannot use the sound meter. The other classroom tools still work.</p>}
+        </section>
+
+        <section className="card shop-card">
+          <div className="card-heading">
+            <div><p className="card-label">Reward shelf</p><h2>Dress up your class friend.</h2></div>
+            <span className="points-badge">★ {points}</span>
+          </div>
+          <div className="reward-list">
+            {accessories.map((item) => {
+              const owned = unlocked.includes(item.id);
+              const wearing = equipped.includes(item.id);
+              return (
+                <article className="reward" key={item.id}>
+                  <span className="reward-icon" aria-hidden="true">{item.icon}</span>
+                  <div><b>{item.name}</b><small>{owned ? wearing ? "Wearing now" : "Unlocked" : `${item.cost} points`}</small></div>
+                  <button type="button" disabled={!owned && points < item.cost} onClick={() => buyOrEquip(item)}>
+                    {owned ? wearing ? "Remove" : "Wear" : "Unlock"}
+                  </button>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+
+        <section className="card history-card">
+          <div className="card-heading">
+            <div><p className="card-label">Class progress</p><h2>{totalMinutes} focused minutes</h2></div>
+            <span className="session-count">{history.length} sessions</span>
+          </div>
+          <div className="progress-summary"><span><b>{totalPoints}</b> total points earned</span><span><b>{points}</b> available now</span></div>
+          {history.length ? (
+            <ul>
+              {history.slice(0, 5).map((session) => (
+                <li key={session.id}>
+                  <span>{new Date(session.date).toLocaleDateString(undefined, { month: "short", day: "numeric" })}</span>
+                  <b>{session.minutes} min</b>
+                  <em>{activities[session.activity]?.label ?? "Focus session"}</em>
+                  <strong>+{session.pointsEarned} ★</strong>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="empty-state">Completed focus sessions will appear here.</p>}
+        </section>
+      </div>
+      {showComplete && (
+        <div className="modal-backdrop">
+          <section className="completion-modal" role="dialog" aria-modal="true" aria-labelledby="complete-title">
+            <span className="celebration-mark" aria-hidden="true">✦</span>
+            <p className="eyebrow">Focus session complete</p>
+            <h2 id="complete-title">Beautiful work, class!</h2>
+            <p>You earned <b>{timer.minutes} class points</b> for {timer.minutes} minutes of shared focus.</p>
+            <button className="primary" type="button" autoFocus onClick={() => setShowComplete(false)}>Celebrate</button>
+          </section>
+        </div>
+      )}
+    </main>
+  );
+}
