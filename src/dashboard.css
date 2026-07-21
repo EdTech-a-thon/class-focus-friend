@@ -28,21 +28,24 @@ h2 { font-size: 1.65rem; }
 .friend-scene { align-self: end; height: 250px; justify-self: center; position: relative; width: 230px; }
 .friend-message { background: #fffaf0; border-radius: 999px; color: #46645b; font-size: .72rem; font-weight: 700; left: 50%; margin: 0; opacity: 0; padding: 7px 12px; position: absolute; top: 2px; transform: translate(-50%, 5px); transition: opacity .25s, transform .25s; white-space: nowrap; z-index: 6; }
 .friend-scene.state-focusing .friend-message, .friend-scene.state-loud .friend-message, .friend-scene.state-celebrating .friend-message { opacity: 1; transform: translate(-50%, 0); }
-.friend { bottom: -18px; height: 215px; left: 10px; position: absolute; transform-origin: 50% 100%; width: 210px; }
-.friend-blob { background: #f3a66f; border: 5px solid #25433d; border-radius: 48% 52% 43% 57% / 40% 43% 57% 60%; bottom: 0; box-shadow: inset -13px -12px rgba(197, 93, 75, .18), inset 11px 10px rgba(255, 230, 177, .2); height: 184px; left: 20px; position: absolute; transform-origin: 50% 100%; width: 170px; z-index: 2; }
-.friend-face { height: 80px; left: 41px; position: absolute; top: 44px; width: 88px; }
-.friend-eye { background: #25433d; border-radius: 50%; height: 13px; position: absolute; top: 4px; transition: height .2s, top .2s, transform .2s; width: 10px; }
-.friend-eye.left { left: 13px; }.friend-eye.right { right: 13px; }
-.friend-eye::after { background: #fffaf0; border-radius: 50%; content: ""; height: 3px; left: 2px; position: absolute; top: 2px; width: 3px; }
-.friend-mouth { border-bottom: 4px solid #25433d; border-radius: 0 0 20px 20px; bottom: 15px; height: 14px; left: 31px; position: absolute; transition: all .2s; width: 27px; }
-.friend-heart { bottom: 23px; color: #fff4dc; font-size: 26px; left: 72px; position: absolute; }
-.friend-arm { height: 105px; position: absolute; top: 84px; transform-origin: 50% 90%; transition: transform .28s ease; width: 48px; z-index: 3; }
-.friend-arm.left { left: 2px; transform: rotate(18deg); }.friend-arm.right { right: 2px; transform: rotate(-18deg); }
-.friend-arm i { background: #f3a66f; border: 5px solid #25433d; border-radius: 50% 50% 46% 54%; display: block; height: 84px; width: 43px; }
-.friend-arm.left i { transform: rotate(8deg); }.friend-arm.right i { transform: rotate(-8deg); }
-.friend-hat { color: #7198d2; font-size: 86px; left: 63px; line-height: .65; position: absolute; text-shadow: -4px 0 #25433d, 0 -4px #25433d, 4px 0 #25433d; top: -19px; transform: scaleX(1.12); z-index: 5; }
-.friend-glasses { color: #25433d; font-family: monospace; font-size: 22px; font-style: normal; left: 39px; letter-spacing: -5px; position: absolute; top: 47px; z-index: 4; }
-.friend-bow { bottom: -3px; color: #f8d97a; font-size: 33px; font-style: normal; left: 68px; position: absolute; text-shadow: 0 2px #25433d; transform: scaleX(1.5) rotate(45deg); }
+.friend { bottom: -18px; height: 215px; left: 10px; position: absolute; transform-origin: 50% 90%; width: 210px; }
+.friend-svg { height: 100%; overflow: visible; width: 100%; }
+.friend-blob { fill: #f3a66f; stroke: #25433d; stroke-linejoin: round; stroke-width: 5; transform-box: fill-box; transform-origin: center bottom; }
+.friend-shine { fill: none; opacity: .65; stroke: #ffe7b6; stroke-linecap: round; stroke-width: 8; }
+.friend-arm, .friend-leg { fill: none; stroke: #25433d; stroke-linecap: round; stroke-linejoin: round; stroke-width: 5; transform-box: fill-box; transition: transform .28s ease; }
+.friend-arm circle { fill: #25433d; stroke: none; }
+.friend-arm-left { transform-origin: 58px 94px; }.friend-arm-right { transform-origin: 163px 93px; }
+.friend-leg-left { transform-origin: 82px 169px; }.friend-leg-right { transform-origin: 143px 170px; }
+.friend-eye { transform-box: fill-box; transform-origin: center; }
+.friend-eye ellipse { fill: #25433d; }.friend-eye circle { fill: #fffaf0; }
+.friend-mouth { fill: none; opacity: 0; stroke: #25433d; stroke-linecap: round; stroke-linejoin: round; stroke-width: 5; }
+.friend-mouth-smile { opacity: 1; }
+.friend-mouth-loud, .friend-mouth-celebrate { fill: #25433d; }
+.friend-heart { fill: #fff4dc; }
+.friend-glasses { fill: rgba(255, 250, 240, .2); stroke: #25433d; stroke-linecap: round; stroke-width: 4; }
+.friend-hat path:first-child { fill: #7198d2; stroke: #25433d; stroke-linejoin: round; stroke-width: 4; }
+.friend-hat path:not(:first-child) { fill: none; stroke: #f8d97a; stroke-width: 4; }.friend-hat circle { fill: #e98769; stroke: #25433d; stroke-width: 3; }
+.friend-bow path { fill: #f8d97a; stroke: #25433d; stroke-linejoin: round; stroke-width: 4; }.friend-bow circle { fill: #e98769; stroke: #25433d; stroke-width: 3; }
 .sparkle, .music-note-float { opacity: 0; pointer-events: none; position: absolute; z-index: 5; }
 .sparkle { color: #d76d54; font-size: 28px; }.sparkle.one { right: 0; top: 42px; }.sparkle.two { left: 0; top: 105px; }
 .music-note-float { color: #527b70; font-size: 22px; }.music-note-float.one { right: 4px; top: 63px; }.music-note-float.two { left: 4px; top: 118px; }
@@ -50,16 +53,16 @@ h2 { font-size: 1.65rem; }
 .state-idle .friend { animation: friend-float 3.2s ease-in-out infinite; }
 .state-idle .friend-eye { animation: friend-blink 4.5s ease-in-out infinite; }
 .state-focusing .friend-blob { animation: friend-breathe 2.8s ease-in-out infinite; }
-.state-focusing .friend-eye { border-radius: 0 0 12px 12px; height: 7px; top: 10px; }
-.state-focusing .friend-eye::after { display: none; }
-.state-focusing .friend-mouth { border-bottom-width: 3px; height: 5px; left: 35px; width: 19px; }
+.state-focusing .friend-eye { transform: scaleY(.35); }
+.state-focusing .friend-mouth-smile { opacity: 0; }.state-focusing .friend-mouth-focus { opacity: 1; }
 .state-loud .friend { animation: friend-startle .4s ease-out both; }
-.state-loud .friend-arm.left { transform: translate(25px, -58px) rotate(-28deg); }.state-loud .friend-arm.right { transform: translate(-25px, -58px) rotate(28deg); }
-.state-loud .friend-eye { height: 16px; top: 0; transform: scaleX(1.15); }
-.state-loud .friend-mouth { background: #25433d; border: 0; border-radius: 50%; bottom: 8px; height: 20px; left: 35px; width: 19px; }
+.state-loud .friend-arm-left { transform: translate(35px, -12px) rotate(-82deg); }.state-loud .friend-arm-right { transform: translate(-35px, -12px) rotate(82deg); }
+.state-loud .friend-eye { transform: scale(1.12); }
+.state-loud .friend-mouth-smile { opacity: 0; }.state-loud .friend-mouth-loud { opacity: 1; }
 .state-celebrating .friend { animation: friend-celebrate .72s ease-in-out infinite; }
-.state-celebrating .friend-arm.left { transform: translate(9px, -55px) rotate(150deg); }.state-celebrating .friend-arm.right { transform: translate(-9px, -55px) rotate(-150deg); }
-.state-celebrating .friend-mouth { background: #25433d; border: 0; border-radius: 4px 4px 18px 18px; bottom: 5px; height: 21px; left: 29px; width: 31px; }
+.state-celebrating .friend-arm-left { transform: rotate(142deg); }.state-celebrating .friend-arm-right { transform: rotate(-142deg); }
+.state-celebrating .friend-leg-left { animation: friend-feet-left .72s ease-in-out infinite; }.state-celebrating .friend-leg-right { animation: friend-feet-right .72s ease-in-out infinite; }
+.state-celebrating .friend-mouth-smile { opacity: 0; }.state-celebrating .friend-mouth-celebrate { opacity: 1; }
 .state-celebrating .sparkle { animation: sparkle-pop .8s ease-in-out infinite alternate; opacity: 1; }
 .state-celebrating .sparkle.two { animation-delay: -.35s; }
 .is-dancing .friend { animation: friend-dance .85s ease-in-out infinite; }
@@ -67,11 +70,13 @@ h2 { font-size: 1.65rem; }
 .is-dancing .music-note-float.two { animation-delay: -.75s; }
 
 @keyframes friend-float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-7px) rotate(1deg); } }
-@keyframes friend-blink { 0%, 44%, 50%, 100% { transform: scaleY(1); } 47% { transform: scaleY(.12); } }
+@keyframes friend-blink { 0%, 44%, 50%, 100% { transform: scaleY(1); } 47% { transform: scaleY(.08); } }
 @keyframes friend-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025, 1.04); } }
 @keyframes friend-startle { 0% { transform: scale(1); } 45% { transform: scale(1.04, .95) translateY(5px); } 100% { transform: scale(1); } }
 @keyframes friend-celebrate { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-20px) rotate(4deg); } }
 @keyframes friend-dance { 0%, 100% { transform: translateX(-5px) rotate(-5deg) scaleY(.98); } 50% { transform: translateX(5px) rotate(5deg) scaleY(1.02); } }
+@keyframes friend-feet-left { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(18deg) translateY(-3px); } }
+@keyframes friend-feet-right { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(-18deg) translateY(-3px); } }
 @keyframes sparkle-pop { from { transform: scale(.65) rotate(0); } to { transform: scale(1.2) rotate(25deg); } }
 @keyframes music-float { 0% { opacity: 0; transform: translateY(18px) rotate(-8deg); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(-30px) rotate(12deg); } }
 
