@@ -13,30 +13,35 @@ import TimerCard from "./components/Timer/TimerCard";
 import HouseCard from "./components/House/HouseCard";
 import ProgressCard from "./components/Progress/ProgressCard";
 import SessionCompletionModal from "./components/SessionCompleteModal/SessionCompletionModal";
+import ExportButton from "./components/Backup/ExportButton";
 
 export default function App() {
+  // persistent classroom data
   const [activity, setActivity] = useLocalStorage("class-focus-activity", "independent");
-  const [preferredMinutes, setPreferredMinutes] = useLocalStorage("class-focus-minutes", 15);
-  const [points, setPoints] = useLocalStorage("class-focus-points", 0);
-  const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
-  const [history, setHistory] = useLocalStorage("class-focus-history", []);
-  const [completedSessions, setCompletedSessions] = useLocalStorage("class-focus-completed-sessions", null);
-  const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
   const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
+  const [history, setHistory] = useLocalStorage("class-focus-history", []);
   const [houseItemsOwned, setHouseItemsOwned] = useLocalStorage("class-focus-house-items", []);
+  const [musicVolume, setMusicVolume] = useLocalStorage("class-focus-music-volume", 55);
+  const [points, setPoints] = useLocalStorage("class-focus-points", 0);
+  const [preferredMinutes, setPreferredMinutes] = useLocalStorage("class-focus-minutes", 15);
+  const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
+  const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
+  
+  // temporary session state
   const [activeRoom, setActiveRoom] = useState("living");
   const [musicEnabled, setMusicEnabled] = useState(false);
-  const [musicVolume, setMusicVolume] = useLocalStorage("class-focus-music-volume", 55);
   const [showComplete, setShowComplete] = useState(false);
+  
+  // runtime state
+  const expectation = activities[activity];
+  const microphone = useMicrophone();
+  const noiseMessage = microphone.status !== "on" ? "Ready when you are" : noiseTone === "good" ? "On track" : noiseTone === "warn" ? "Getting loud" : "Too loud";
+  const noiseTone = microphone.status !== "on" ? "neutral" : microphone.level <= expectation.threshold ? "good" : microphone.level <= expectation.threshold + 18 ? "warn" : "loud";
+  const timer = useTimer(preferredMinutes);
+  const pauseTimer = timer.pause;
   const recordedCompletion = useRef(false);
   const redAlertPlayed = useRef(false);
-  const timer = useTimer(preferredMinutes);
-  const microphone = useMicrophone();
-  const expectation = activities[activity];
-  const noiseTone = microphone.status !== "on" ? "neutral" : microphone.level <= expectation.threshold ? "good" : microphone.level <= expectation.threshold + 18 ? "warn" : "loud";
-  const noiseMessage = microphone.status !== "on" ? "Ready when you are" : noiseTone === "good" ? "On track" : noiseTone === "warn" ? "Getting loud" : "Too loud";
-  const pauseTimer = timer.pause;
-
+  
   useEffect(() => {
     if (noiseTone !== "loud") {
       redAlertPlayed.current = false;
