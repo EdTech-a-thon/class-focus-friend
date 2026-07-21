@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { accessories } from "./data/accessories";
+import { houseItems, houseRooms } from "./data/houseItems";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMicrophone } from "./hooks/useMicrophone";
 import { useTimer } from "./hooks/useTimer";
@@ -110,6 +111,8 @@ export default function App() {
   const [history, setHistory] = useLocalStorage("class-focus-history", []);
   const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
   const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
+  const [houseItemsOwned, setHouseItemsOwned] = useLocalStorage("class-focus-house-items", []);
+  const [activeRoom, setActiveRoom] = useState("living");
   const [musicEnabled, setMusicEnabled] = useState(false);
   const [musicVolume, setMusicVolume] = useLocalStorage("class-focus-music-volume", 55);
   const [showComplete, setShowComplete] = useState(false);
@@ -193,6 +196,15 @@ export default function App() {
     timer.chooseMinutes(value);
     setPreferredMinutes(value);
   }
+
+  function buyHouseItem(item) {
+    if (houseItemsOwned.includes(item.id) || points < item.cost) return;
+    setPoints((value) => value - item.cost);
+    setHouseItemsOwned((items) => [...items, item.id]);
+  }
+
+  const currentRoom = houseRooms.find((room) => room.id === activeRoom);
+  const roomDecorations = houseItems.filter((item) => item.room === activeRoom && houseItemsOwned.includes(item.id));
 
   return (
     <main className="app-shell">
@@ -302,6 +314,44 @@ export default function App() {
                 </article>
               );
             })}
+          </div>
+        </section>
+
+        <section className="card house-card">
+          <div className="card-heading">
+            <div><p className="card-label">Friend&apos;s house</p><h2>Make a home together.</h2></div>
+            <span className="points-badge">★ {points}</span>
+          </div>
+          <p className="house-intro">Every room is empty and ready for your class to make it special.</p>
+          <div className="room-tabs" role="tablist" aria-label="Rooms in the friend&apos;s house">
+            {houseRooms.map((room) => (
+              <button key={room.id} className={activeRoom === room.id ? "selected" : ""} type="button" role="tab" aria-selected={activeRoom === room.id} onClick={() => setActiveRoom(room.id)}>
+                <span aria-hidden="true">{room.icon}</span>{room.name}
+              </button>
+            ))}
+          </div>
+          <section className="room-scene" style={{ backgroundImage: `url(${currentRoom.image})` }} aria-label={`${currentRoom.name} in the friend's house`}>
+            <div className="room-scene-label"><span>{currentRoom.icon}</span><div><b>{currentRoom.name}</b><small>{currentRoom.description}</small></div></div>
+            {roomDecorations.length ? (
+              <div className="placed-decorations" aria-label="Decorations in this room">
+                {roomDecorations.map((item) => <img key={item.id} src={item.image} alt={item.name} />)}
+              </div>
+            ) : <p className="empty-room">This room is empty. Choose something from the catalog to begin decorating.</p>}
+          </section>
+          <div className="house-catalog">
+            <p className="catalog-label">{currentRoom.name} catalog</p>
+            <div className="reward-list">
+              {houseItems.filter((item) => item.room === activeRoom).map((item) => {
+                const owned = houseItemsOwned.includes(item.id);
+                return (
+                  <article className="reward" key={item.id}>
+                    <img className="reward-icon house-item-icon" src={item.image} alt="" />
+                    <div><b>{item.name}</b><small>{owned ? "In this room" : `${item.cost} points`}</small></div>
+                    <button type="button" disabled={owned || points < item.cost} onClick={() => buyHouseItem(item)}>{owned ? "Placed" : "Buy"}</button>
+                  </article>
+                );
+              })}
+            </div>
           </div>
         </section>
 

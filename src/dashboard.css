@@ -42,7 +42,7 @@ h2 { font-size: 1.65rem; }
 .dashboard-placeholder { background: #fffaf0; border: 1px solid #e7ded0; border-radius: 24px; display: block; padding: 34px; }
 .card { background: #fffaf0; border: 1px solid #e7ded0; border-radius: 24px; box-shadow: 0 10px 30px rgba(56, 75, 66, .06); padding: 30px; }
 .card-heading { align-items: flex-start; display: flex; justify-content: space-between; }
-.primary, .outline, .plain-button, .choice-row button, .activity-list button, .reward button { border-radius: 999px; cursor: pointer; font-weight: 700; }
+.primary, .outline, .plain-button, .choice-row button, .activity-list button, .reward button, .room-tabs button { border-radius: 999px; cursor: pointer; font-weight: 700; }
 .primary { background: #25433d; border: 0; color: #fffaf0; padding: 13px 22px; }
 .primary:hover { background: #39675b; }
 .plain-button { background: transparent; border: 0; color: #526a63; padding: 12px 16px; }
@@ -95,6 +95,19 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
 .reward small { color: #75867f; }
 .reward button { background: #25433d; border: 0; color: #fffaf0; font-size: .76rem; padding: 8px 12px; }
 .reward button:disabled { background: #d4d1c8; color: #7e817d; cursor: not-allowed; }
+.house-card { background: #e7edf5; grid-column: 1 / -1; }
+.house-intro { color: #60756e; margin: 14px 0 20px; }
+.room-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.room-tabs button { align-items: center; background: #f8fbff; border: 1px solid #c9d6e3; color: #526a63; display: inline-flex; font-size: .8rem; gap: 6px; padding: 9px 12px; }
+.room-tabs button.selected { background: #7198d2; border-color: #5c82bc; color: #fff; }
+.room-scene { background-color: #d7e6f3; background-position: center; background-size: cover; border: 5px solid #fffaf0; border-radius: 20px; margin-top: 18px; min-height: 280px; overflow: hidden; padding: 20px; position: relative; }
+.room-scene::after { background: linear-gradient(180deg, transparent 36%, rgba(20, 38, 34, .52)); content: ""; inset: 0; position: absolute; }
+.room-scene-label { align-items: center; background: rgba(255, 250, 240, .92); border-radius: 13px; display: flex; gap: 10px; padding: 9px 12px; position: relative; width: max-content; z-index: 1; }
+.room-scene-label > span { color: #7198d2; font-size: 1.35rem; }.room-scene-label div { display: grid; gap: 2px; }.room-scene-label small { color: #71827c; font-size: .72rem; }
+.empty-room { bottom: 18px; color: #fffaf0; font-size: .9rem; line-height: 1.45; margin: 0; max-width: 290px; position: absolute; text-shadow: 0 1px 2px rgba(37, 67, 61, .5); z-index: 1; }
+.placed-decorations { align-items: end; bottom: 16px; display: flex; gap: 12px; left: 26px; max-width: calc(100% - 52px); overflow-x: auto; padding-bottom: 2px; position: absolute; z-index: 1; }
+.placed-decorations img { border: 3px solid #fffaf0; border-radius: 12px; box-shadow: 0 3px 10px rgba(20, 38, 34, .28); height: 72px; object-fit: cover; width: 72px; }
+.house-catalog { margin-top: 22px; }.catalog-label { color: #5674a5; font-size: .74rem; font-weight: 700; letter-spacing: .1em; margin: 0; text-transform: uppercase; }.house-catalog .reward-list { grid-template-columns: repeat(2, minmax(0, 1fr)); max-height: 520px; overflow-y: auto; padding-right: 4px; }.house-item-icon { background: #d3e1f0; color: #456996; font-family: Georgia, serif; font-size: 1.45rem; object-fit: cover; }
 .history-card { grid-column: 1 / -1; }
 .session-count { background: #dce9d9; border-radius: 999px; color: #44675d; font-size: .78rem; font-weight: 700; padding: 7px 11px; }
 .progress-summary { display: flex; gap: 10px; margin: 22px 0 15px; }
@@ -120,6 +133,8 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
   .dashboard-grid, .dashboard-placeholder { grid-template-columns: 1fr; margin: 0 18px; width: auto; }
   .card { padding: 24px; }
   .history-card { grid-column: auto; }
+  .house-card { grid-column: auto; }
+  .house-catalog .reward-list { grid-template-columns: 1fr; }
   .history-card li { grid-template-columns: 60px 45px 1fr; }
   .history-card li em { display: none; }
   .progress-summary { flex-direction: column; }
