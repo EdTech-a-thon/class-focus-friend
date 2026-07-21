@@ -1,14 +1,14 @@
 import RewardList from "./RewardList";
 
-const RewardShop = ({ rewards }) => {
+const RewardShop = ({ rewards, titleId }) => {
   const { points, accessories, unlocked, equipped, buyOrEquip } = rewards;
 
   return (
-    <section className="card shop-card">
+    <div className="shop-card">
       <div className="card-heading">
         <div>
           <p className="card-label">Reward shelf</p>
-          <h2>Dress up your class friend.</h2>
+          <h2 id={titleId}>Dress up your class friend.</h2>
         </div>
 
         <span className="points-badge">★ {points}</span>
@@ -21,7 +21,7 @@ const RewardShop = ({ rewards }) => {
         equipped={equipped}
         buyOrEquip={buyOrEquip}
       />
-    </section>
+    </div>
   );
 };
 

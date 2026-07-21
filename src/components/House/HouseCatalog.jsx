@@ -4,6 +4,7 @@ const HouseCatalog = ({
   ownedItems,
   points,
   buyHouseItem,
+  titleId,
 }) => {
   const catalogItems = items.filter(
     (item) => item.room === room.id
@@ -14,7 +15,7 @@ const HouseCatalog = ({
       <div className="catalog-heading">
         <div>
           <p className="catalog-label">House shop</p>
-          <h3>Decorate the {room.name.toLowerCase()}</h3>
+          <h2 id={titleId}>Decorate the {room.name.toLowerCase()}</h2>
         </div>
         <span className="points-badge">{points} points</span>
       </div>

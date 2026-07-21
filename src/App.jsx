@@ -8,10 +8,8 @@ import { useTimer } from "./hooks/useTimer";
 import { formatTime } from "./utils/formatTime";
 import { playNoiseAlert } from "./utils/playNoiseAlert";
 import Header from "./components/Header/Header";
-import Friend from "./components/Friend/Friend";
 import NoiseCard from "./components/NoiseMeter/NoiseCard";
 import TimerCard from "./components/Timer/TimerCard";
-import RewardShop from "./components/Rewards/RewardShop";
 import HouseCard from "./components/House/HouseCard";
 import ProgressCard from "./components/Progress/ProgressCard";
 import SessionCompletionModal from "./components/SessionCompleteModal/SessionCompletionModal";
@@ -175,29 +173,12 @@ export default function App() {
   return (
     <main className="app-shell">
       <Header header={header}/>
-      <section className="welcome" id="dashboard">
-        <div>
-          <p className="eyebrow">Today&apos;s classroom goal</p>
-          <h1>Let&apos;s make space for focus.</h1>
-          <p>Set a shared work session, notice the room&apos;s energy, and celebrate every small win together.</p>
-        </div>
-        <Friend
-          equipped={equipped}
-          isCelebrating={showComplete}
-          isFocusing={timer.isRunning}
-          isMusicPlaying={musicEnabled}
-          noiseTone={noiseTone}
-        />
-      </section>
+      <HouseCard house={house} rewards={rewards}/>
 
-      <div className="dashboard-grid">
+      <div className="dashboard-grid focus-controls">
         <TimerCard timerSettings={timerSettings} music={music} session={session}/>
 
         <NoiseCard noise={noise}/>
-
-        <RewardShop rewards={rewards}/>
-
-        <HouseCard house={house}/>
 
         <ProgressCard progress={progress}/>
       </div>

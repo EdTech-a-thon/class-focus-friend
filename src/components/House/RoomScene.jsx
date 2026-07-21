@@ -54,7 +54,7 @@ const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isM
         </div>
       ) : (
         <p className="empty-room">
-          Your friend is settling in. Visit the shop below to make this room your own.
+          Your friend is settling in. Decorate this room to make it your own.
         </p>
       )}
     </section>
