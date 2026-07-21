@@ -80,6 +80,17 @@ export const houseItems = [
   item("face-masks", "Face Masks", 265, "bathroom", "🧖", "#a3c9ae"),
   item("skin-care", "Skin Care Set", 270, "bathroom", "🧴", "#dfa0ae"),
   item("fuzzy-robe", "Fuzzy Robe", 325, "bathroom", "🥋", "#b9a5cb"),
+
+  item("office-desk", "Focus Desk", 275, "office", "🖥️", "#b9825d"),
+  item("desk-chair", "Desk Chair", 280, "office", "🪑", "#7198d2"),
+  item("bookcase", "Bookcase", 285, "office", "📚", "#d3a066"),
+  item("desk-lamp", "Desk Lamp", 290, "office", "💡", "#e9bd62"),
+  item("office-plant", "Office Plant", 295, "office", "🪴", "#83b68b"),
+  item("wall-calendar", "Wall Calendar", 300, "office", "📅", "#e58369"),
+  item("filing-cabinet", "Filing Cabinet", 305, "office", "🗄️", "#8d83bd"),
+  item("work-rug", "Work Rug", 310, "office", "▰", "#d88cbe"),
+  item("wall-art", "Wall Art", 315, "office", "🖼️", "#f0b867"),
+  item("coffee-maker", "Coffee Maker", 320, "office", "☕", "#6fa7b0"),
 ];
 
 export const classMilestones = [
@@ -174,4 +185,5 @@ export const houseRooms = [
   { id: "bedroom", name: "Bedroom", icon: "☾", description: "A quiet space for cozy dreams.", sessionsRequired: 25, image: cartoonRoom("Bedroom", "DREAM", "#ded8ee", "#b89072") },
   { id: "kitchen", name: "Kitchen", icon: "♨", description: "A cheerful spot for snacks.", sessionsRequired: 50, image: cartoonRoom("Kitchen", "YUM", "#f6ddad", "#c99d75") },
   { id: "bathroom", name: "Bathroom", icon: "◌", description: "A fresh space to get ready.", sessionsRequired: 75, image: cartoonRoom("Bathroom", "SPLASH", "#d1e9ed", "#b58d6d") },
+  { id: "office", name: "Office", icon: "▣", description: "A bright space for big ideas.", sessionsRequired: 100, image: cartoonRoom("Office", "FOCUS", "#e9e2d3", "#a88161") },
 ];
