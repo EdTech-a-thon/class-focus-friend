@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { accessories } from "./data/accessories";
+import { houseItems, houseRooms } from "./data/houseItems";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMicrophone } from "./hooks/useMicrophone";
 import { useTimer } from "./hooks/useTimer";
@@ -12,6 +13,72 @@ const activities = {
 
 function formatTime(seconds) {
   return `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
+}
+
+function playNoiseAlert() {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return;
+
+  const context = new AudioContextClass();
+  const gain = context.createGain();
+  gain.gain.setValueAtTime(0.16, context.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.45);
+  gain.connect(context.destination);
+
+  [0, 0.18].forEach((delay) => {
+    const oscillator = context.createOscillator();
+    oscillator.frequency.value = 660;
+    oscillator.connect(gain);
+    oscillator.start(context.currentTime + delay);
+    oscillator.stop(context.currentTime + delay + 0.12);
+  });
+
+  window.setTimeout(() => context.close(), 700);
+}
+
+function startLoFiMusic(volume) {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return null;
+
+  const context = new AudioContextClass();
+  const master = context.createGain();
+  const filter = context.createBiquadFilter();
+  master.gain.value = volume;
+  filter.type = "lowpass";
+  filter.frequency.value = 900;
+  filter.connect(master);
+  master.connect(context.destination);
+
+  const notes = [196, 246.94, 293.66, 369.99, 220, 277.18, 329.63, 415.3, 174.61, 220, 261.63, 329.63, 164.81, 207.65, 246.94, 311.13];
+  let noteIndex = 0;
+
+  function playNote() {
+    const start = context.currentTime;
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.value = notes[noteIndex];
+    gain.gain.setValueAtTime(0.001, start);
+    gain.gain.exponentialRampToValueAtTime(0.22, start + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, start + 2.8);
+    oscillator.connect(gain);
+    gain.connect(filter);
+    oscillator.start(start);
+    oscillator.stop(start + 2.85);
+    noteIndex = (noteIndex + 1) % notes.length;
+  }
+
+  playNote();
+  const interval = window.setInterval(playNote, 2400);
+  return {
+    setVolume(value) {
+      master.gain.setTargetAtTime(value, context.currentTime, 0.05);
+    },
+    stop() {
+      window.clearInterval(interval);
+      context.close();
+    },
+  };
 }
 
 function Friend({ equipped }) {
@@ -44,13 +111,44 @@ export default function App() {
   const [history, setHistory] = useLocalStorage("class-focus-history", []);
   const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
   const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
+  const [houseItemsOwned, setHouseItemsOwned] = useLocalStorage("class-focus-house-items", []);
+  const [activeRoom, setActiveRoom] = useState("living");
+  const [musicEnabled, setMusicEnabled] = useState(false);
+  const [musicVolume, setMusicVolume] = useLocalStorage("class-focus-music-volume", 55);
   const [showComplete, setShowComplete] = useState(false);
   const recordedCompletion = useRef(false);
+  const redAlertPlayed = useRef(false);
+  const musicPlayer = useRef(null);
   const timer = useTimer(preferredMinutes);
   const microphone = useMicrophone();
   const expectation = activities[activity];
   const noiseTone = microphone.status !== "on" ? "neutral" : microphone.level <= expectation.threshold ? "good" : microphone.level <= expectation.threshold + 18 ? "warn" : "loud";
   const noiseMessage = microphone.status !== "on" ? "Ready when you are" : noiseTone === "good" ? "On track" : noiseTone === "warn" ? "Getting loud" : "Too loud";
+  const pauseTimer = timer.pause;
+
+  useEffect(() => {
+    if (noiseTone !== "loud") {
+      redAlertPlayed.current = false;
+      return;
+    }
+    if (redAlertPlayed.current) return;
+    redAlertPlayed.current = true;
+    pauseTimer();
+    playNoiseAlert();
+  }, [noiseTone, pauseTimer]);
+
+  useEffect(() => {
+    if (!musicEnabled) return;
+    musicPlayer.current = startLoFiMusic(musicVolume / 100);
+    return () => {
+      musicPlayer.current?.stop();
+      musicPlayer.current = null;
+    };
+  }, [musicEnabled]);
+
+  useEffect(() => {
+    musicPlayer.current?.setVolume(musicVolume / 100);
+  }, [musicVolume]);
 
   useEffect(() => {
     if (!timer.isComplete) {
@@ -99,6 +197,15 @@ export default function App() {
     setPreferredMinutes(value);
   }
 
+  function buyHouseItem(item) {
+    if (houseItemsOwned.includes(item.id) || points < item.cost) return;
+    setPoints((value) => value - item.cost);
+    setHouseItemsOwned((items) => [...items, item.id]);
+  }
+
+  const currentRoom = houseRooms.find((room) => room.id === activeRoom);
+  const roomDecorations = houseItems.filter((item) => item.room === activeRoom && houseItemsOwned.includes(item.id));
+
   return (
     <main className="app-shell">
       <header className="app-header">
@@ -126,6 +233,26 @@ export default function App() {
             </button>
             <button className="plain-button" type="button" onClick={timer.reset}>Reset</button>
           </div>
+          <button
+            className={`music-button ${musicEnabled ? "playing" : ""}`}
+            type="button"
+            aria-pressed={musicEnabled}
+            onClick={() => setMusicEnabled((enabled) => !enabled)}
+          >
+            <span aria-hidden="true">♫</span> {musicEnabled ? "Lo-fi music playing" : "Play lo-fi music"}
+          </button>
+          <label className="volume-control">
+            <span>Music volume</span>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={musicVolume}
+              onChange={(event) => setMusicVolume(Number(event.target.value))}
+            />
+            <output>{musicVolume}%</output>
+          </label>
+          <p className="music-note">Optional background music, available before, during, or after a session.</p>
         </section>
 
         <section className="card setup-card">
@@ -187,6 +314,44 @@ export default function App() {
                 </article>
               );
             })}
+          </div>
+        </section>
+
+        <section className="card house-card">
+          <div className="card-heading">
+            <div><p className="card-label">Friend&apos;s house</p><h2>Make a home together.</h2></div>
+            <span className="points-badge">★ {points}</span>
+          </div>
+          <p className="house-intro">Every room is empty and ready for your class to make it special.</p>
+          <div className="room-tabs" role="tablist" aria-label="Rooms in the friend&apos;s house">
+            {houseRooms.map((room) => (
+              <button key={room.id} className={activeRoom === room.id ? "selected" : ""} type="button" role="tab" aria-selected={activeRoom === room.id} onClick={() => setActiveRoom(room.id)}>
+                <span aria-hidden="true">{room.icon}</span>{room.name}
+              </button>
+            ))}
+          </div>
+          <section className="room-scene" style={{ backgroundImage: `url(${currentRoom.image})` }} aria-label={`${currentRoom.name} in the friend's house`}>
+            <div className="room-scene-label"><span>{currentRoom.icon}</span><div><b>{currentRoom.name}</b><small>{currentRoom.description}</small></div></div>
+            {roomDecorations.length ? (
+              <div className="placed-decorations" aria-label="Decorations in this room">
+                {roomDecorations.map((item) => <img key={item.id} src={item.image} alt={item.name} />)}
+              </div>
+            ) : <p className="empty-room">This room is empty. Choose something from the catalog to begin decorating.</p>}
+          </section>
+          <div className="house-catalog">
+            <p className="catalog-label">{currentRoom.name} catalog</p>
+            <div className="reward-list">
+              {houseItems.filter((item) => item.room === activeRoom).map((item) => {
+                const owned = houseItemsOwned.includes(item.id);
+                return (
+                  <article className="reward" key={item.id}>
+                    <img className="reward-icon house-item-icon" src={item.image} alt="" />
+                    <div><b>{item.name}</b><small>{owned ? "In this room" : `${item.cost} points`}</small></div>
+                    <button type="button" disabled={owned || points < item.cost} onClick={() => buyHouseItem(item)}>{owned ? "Placed" : "Buy"}</button>
+                  </article>
+                );
+              })}
+            </div>
           </div>
         </section>
 
