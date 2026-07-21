@@ -176,7 +176,13 @@ export default function App() {
           <h1>Let&apos;s make space for focus.</h1>
           <p>Set a shared work session, notice the room&apos;s energy, and celebrate every small win together.</p>
         </div>
-        <Friend equipped={equipped} />
+        <Friend
+          equipped={equipped}
+          isCelebrating={showComplete}
+          isFocusing={timer.isRunning}
+          isMusicPlaying={musicEnabled}
+          noiseTone={noiseTone}
+        />
       </section>
 
       <div className="dashboard-grid">
@@ -194,6 +200,7 @@ export default function App() {
       </div>
 
       <SessionCompletionModal
+        equipped={equipped}
         showComplete={showComplete}
         setShowComplete={setShowComplete}
         minutes={timer.minutes}

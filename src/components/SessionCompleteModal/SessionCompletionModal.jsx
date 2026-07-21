@@ -1,4 +1,6 @@
-const CompletionModal = ({ showComplete, setShowComplete, minutes }) => {
+import Friend from "../Friend/Friend";
+
+const CompletionModal = ({ equipped, showComplete, setShowComplete, minutes }) => {
   if (!showComplete) return null;
 
   return (
@@ -9,9 +11,15 @@ const CompletionModal = ({ showComplete, setShowComplete, minutes }) => {
         aria-modal="true"
         aria-labelledby="complete-title"
       >
-        <span className="celebration-mark" aria-hidden="true">
-          ✦
-        </span>
+        <div className="completion-friend">
+          <Friend
+            equipped={equipped}
+            isCelebrating
+            isFocusing={false}
+            isMusicPlaying={false}
+            noiseTone="neutral"
+          />
+        </div>
 
         <p className="eyebrow">
           Focus session complete

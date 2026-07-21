@@ -26,17 +26,54 @@ h2 { font-size: 1.65rem; }
 .welcome p:last-child { color: #506a62; font-size: 1.02rem; line-height: 1.6; margin: 20px 0 0; max-width: 590px; }
 
 .friend-scene { align-self: end; height: 250px; justify-self: center; position: relative; width: 230px; }
-.friend { bottom: -18px; height: 235px; left: 10px; position: absolute; width: 210px; }
-.friend-ear { background: #f4b969; border: 5px solid #25433d; height: 68px; position: absolute; top: 27px; width: 65px; }
-.friend-ear.left { border-radius: 70% 25% 55% 30%; left: 2px; transform: rotate(-20deg); }
-.friend-ear.right { border-radius: 25% 70% 30% 55%; right: 2px; transform: rotate(20deg); }
-.friend-face { align-items: center; background: #f8c278; border: 5px solid #25433d; border-radius: 48%; display: flex; font-size: 18px; height: 155px; justify-content: center; left: 25px; position: absolute; top: 14px; width: 160px; z-index: 2; }
-.friend-face b { bottom: 29px; font-size: 28px; font-weight: 400; left: 66px; position: absolute; }
-.friend-body { background: #e98769; border: 5px solid #25433d; border-radius: 45% 45% 25% 25%; bottom: 0; color: #fff7e9; font-size: 28px; height: 115px; left: 33px; padding-top: 35px; position: absolute; text-align: center; width: 145px; }
-.friend-hat { color: #7198d2; font-size: 95px; left: 60px; line-height: .65; position: absolute; text-shadow: -4px 0 #25433d, 0 -4px #25433d, 4px 0 #25433d; top: -29px; transform: scaleX(1.15); z-index: 4; }
-.friend-glasses { color: #25433d; font-family: monospace; font-size: 22px; font-style: normal; left: 39px; letter-spacing: -5px; position: absolute; top: 52px; }
-.friend-bow { bottom: -2px; color: #f8d97a; font-size: 33px; font-style: normal; left: 51px; position: absolute; text-shadow: 0 2px #25433d; transform: scaleX(1.5) rotate(45deg); }
-.sparkle { color: #d76d54; font-size: 28px; position: absolute; }.sparkle.one { right: 0; top: 35px; }.sparkle.two { left: 0; top: 110px; }
+.friend-message { background: #fffaf0; border-radius: 999px; color: #46645b; font-size: .72rem; font-weight: 700; left: 50%; margin: 0; opacity: 0; padding: 7px 12px; position: absolute; top: 2px; transform: translate(-50%, 5px); transition: opacity .25s, transform .25s; white-space: nowrap; z-index: 6; }
+.friend-scene.state-focusing .friend-message, .friend-scene.state-loud .friend-message, .friend-scene.state-celebrating .friend-message { opacity: 1; transform: translate(-50%, 0); }
+.friend { bottom: -18px; height: 215px; left: 10px; position: absolute; transform-origin: 50% 100%; width: 210px; }
+.friend-blob { background: #f3a66f; border: 5px solid #25433d; border-radius: 48% 52% 43% 57% / 40% 43% 57% 60%; bottom: 0; box-shadow: inset -13px -12px rgba(197, 93, 75, .18), inset 11px 10px rgba(255, 230, 177, .2); height: 184px; left: 20px; position: absolute; transform-origin: 50% 100%; width: 170px; z-index: 2; }
+.friend-face { height: 80px; left: 41px; position: absolute; top: 44px; width: 88px; }
+.friend-eye { background: #25433d; border-radius: 50%; height: 13px; position: absolute; top: 4px; transition: height .2s, top .2s, transform .2s; width: 10px; }
+.friend-eye.left { left: 13px; }.friend-eye.right { right: 13px; }
+.friend-eye::after { background: #fffaf0; border-radius: 50%; content: ""; height: 3px; left: 2px; position: absolute; top: 2px; width: 3px; }
+.friend-mouth { border-bottom: 4px solid #25433d; border-radius: 0 0 20px 20px; bottom: 15px; height: 14px; left: 31px; position: absolute; transition: all .2s; width: 27px; }
+.friend-heart { bottom: 23px; color: #fff4dc; font-size: 26px; left: 72px; position: absolute; }
+.friend-arm { height: 105px; position: absolute; top: 84px; transform-origin: 50% 90%; transition: transform .28s ease; width: 48px; z-index: 3; }
+.friend-arm.left { left: 2px; transform: rotate(18deg); }.friend-arm.right { right: 2px; transform: rotate(-18deg); }
+.friend-arm i { background: #f3a66f; border: 5px solid #25433d; border-radius: 50% 50% 46% 54%; display: block; height: 84px; width: 43px; }
+.friend-arm.left i { transform: rotate(8deg); }.friend-arm.right i { transform: rotate(-8deg); }
+.friend-hat { color: #7198d2; font-size: 86px; left: 63px; line-height: .65; position: absolute; text-shadow: -4px 0 #25433d, 0 -4px #25433d, 4px 0 #25433d; top: -19px; transform: scaleX(1.12); z-index: 5; }
+.friend-glasses { color: #25433d; font-family: monospace; font-size: 22px; font-style: normal; left: 39px; letter-spacing: -5px; position: absolute; top: 47px; z-index: 4; }
+.friend-bow { bottom: -3px; color: #f8d97a; font-size: 33px; font-style: normal; left: 68px; position: absolute; text-shadow: 0 2px #25433d; transform: scaleX(1.5) rotate(45deg); }
+.sparkle, .music-note-float { opacity: 0; pointer-events: none; position: absolute; z-index: 5; }
+.sparkle { color: #d76d54; font-size: 28px; }.sparkle.one { right: 0; top: 42px; }.sparkle.two { left: 0; top: 105px; }
+.music-note-float { color: #527b70; font-size: 22px; }.music-note-float.one { right: 4px; top: 63px; }.music-note-float.two { left: 4px; top: 118px; }
+
+.state-idle .friend { animation: friend-float 3.2s ease-in-out infinite; }
+.state-idle .friend-eye { animation: friend-blink 4.5s ease-in-out infinite; }
+.state-focusing .friend-blob { animation: friend-breathe 2.8s ease-in-out infinite; }
+.state-focusing .friend-eye { border-radius: 0 0 12px 12px; height: 7px; top: 10px; }
+.state-focusing .friend-eye::after { display: none; }
+.state-focusing .friend-mouth { border-bottom-width: 3px; height: 5px; left: 35px; width: 19px; }
+.state-loud .friend { animation: friend-startle .4s ease-out both; }
+.state-loud .friend-arm.left { transform: translate(25px, -58px) rotate(-28deg); }.state-loud .friend-arm.right { transform: translate(-25px, -58px) rotate(28deg); }
+.state-loud .friend-eye { height: 16px; top: 0; transform: scaleX(1.15); }
+.state-loud .friend-mouth { background: #25433d; border: 0; border-radius: 50%; bottom: 8px; height: 20px; left: 35px; width: 19px; }
+.state-celebrating .friend { animation: friend-celebrate .72s ease-in-out infinite; }
+.state-celebrating .friend-arm.left { transform: translate(9px, -55px) rotate(150deg); }.state-celebrating .friend-arm.right { transform: translate(-9px, -55px) rotate(-150deg); }
+.state-celebrating .friend-mouth { background: #25433d; border: 0; border-radius: 4px 4px 18px 18px; bottom: 5px; height: 21px; left: 29px; width: 31px; }
+.state-celebrating .sparkle { animation: sparkle-pop .8s ease-in-out infinite alternate; opacity: 1; }
+.state-celebrating .sparkle.two { animation-delay: -.35s; }
+.is-dancing .friend { animation: friend-dance .85s ease-in-out infinite; }
+.is-dancing .music-note-float { animation: music-float 1.5s ease-out infinite; opacity: 1; }
+.is-dancing .music-note-float.two { animation-delay: -.75s; }
+
+@keyframes friend-float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-7px) rotate(1deg); } }
+@keyframes friend-blink { 0%, 44%, 50%, 100% { transform: scaleY(1); } 47% { transform: scaleY(.12); } }
+@keyframes friend-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025, 1.04); } }
+@keyframes friend-startle { 0% { transform: scale(1); } 45% { transform: scale(1.04, .95) translateY(5px); } 100% { transform: scale(1); } }
+@keyframes friend-celebrate { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-20px) rotate(4deg); } }
+@keyframes friend-dance { 0%, 100% { transform: translateX(-5px) rotate(-5deg) scaleY(.98); } 50% { transform: translateX(5px) rotate(5deg) scaleY(1.02); } }
+@keyframes sparkle-pop { from { transform: scale(.65) rotate(0); } to { transform: scale(1.2) rotate(25deg); } }
+@keyframes music-float { 0% { opacity: 0; transform: translateY(18px) rotate(-8deg); } 25% { opacity: 1; } 100% { opacity: 0; transform: translateY(-30px) rotate(12deg); } }
 
 .dashboard-grid, .dashboard-placeholder { display: grid; gap: 22px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 0 auto; max-width: 1116px; width: calc(100% - 48px); }
 .dashboard-placeholder { background: #fffaf0; border: 1px solid #e7ded0; border-radius: 24px; display: block; padding: 34px; }
@@ -130,7 +167,8 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
 .completion-modal { background: #fffaf0; border-radius: 28px; box-shadow: 0 25px 80px rgba(18, 42, 35, .35); max-width: 460px; padding: 42px; text-align: center; }
 .completion-modal h2 { font-size: 2.4rem; }
 .completion-modal > p:not(.eyebrow) { color: #60756e; line-height: 1.6; margin: 17px 0 25px; }
-.celebration-mark { align-items: center; background: #f8d97a; border-radius: 50%; color: #25433d; display: inline-flex; font-size: 1.6rem; height: 58px; justify-content: center; margin-bottom: 20px; width: 58px; }
+.completion-friend { height: 150px; margin: -35px auto 14px; overflow: hidden; width: 200px; }
+.completion-friend .friend-scene { height: 250px; left: -15px; transform: scale(.72); transform-origin: top center; }
 
 @media (max-width: 760px) {
   .app-header { padding: 20px; }
@@ -148,5 +186,5 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+  *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; transition: none !important; }
 }
