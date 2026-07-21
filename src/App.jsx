@@ -148,6 +148,7 @@ export default function App() {
     classMilestones,
     houseItems,
     houseItemsOwned,
+    houseRooms,
   };
 
   const house = {

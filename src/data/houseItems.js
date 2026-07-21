@@ -1,13 +1,11 @@
 function cartoonItem(label, symbol, color) {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260">
-    <rect width="360" height="260" fill="#fff8ec"/>
-    <rect width="360" height="185" fill="${color}" opacity=".28"/>
-    <path d="M0 185h360v75H0z" fill="#d2a77c"/>
-    <path d="M0 185h360" stroke="#805d45" stroke-width="7"/>
-    <circle cx="290" cy="48" r="24" fill="#ffe48b"/>
-    <path d="M66 192c0-65 34-110 114-110s114 45 114 110" fill="${color}" stroke="#29453e" stroke-width="8"/>
-    <text x="180" y="177" text-anchor="middle" font-family="Arial, sans-serif" font-size="96">${symbol}</text>
-    <text x="180" y="229" text-anchor="middle" font-family="Arial, sans-serif" font-size="17" font-weight="bold" fill="#29453e">${label}</text>
+    <defs><filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#29453e" flood-opacity=".22"/></filter></defs>
+    <ellipse cx="180" cy="218" rx="104" ry="18" fill="#29453e" opacity=".13"/>
+    <g filter="url(#shadow)">
+      <path d="M64 190c8-77 48-124 116-124s108 47 116 124c-27 22-66 34-116 34S91 212 64 190z" fill="${color}" stroke="#29453e" stroke-width="7"/>
+      <text x="180" y="179" text-anchor="middle" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif" font-size="104">${symbol}</text>
+    </g>
   </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
@@ -64,6 +62,10 @@ export const houseItems = [
   item("recipe-board", "Recipe Board", 10, "kitchen", "📝", "#e58369"),
   item("happy-toaster", "Happy Toaster", 20, "kitchen", "🍞", "#7198d2"),
   item("cake-stand", "Cake Stand", 25, "kitchen", "🍰", "#d97dac"),
+  item("dining-table", "Dining Table", 35, "kitchen", "🍽️", "#b9825d"),
+  item("place-settings", "Place Settings", 20, "kitchen", "🍴", "#87aeb8"),
+  item("kitchen-utensils", "Kitchen Utensils", 15, "kitchen", "🥄", "#d3a066"),
+  item("dinner-feast", "Dinner Feast", 30, "kitchen", "🥘", "#d9795f"),
 
   item("bubble-bath", "Bubble Bath", 15, "bathroom", "🛁", "#88bbd5"),
   item("soft-towels", "Soft Towels", 10, "bathroom", "🧺", "#d59aae"),
@@ -75,6 +77,9 @@ export const houseItems = [
   item("shower-curtain", "Shower Curtain", 25, "bathroom", "🚿", "#80abc7"),
   item("rubber-duck", "Rubber Duck", 10, "bathroom", "🦆", "#edbb59"),
   item("bathroom-plant", "Bathroom Plant", 15, "bathroom", "🪴", "#83b68b"),
+  item("face-masks", "Face Masks", 15, "bathroom", "🧖", "#a3c9ae"),
+  item("skin-care", "Skin Care Set", 20, "bathroom", "🧴", "#dfa0ae"),
+  item("fuzzy-robe", "Fuzzy Robe", 25, "bathroom", "🥋", "#b9a5cb"),
 ];
 
 export const classMilestones = [
@@ -82,19 +87,85 @@ export const classMilestones = [
     id: "plant-corner",
     name: "Sunny Plant Corner",
     icon: "🌱",
+    room: "living",
     itemIds: ["leafy-plant", "window-curtains", "rainbow-rug"],
   },
   {
     id: "reading-nook",
     name: "Cozy Reading Nook",
     icon: "📚",
+    room: "living",
     itemIds: ["book-nook", "story-lamp", "cloud-pillows"],
   },
   {
     id: "celebration-space",
     name: "Class Celebration Space",
     icon: "🎉",
+    room: "living",
     itemIds: ["record-player", "tea-table", "family-photo"],
+  },
+  {
+    id: "sweet-dreams",
+    name: "Sweet Dreams Setup",
+    icon: "🌙",
+    room: "bedroom",
+    itemIds: ["cozy-bed", "soft-blanket", "moon-lamp"],
+  },
+  {
+    id: "stargazing-corner",
+    name: "Stargazing Corner",
+    icon: "⭐",
+    room: "bedroom",
+    itemIds: ["star-rug", "dream-mobile", "comfy-chair"],
+  },
+  {
+    id: "creative-sleepover",
+    name: "Creative Sleepover",
+    icon: "🎨",
+    room: "bedroom",
+    itemIds: ["art-wall", "toy-basket", "closet"],
+  },
+  {
+    id: "cheerful-breakfast",
+    name: "Cheerful Breakfast",
+    icon: "🍞",
+    room: "kitchen",
+    itemIds: ["sunny-table", "fruit-bowl", "happy-toaster"],
+  },
+  {
+    id: "class-dinner",
+    name: "Host a Class Dinner",
+    icon: "🍽️",
+    room: "kitchen",
+    itemIds: ["dining-table", "place-settings", "kitchen-utensils", "dinner-feast"],
+  },
+  {
+    id: "class-bake-off",
+    name: "Class Bake-Off",
+    icon: "🍰",
+    room: "kitchen",
+    itemIds: ["mixing-bowls", "cookie-jar", "recipe-board", "cake-stand"],
+  },
+  {
+    id: "fresh-and-ready",
+    name: "Fresh and Ready",
+    icon: "🫧",
+    room: "bathroom",
+    itemIds: ["soft-towels", "round-mirror", "soap-set"],
+  },
+  {
+    id: "spa-day",
+    name: "Spa Day",
+    icon: "🧖",
+    room: "bathroom",
+    itemIds: ["face-masks", "skin-care", "fuzzy-robe", "bubble-bath"],
+  },
+  {
+    id: "garden-bath",
+    name: "Calm Garden Bath",
+    icon: "🌿",
+    room: "bathroom",
+    itemIds: ["bathroom-plant", "bath-mat", "shower-curtain", "rubber-duck"],
   },
 ];
 

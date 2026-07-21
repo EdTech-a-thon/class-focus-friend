@@ -8,6 +8,7 @@ const ProgressCard = ({ progress }) => {
     classMilestones,
     houseItems,
     houseItemsOwned,
+    houseRooms,
   } = progress;
   const activeMilestone = classMilestones.find((milestone) =>
     milestone.itemIds.some((itemId) => !houseItemsOwned.includes(itemId))
@@ -18,6 +19,8 @@ const ProgressCard = ({ progress }) => {
   const collectedItems = milestoneItems.filter((item) => houseItemsOwned.includes(item.id)).length;
   const progressToReward = (collectedItems / milestoneItems.length) * 100;
   const milestoneComplete = collectedItems === milestoneItems.length;
+  const activeMilestoneIndex = classMilestones.indexOf(activeMilestone);
+  const milestoneRoom = houseRooms.find((room) => room.id === activeMilestone.room);
 
   return (
     <section className="card history-card">
@@ -45,7 +48,7 @@ const ProgressCard = ({ progress }) => {
       <div className="class-goal" aria-label={`Class milestone progress: ${collectedItems} of ${milestoneItems.length} items collected`}>
         <div className="class-goal-icon" aria-hidden="true">{activeMilestone.icon}</div>
         <div className="class-goal-copy">
-          <p className="class-goal-label">Class milestone</p>
+          <p className="class-goal-label">{milestoneRoom.name} milestone · {activeMilestoneIndex + 1} of {classMilestones.length}</p>
           <h3>{activeMilestone.name}</h3>
           <p>
             {milestoneComplete
