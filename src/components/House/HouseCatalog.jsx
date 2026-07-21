@@ -11,9 +11,13 @@ const HouseCatalog = ({
 
   return (
     <div className="house-catalog">
-      <p className="catalog-label">
-        {room.name} catalog
-      </p>
+      <div className="catalog-heading">
+        <div>
+          <p className="catalog-label">House shop</p>
+          <h3>Decorate the {room.name.toLowerCase()}</h3>
+        </div>
+        <span className="points-badge">{points} points</span>
+      </div>
 
       <div className="reward-list">
         {catalogItems.map((item) => {

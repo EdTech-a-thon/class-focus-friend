@@ -1,9 +1,10 @@
-const RoomScene = ({ room, decorations }) => {
+import Friend from "../Friend/Friend";
+
+const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isMusicPlaying, noiseTone }) => {
   
   return (
     <section
       className="room-scene"
-      style={{ backgroundImage: `url(${room.image})` }}
       aria-label={`${room.name} in the friend's house`}
     >
       <div className="room-scene-label">
@@ -15,6 +16,27 @@ const RoomScene = ({ room, decorations }) => {
           <b>{room.name}</b>
           <small>{room.description}</small>
         </div>
+      </div>
+
+      <div className="room-window" aria-hidden="true">
+        <span className="window-sun" />
+        <span className="window-cloud cloud-one" />
+        <span className="window-cloud cloud-two" />
+      </div>
+      <div className="wall-picture" aria-hidden="true">♥</div>
+      <div className="room-shelf" aria-hidden="true"><span>▥</span><span>●</span><span>▯</span></div>
+      <div className="room-sofa" aria-hidden="true"><span /><span /></div>
+      <div className="room-rug" aria-hidden="true" />
+      <div className="room-plant" aria-hidden="true"><span>✦</span></div>
+
+      <div className="friend-at-home">
+        <Friend
+          equipped={equipped}
+          isCelebrating={isCelebrating}
+          isFocusing={isFocusing}
+          isMusicPlaying={isMusicPlaying}
+          noiseTone={noiseTone}
+        />
       </div>
 
       {decorations.length ? (
@@ -32,7 +54,7 @@ const RoomScene = ({ room, decorations }) => {
         </div>
       ) : (
         <p className="empty-room">
-          This room is empty. Choose something from the catalog to begin decorating.
+          Your friend is settling in. Visit the shop below to make this room your own.
         </p>
       )}
     </section>

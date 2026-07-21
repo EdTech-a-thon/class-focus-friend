@@ -160,6 +160,12 @@ export default function App() {
     houseItems,
     houseItemsOwned,
     buyHouseItem,
+    completedSessions: history.length,
+    equipped,
+    isCelebrating: showComplete,
+    isFocusing: timer.isRunning,
+    isMusicPlaying: musicEnabled,
+    noiseTone,
   };
 
   const header = {
