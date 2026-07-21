@@ -35,6 +35,51 @@ function playNoiseAlert() {
   window.setTimeout(() => context.close(), 700);
 }
 
+function startLoFiMusic(volume) {
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass) return null;
+
+  const context = new AudioContextClass();
+  const master = context.createGain();
+  const filter = context.createBiquadFilter();
+  master.gain.value = volume;
+  filter.type = "lowpass";
+  filter.frequency.value = 900;
+  filter.connect(master);
+  master.connect(context.destination);
+
+  const notes = [196, 246.94, 293.66, 369.99, 220, 277.18, 329.63, 415.3, 174.61, 220, 261.63, 329.63, 164.81, 207.65, 246.94, 311.13];
+  let noteIndex = 0;
+
+  function playNote() {
+    const start = context.currentTime;
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.value = notes[noteIndex];
+    gain.gain.setValueAtTime(0.001, start);
+    gain.gain.exponentialRampToValueAtTime(0.22, start + 0.2);
+    gain.gain.exponentialRampToValueAtTime(0.001, start + 2.8);
+    oscillator.connect(gain);
+    gain.connect(filter);
+    oscillator.start(start);
+    oscillator.stop(start + 2.85);
+    noteIndex = (noteIndex + 1) % notes.length;
+  }
+
+  playNote();
+  const interval = window.setInterval(playNote, 2400);
+  return {
+    setVolume(value) {
+      master.gain.setTargetAtTime(value, context.currentTime, 0.05);
+    },
+    stop() {
+      window.clearInterval(interval);
+      context.close();
+    },
+  };
+}
+
 function Friend({ equipped }) {
   return (
     <div className="friend-scene" aria-label="A cheerful classroom friend">
@@ -65,9 +110,12 @@ export default function App() {
   const [history, setHistory] = useLocalStorage("class-focus-history", []);
   const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
   const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
+  const [musicEnabled, setMusicEnabled] = useState(false);
+  const [musicVolume, setMusicVolume] = useLocalStorage("class-focus-music-volume", 55);
   const [showComplete, setShowComplete] = useState(false);
   const recordedCompletion = useRef(false);
   const redAlertPlayed = useRef(false);
+  const musicPlayer = useRef(null);
   const timer = useTimer(preferredMinutes);
   const microphone = useMicrophone();
   const expectation = activities[activity];
@@ -85,6 +133,19 @@ export default function App() {
     pauseTimer();
     playNoiseAlert();
   }, [noiseTone, pauseTimer]);
+
+  useEffect(() => {
+    if (!musicEnabled) return;
+    musicPlayer.current = startLoFiMusic(musicVolume / 100);
+    return () => {
+      musicPlayer.current?.stop();
+      musicPlayer.current = null;
+    };
+  }, [musicEnabled]);
+
+  useEffect(() => {
+    musicPlayer.current?.setVolume(musicVolume / 100);
+  }, [musicVolume]);
 
   useEffect(() => {
     if (!timer.isComplete) {
@@ -160,6 +221,26 @@ export default function App() {
             </button>
             <button className="plain-button" type="button" onClick={timer.reset}>Reset</button>
           </div>
+          <button
+            className={`music-button ${musicEnabled ? "playing" : ""}`}
+            type="button"
+            aria-pressed={musicEnabled}
+            onClick={() => setMusicEnabled((enabled) => !enabled)}
+          >
+            <span aria-hidden="true">♫</span> {musicEnabled ? "Lo-fi music playing" : "Play lo-fi music"}
+          </button>
+          <label className="volume-control">
+            <span>Music volume</span>
+            <input
+              type="range"
+              min="0"
+              max="100"
+              value={musicVolume}
+              onChange={(event) => setMusicVolume(Number(event.target.value))}
+            />
+            <output>{musicVolume}%</output>
+          </label>
+          <p className="music-note">Optional background music, available before, during, or after a session.</p>
         </section>
 
         <section className="card setup-card">
