@@ -77,6 +77,27 @@ export const houseItems = [
   item("bathroom-plant", "Bathroom Plant", 15, "bathroom", "🪴", "#83b68b"),
 ];
 
+export const classMilestones = [
+  {
+    id: "plant-corner",
+    name: "Sunny Plant Corner",
+    icon: "🌱",
+    itemIds: ["leafy-plant", "window-curtains", "rainbow-rug"],
+  },
+  {
+    id: "reading-nook",
+    name: "Cozy Reading Nook",
+    icon: "📚",
+    itemIds: ["book-nook", "story-lamp", "cloud-pillows"],
+  },
+  {
+    id: "celebration-space",
+    name: "Class Celebration Space",
+    icon: "🎉",
+    itemIds: ["record-player", "tea-table", "family-photo"],
+  },
+];
+
 export const houseRooms = [
   { id: "living", name: "Living Room", icon: "⌂", description: "A sunny place to focus together.", sessionsRequired: 0, image: cartoonRoom("Living Room", "HOME", "#d9e9db", "#caa27a") },
   { id: "bedroom", name: "Bedroom", icon: "☾", description: "A quiet space for cozy dreams.", sessionsRequired: 3, image: cartoonRoom("Bedroom", "DREAM", "#ded8ee", "#b89072") },

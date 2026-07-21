@@ -5,7 +5,19 @@ const ProgressCard = ({ progress }) => {
     totalPoints,
     points,
     activities,
+    classMilestones,
+    houseItems,
+    houseItemsOwned,
   } = progress;
+  const activeMilestone = classMilestones.find((milestone) =>
+    milestone.itemIds.some((itemId) => !houseItemsOwned.includes(itemId))
+  ) ?? classMilestones.at(-1);
+  const milestoneItems = activeMilestone.itemIds.map((itemId) =>
+    houseItems.find((item) => item.id === itemId)
+  );
+  const collectedItems = milestoneItems.filter((item) => houseItemsOwned.includes(item.id)).length;
+  const progressToReward = (collectedItems / milestoneItems.length) * 100;
+  const milestoneComplete = collectedItems === milestoneItems.length;
 
   return (
     <section className="card history-card">
@@ -28,6 +40,35 @@ const ProgressCard = ({ progress }) => {
         <span>
           <b>{points}</b> available now
         </span>
+      </div>
+
+      <div className="class-goal" aria-label={`Class milestone progress: ${collectedItems} of ${milestoneItems.length} items collected`}>
+        <div className="class-goal-icon" aria-hidden="true">{activeMilestone.icon}</div>
+        <div className="class-goal-copy">
+          <p className="class-goal-label">Class milestone</p>
+          <h3>{activeMilestone.name}</h3>
+          <p>
+            {milestoneComplete
+              ? "Complete! Every piece is in your inventory."
+              : `Collect ${milestoneItems.length - collectedItems} more piece${milestoneItems.length - collectedItems === 1 ? "" : "s"} to complete this space. Focus together to earn points for each piece.`}
+          </p>
+          <div className="class-goal-meter" aria-hidden="true">
+            <span style={{ width: `${progressToReward}%` }} />
+          </div>
+          <small>{collectedItems} / {milestoneItems.length} pieces collected</small>
+          <div className="milestone-pieces">
+            {milestoneItems.map((item) => {
+              const owned = houseItemsOwned.includes(item.id);
+              return (
+                <div className={owned ? "collected" : ""} key={item.id}>
+                  <img src={item.image} alt="" />
+                  <span>{item.name}</span>
+                  <b>{owned ? "Collected" : `${item.cost} points`}</b>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {history.length ? (

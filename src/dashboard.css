@@ -202,6 +202,22 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
 .progress-summary { display: flex; gap: 10px; margin: 22px 0 15px; }
 .progress-summary span { background: #f4eee3; border-radius: 12px; color: #657972; font-size: .82rem; padding: 10px 12px; }
 .progress-summary b { color: #25433d; }
+.class-goal { align-items: center; background: #f8e8de; border: 1px solid #e6b19f; border-radius: 18px; display: flex; gap: 15px; margin: 20px 0 22px; padding: 15px; }
+.class-goal-icon { align-items: center; background: #fffaf0; border-radius: 14px; display: flex; flex: 0 0 auto; font-size: 1.65rem; height: 54px; justify-content: center; width: 54px; }
+.class-goal-copy { flex: 1; min-width: 0; }
+.class-goal-copy p { color: #657972; font-size: .82rem; margin: 4px 0 9px; }
+.class-goal-label { color: #cb654e !important; font-size: .68rem !important; font-weight: 700; letter-spacing: .1em; margin: 0 !important; text-transform: uppercase; }
+.class-goal h3 { color: #25433d; font-family: Fraunces, Georgia, serif; font-size: 1.05rem; letter-spacing: -.025em; margin: 3px 0 0; }
+.class-goal-meter { background: rgba(203, 101, 78, .18); border-radius: 99px; height: 8px; overflow: hidden; }
+.class-goal-meter span { background: linear-gradient(90deg, #e98769, #e6b84f); border-radius: inherit; display: block; height: 100%; min-width: 8px; transition: width .35s ease; }
+.class-goal-copy small { color: #8b6b5e; display: block; font-size: .7rem; font-weight: 700; margin-top: 7px; }
+.milestone-pieces { display: grid; gap: 7px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 13px; }
+.milestone-pieces > div { align-items: center; background: rgba(255, 250, 240, .72); border: 1px solid #e8cbbd; border-radius: 11px; display: grid; gap: 1px 7px; grid-template-columns: 34px 1fr; min-width: 0; padding: 6px; }
+.milestone-pieces > div.collected { background: #e2ecdc; border-color: #b8cfb7; }
+.milestone-pieces img { border-radius: 7px; grid-row: 1 / 3; height: 34px; object-fit: cover; width: 34px; }
+.milestone-pieces span { font-size: .7rem; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.milestone-pieces b { color: #8b6b5e; font-size: .63rem; }
+.milestone-pieces .collected b { color: #39765d; }
 .history-card ul { list-style: none; margin: 0; padding: 0; }
 .history-card li { align-items: center; border-top: 1px solid #e9e1d5; display: grid; font-size: .86rem; gap: 14px; grid-template-columns: 75px 55px 1fr auto; padding: 13px 2px; }
 .history-card li span, .history-card li em { color: #75867f; }
@@ -244,6 +260,8 @@ legend { font-size: .78rem; font-weight: 700; margin-bottom: 10px; }
   .history-card li { grid-template-columns: 60px 45px 1fr; }
   .history-card li em { display: none; }
   .progress-summary { flex-direction: column; }
+  .class-goal { align-items: flex-start; }
+  .milestone-pieces { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

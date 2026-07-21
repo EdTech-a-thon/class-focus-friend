@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { accessories } from "./data/accessories";
 import { activities } from "./data/activities";
-import { houseItems, houseRooms } from "./data/houseItems";
+import { classMilestones, houseItems, houseRooms } from "./data/houseItems";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useMicrophone } from "./hooks/useMicrophone";
 import { useTimer } from "./hooks/useTimer";
@@ -145,6 +145,9 @@ export default function App() {
     totalPoints,
     points,
     activities,
+    classMilestones,
+    houseItems,
+    houseItemsOwned,
   };
 
   const house = {
