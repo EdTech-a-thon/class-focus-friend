@@ -18,9 +18,10 @@ export default function App() {
   const [activity, setActivity] = useLocalStorage("class-focus-activity", "independent");
   const [preferredMinutes, setPreferredMinutes] = useLocalStorage("class-focus-minutes", 15);
   const [points, setPoints] = useLocalStorage("class-focus-points", 0);
-  const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 60);
+  const [totalPoints, setTotalPoints] = useLocalStorage("class-focus-total-points", 0);
   const [history, setHistory] = useLocalStorage("class-focus-history", []);
   const [unlocked, setUnlocked] = useLocalStorage("class-focus-unlocked", []);
+  const [roomsOwned, setRoomsOwned] = useLocalStorage("class-focus-rooms", []);
   const [equipped, setEquipped] = useLocalStorage("class-focus-equipped", []);
   const [houseItemsOwned, setHouseItemsOwned] = useLocalStorage("class-focus-house-items", []);
   const [activeRoom, setActiveRoom] = useState("living");
@@ -95,9 +96,16 @@ export default function App() {
   }
 
   function buyHouseItem(item) {
-    if (houseItemsOwned.includes(item.id) || points < item.cost) return;
+    if (!roomsOwned.includes(item.room) || houseItemsOwned.includes(item.id) || points < item.cost) return;
     setPoints((value) => value - item.cost);
     setHouseItemsOwned((items) => [...items, item.id]);
+  }
+
+  function buyRoom(room) {
+    if (roomsOwned.includes(room.id) || points < room.cost) return;
+    setPoints((value) => value - room.cost);
+    setRoomsOwned((rooms) => [...rooms, room.id]);
+    setActiveRoom(room.id);
   }
 
   const activeRoomDetails = houseRooms.find((room) => room.id === activeRoom);
@@ -161,7 +169,8 @@ export default function App() {
     houseItems,
     houseItemsOwned,
     buyHouseItem,
-    completedSessions: history.length,
+    roomsOwned,
+    buyRoom,
     equipped,
     isCelebrating: showComplete,
     isFocusing: timer.isRunning,

@@ -61,30 +61,30 @@ The class can spend available points in two ways. Select **Decorate room** to bu
 
 | Accessory | Cost |
 | --- | ---: |
-| Sunny Specs | 10 points |
-| Party Hat | 15 points |
-| Bow Tie | 20 points |
+| Sunny Specs | 25 points |
+| Party Hat | 50 points |
+| Bow Tie | 75 points |
 
 An accessory only needs to be purchased once. After that, it can be put on or removed at any time without spending more points.
 
 ### House Decorations
 
-House decorations cost between **10 and 35 points**. A purchased decoration is placed in its room and cannot be purchased again.
+House decorations become more expensive as the class moves through the house, from **15 points** for the first decoration to **325 points** for the final one. A purchased decoration is placed in its room and cannot be purchased again.
 
 Some decorations are part of milestones. Buying all the listed pieces for the current milestone completes it and moves the class to the next milestone.
 
-## Room Unlocks
+## Buying Rooms
 
-Rooms open according to the number of completed sessions. Spending points does not affect room unlocks.
+Rooms are purchased with points, just like decorations. The class can buy rooms in any order, but each room must be owned before it can be decorated.
 
-| Room | When it is available |
+| Room | Cost |
 | --- | --- |
-| Living Room | Available from the start |
-| Bedroom | After 3 completed sessions |
-| Kitchen | After 6 completed sessions |
-| Bathroom | After 10 completed sessions |
+| Living Room | 100 points |
+| Bedroom | 250 points |
+| Kitchen | 400 points |
+| Bathroom | 550 points |
 
-The class can use **Choose room** to visit any room it has unlocked.
+The class can use **Choose room** to buy a room once it has enough points, or visit a room it already owns.
 
 ## Milestones in Order
 
@@ -94,7 +94,7 @@ There is no extra point prize for completing a milestone. The reward is seeing t
 
 ### Living Room Milestones
 
-The Living Room is available from the start.
+The Living Room costs 100 points.
 
 1. **Sunny Plant Corner**: Leafy Plant (15), Window Curtains (20), and Rainbow Rug (20). **55 points total.**
 2. **Cozy Reading Nook**: Book Nook (30), Story Lamp (15), and Cloud Pillows (15). **60 points total.**
@@ -102,7 +102,7 @@ The Living Room is available from the start.
 
 ### Bedroom Milestones
 
-The Bedroom opens after 3 completed sessions.
+The Bedroom costs 250 points.
 
 4. **Sweet Dreams Setup**: Cozy Bed (30), Soft Blanket (15), and Moon Lamp (20). **65 points total.**
 5. **Stargazing Corner**: Star Rug (15), Dream Mobile (20), and Comfy Chair (25). **60 points total.**
@@ -110,7 +110,7 @@ The Bedroom opens after 3 completed sessions.
 
 ### Kitchen Milestones
 
-The Kitchen opens after 6 completed sessions.
+The Kitchen costs 400 points.
 
 7. **Cheerful Breakfast**: Sunny Table (30), Fruit Bowl (10), and Happy Toaster (20). **60 points total.**
 8. **Host a Class Dinner**: Dining Table (35), Place Settings (20), Kitchen Utensils (15), and Dinner Feast (30). **100 points total.**
@@ -118,13 +118,13 @@ The Kitchen opens after 6 completed sessions.
 
 ### Bathroom Milestones
 
-The Bathroom opens after 10 completed sessions.
+The Bathroom costs 550 points.
 
 10. **Fresh and Ready**: Soft Towels (10), Round Mirror (20), and Sweet Soap Set (15). **45 points total.**
 11. **Spa Day**: Face Masks (15), Skin Care Set (20), Fuzzy Robe (25), and Bubble Bath (15). **75 points total.**
 12. **Calm Garden Bath**: Bathroom Plant (15), Bath Mat (15), Shower Curtain (25), and Rubber Duck (10). **65 points total.**
 
-Completing all 12 milestones requires **775 points** if the class spends points only on milestone pieces.
+The milestones remain a helpful order for choosing decorations, but classes can buy any available piece when they have enough points.
 
 ## Other Decorations
 
@@ -137,7 +137,7 @@ These decorations can also be purchased, but they are not required for any miles
 | Kitchen | Tea Kettle (20), Wall Clock (15), Herb Garden (20) |
 | Bathroom | Toothbrush Cup (10), Wash Basket (20) |
 
-Optional decorations and Focus Friend accessories use the same available points as milestone pieces. If the class wants to reach milestones as quickly as possible, save points for the pieces shown on the Class Progress card.
+Optional decorations, rooms, and Focus Friend accessories use the same available points as milestone pieces. Buying every room, decoration, and accessory costs exactly **8,000 points**: a full 160-day school year at an average of 50 points per day.
 
 ## Helpful Classroom Routine
 
