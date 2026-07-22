@@ -45,8 +45,8 @@ const HouseCard = ({ house, rewards }) => {
     <section className="house-card" id="dashboard">
       <div className="house-heading">
         <div>
-          <p className="card-label">Focus friend&apos;s house</p>
-          <h2>{friendName || "Focus Friend"} is ready for focus</h2>
+          <p className="card-label">{friendName || "Focus Friend"}'s house</p>
+          <h2>{friendName || "Focus Friend"} is ready to focus</h2>
         </div>
         <div className="house-progress">
           <span><b>{completedSessions}</b> total sessions completed</span>
