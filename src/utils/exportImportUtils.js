@@ -12,7 +12,11 @@ const createSaveFile = (data) => {
   return exportClassroomSave(data);
 };
 
-const downloadSaveFile = (data) => {
+const getSaveFileName = () => {
+  return `Focus-Friend-Classroom-Save-${new Date().toISOString().slice(0, 10)}.json`;
+};
+
+const downloadSaveFile = (data, filename = getSaveFileName()) => {
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
   });
@@ -20,7 +24,6 @@ const downloadSaveFile = (data) => {
   const link = document.createElement("a");
 
   link.href = url;
-  const filename = `Focus-Friend-Classroom-Save-${new Date().toISOString().slice(0, 10)}.json`;
   link.download = filename;
   document.body.appendChild(link);
   link.click();
@@ -29,7 +32,7 @@ const downloadSaveFile = (data) => {
   return filename;
 };
 
-const openSubstituteHandoff = () => {
+const openSubstituteHandoff = (filename) => {
   const handoffWindow = window.open("", "_blank");
   if (!handoffWindow) return;
 
@@ -44,7 +47,7 @@ To use it:
 1. Open the Focus Friend webpage above.
 2. Select "Save Classroom Setup" near the top of the page.
 3. Select "Restore Classroom Save."
-4. Choose the shared Focus Friend Classroom Save JSON file.
+4. Choose the downloaded file named "${filename}".
 5. The page will refresh with our timer settings, points, rewards, and classroom setup.
 
 When you are finished, you can create a new Classroom Save File from the same menu if you would like to pass along the updated classroom progress.
@@ -187,4 +190,4 @@ const restoreSaveFile = (data) => {
   importClassroomSave(data);
 };
 
-export { restoreSaveFile, validateSaveFile, createSaveFile, downloadSaveFile, openSubstituteHandoff };
+export { restoreSaveFile, validateSaveFile, createSaveFile, getSaveFileName, downloadSaveFile, openSubstituteHandoff };

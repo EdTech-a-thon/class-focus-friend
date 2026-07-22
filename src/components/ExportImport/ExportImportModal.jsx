@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { createSaveFile, downloadSaveFile, openSubstituteHandoff, restoreSaveFile, validateSaveFile } from "../../utils/exportImportUtils";
+import { createSaveFile, downloadSaveFile, getSaveFileName, openSubstituteHandoff, restoreSaveFile, validateSaveFile } from "../../utils/exportImportUtils";
 import Modal from "../Modal/Modal";
 
 const detectComputerType = () => {
@@ -22,8 +22,9 @@ const ExportImportModal = ({ classroomData, validIds, onClose }) => {
   }, [onClose]);
 
   const exportSetup = () => {
-    openSubstituteHandoff();
-    const filename = downloadSaveFile(createSaveFile(classroomData));
+    const filename = getSaveFileName();
+    openSubstituteHandoff(filename);
+    downloadSaveFile(createSaveFile(classroomData), filename);
     setMessage({ type: "success", text: "Classroom Save Created!", filename });
   }
 
