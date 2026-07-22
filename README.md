@@ -18,22 +18,22 @@ Class Focus Friend turns a focus session into a shared goal. When the class comp
 
 ## MVP: The First Version
 
-The first version keeps the experience simple and useful for one classroom:
+The first version keeps the experience simple and useful for one classroom. It saves classroom progress on the current device and does not use teacher or student accounts.
 
-- One teacher or classroom login with a simple email and password.
-- A shared focus-session timer where the teacher selects the session length.
+- A shared focus-session timer where the teacher can enter a session length in minutes, save a named setup as a favorite, and return to favorites for future sessions.
 - A classroom character that earns points when a focus session is completed.
 - A point shop where the character can get clothes and accessories.
 - A noise meter with adjustable sensitivity for the selected type of work:
   - Independent or silent work
   - Partner work
+- When the room becomes too loud, the timer pauses automatically. It resumes when the room is back on track, and the teacher can still pause or reset the session manually.
 - A history of previous focus sessions.
 - A display designed to be shared with the whole class.
 
 ## A Typical Session
 
-1. The teacher selects the type of work and the focus-session length.
-2. The class watches the timer and noise meter while they work.
+1. The teacher selects the type of work and enters a focus-session length, or chooses a saved favorite.
+2. The class watches the timer and noise meter while they work. If the room becomes too loud, the timer pauses until the sound level returns to the goal.
 3. When the session is completed, the class earns points for its character.
 4. The class can use earned points to personalize the character over time.
 
@@ -42,7 +42,6 @@ The first version keeps the experience simple and useful for one classroom:
 These are valuable possibilities, but are not needed for the first version:
 
 - Support for multiple class sections.
-- Saved or favorited session setups for activities such as an independent math warm-up.
 - Easy display options for a TV or Roku through HDMI or AirPlay.
 - A choice to use silence or calming background audio.
 - A selectable or integrated calming lofi YouTube video for the background.

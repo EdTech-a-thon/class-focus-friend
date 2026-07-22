@@ -4,15 +4,27 @@ export const useMicrophone = () => {
   const [level, setLevel] = useState(0);
   const [status, setStatus] = useState("off");
   const cleanupRef = useRef(() => {});
+  const isStartingRef = useRef(false);
 
   const start = async () => {
+    if (isStartingRef.current || status === "on") return;
+    isStartingRef.current = true;
+    setStatus("starting");
+
     if (!navigator.mediaDevices?.getUserMedia) {
       setStatus("unsupported");
+      isStartingRef.current = false;
       return;
     }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextClass) {
+        stream.getTracks().forEach((track) => track.stop());
+        setStatus("unsupported");
+        return;
+      }
       const context = new AudioContextClass();
       const analyser = context.createAnalyser();
       analyser.fftSize = 1024;
@@ -37,6 +49,8 @@ export const useMicrophone = () => {
       };
     } catch {
       setStatus("denied");
+    } finally {
+      isStartingRef.current = false;
     }
   }
 

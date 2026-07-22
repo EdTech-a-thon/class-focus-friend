@@ -1,6 +1,6 @@
 import Friend from "../Friend/Friend";
 
-const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isMusicPlaying, noiseTone }) => {
+const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isMusicPlaying, noiseTone, friendName }) => {
   
   return (
     <section
@@ -48,7 +48,7 @@ const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isM
         </div>
       ) : (
         <p className="empty-room">
-          Your friend is settling in. Decorate this room to make it your own.
+          {friendName} is settling in. Decorate this room to make it your own.
         </p>
       )}
     </section>

@@ -15,8 +15,18 @@ const NoiseCard = ({ noise }) => {
           </div>
           <p className="noise-expectation">Goal for {expectation.label.toLowerCase()}: <b>{expectation.detail}</b></p>
           <NoiseScale microphone={microphone} noiseTone={noiseTone}/>
-          <button className="outline" type="button" aria-pressed={microphone.status === "on"} onClick={microphone.status === "on" ? microphone.stop : microphone.start}>
-            {microphone.status === "on" ? "Stop sound meter" : "Turn on sound meter"}
+          <button
+            className="outline"
+            type="button"
+            aria-pressed={microphone.status === "on"}
+            disabled={microphone.status === "starting"}
+            onClick={microphone.status === "on" ? microphone.stop : microphone.start}
+          >
+            {microphone.status === "on"
+              ? "Stop sound meter"
+              : microphone.status === "starting"
+                ? "Starting sound meter..."
+                : "Turn on sound meter"}
           </button>
           {microphone.status === "denied" && <p className="help-text">Microphone access was not available. You can still run a focus session.</p>}
           {microphone.status === "unsupported" && <p className="help-text">This browser cannot use the sound meter. The other classroom tools still work.</p>}

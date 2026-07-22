@@ -114,7 +114,19 @@ const validateSaveFile = (data, validIds) => {
     validIds.activities.includes(settings.activity) &&
     Number.isFinite(settings.preferredMinutes) &&
     settings.preferredMinutes > 0 &&
-    (settings.friendName === undefined || typeof settings.friendName === "string");
+    (settings.friendName === undefined || typeof settings.friendName === "string") &&
+    (settings.favoriteSessions === undefined || (
+      Array.isArray(settings.favoriteSessions) &&
+      settings.favoriteSessions.every((favorite) =>
+        favorite &&
+        (typeof favorite.id === "number" || typeof favorite.id === "string") &&
+        typeof favorite.name === "string" &&
+        favorite.name.length > 0 &&
+        Number.isFinite(favorite.minutes) &&
+        favorite.minutes > 0 &&
+        validIds.activities.includes(favorite.activity)
+      )
+    ));
 
   const validPreferences =
     preferences &&
@@ -161,6 +173,7 @@ const validateSaveFile = (data, validIds) => {
   data.data.focusFriendSettings = {
     ...settings,
     friendName: settings.friendName ?? "Focus Friend",
+    favoriteSessions: settings.favoriteSessions ?? [],
   };
   data.data.focusFriendHouse = {
     activeRoom: house.activeRoom,

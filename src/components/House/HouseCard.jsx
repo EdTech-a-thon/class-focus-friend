@@ -80,6 +80,7 @@ const HouseCard = ({ house, rewards }) => {
         isFocusing={isFocusing}
         isMusicPlaying={isMusicPlaying}
         noiseTone={noiseTone}
+        friendName={friendName || "Focus Friend"}
       />
 
       {openShop && (

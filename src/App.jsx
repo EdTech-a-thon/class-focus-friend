@@ -24,6 +24,7 @@ const App = () => {
     activity: "independent",
     preferredMinutes: 15,
     friendName: "Focus Friend",
+    favoriteSessions: [],
   });
   const [progressData, setProgressData] = useLocalStorage("focusFriendProgress", {
     points: 0,
@@ -44,7 +45,13 @@ const App = () => {
     musicVolume: 55,
   });
 
-  const { activity, preferredMinutes, friendName = "Focus Friend" } = settings;
+  const {
+    activity,
+    preferredMinutes,
+    friendName = "Focus Friend",
+    favoriteSessions: savedFavoriteSessions = [],
+  } = settings;
+  const favoriteSessions = Array.isArray(savedFavoriteSessions) ? savedFavoriteSessions : [];
   const { points, totalPoints, history = [] } = progressData;
   // Older saved classrooms may only have session history, not this total.
   const completedSessions = progressData.completedSessions ?? history.length;
@@ -73,6 +80,25 @@ const App = () => {
   const setFriendName = (value) => setSettings(
     (current) => ({ ...current, friendName: value })
   );
+
+  const saveFavoriteSession = (name) => setSettings((current) => ({
+    ...current,
+    favoriteSessions: [
+      ...(Array.isArray(current.favoriteSessions) ? current.favoriteSessions : []),
+      {
+        id: Date.now(),
+        name,
+        activity: current.activity,
+        minutes: current.preferredMinutes,
+      },
+    ],
+  }));
+
+  const deleteFavoriteSession = (id) => setSettings((current) => ({
+    ...current,
+    favoriteSessions: (Array.isArray(current.favoriteSessions) ? current.favoriteSessions : [])
+      .filter((favorite) => favorite.id !== id),
+  }));
 
   const setPoints = (value) => setProgressData(
     (current) => (
@@ -229,7 +255,7 @@ const App = () => {
     setPoints((value) => value + completedMinutes);
     setTotalPoints((value) => value + completedMinutes);
     setCompletedSessions((value) => value + 1);
-    setHistory((sessions) => [completedSession, ...sessions].slice(0, 20));
+    setHistory((sessions) => [completedSession, ...sessions]);
     stopTimerAlert.current = playTimerCompleteAlert();
     setIsTimerAlertPlaying(true);
     setShowComplete(true);
@@ -306,6 +332,9 @@ const App = () => {
     activities,
     chooseDuration,
     setActivity,
+    favoriteSessions,
+    saveFavoriteSession,
+    deleteFavoriteSession,
   };
 
   const noise = {
@@ -405,7 +434,7 @@ const App = () => {
       <Header header={header} />
       <HouseCard house={house} rewards={rewards} />
 
-       <div className="dashboard-grid ocus-controls">
+        <div className="dashboard-grid focus-controls">
         <TimerCard timerSettings={timerSettings} music={music} session={session} />
 
         <NoiseCard noise={noise} />
