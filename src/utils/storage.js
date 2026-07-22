@@ -72,6 +72,18 @@ export const saveData = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
+export const clearFocusFriendData = () => {
+  for (const key of FOCUS_FRIEND_STORAGE_KEYS) {
+    localStorage.removeItem(key);
+  }
+
+  for (const fields of Object.values(LEGACY_STORAGE)) {
+    for (const key of Object.values(fields)) {
+      localStorage.removeItem(key);
+    }
+  }
+}
+
 export const loadData = (key, fallback) => {
   if (!FOCUS_FRIEND_STORAGE_KEYS.includes(key)) return fallback;
 

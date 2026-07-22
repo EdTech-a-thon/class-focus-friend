@@ -15,6 +15,8 @@ import HouseCard from "./components/House/HouseCard";
 import ProgressCard from "./components/Progress/ProgressCard";
 import SessionCompletionModal from "./components/SessionCompleteModal/SessionCompletionModal";
 import ExportImportModal from "./components/ExportImport/ExportImportModal";
+import ClearDataModal from "./components/ClearData/ClearDataModal";
+import { clearFocusFriendData } from "./utils/storage";
 
 const App = () => {
   // persistent classroom data
@@ -156,6 +158,7 @@ const App = () => {
   // temporary session state
   const [showComplete, setShowComplete] = useState(false);
   const [showExportImport, setShowExportImport] = useState(false);
+  const [showClearData, setShowClearData] = useState(false);
 
   // runtime state
   const expectation = activities[activity];
@@ -392,18 +395,29 @@ const App = () => {
     rooms: houseRooms.map((room) => room.id),
   };
 
+  const eraseSavedData = () => {
+    clearFocusFriendData();
+    window.location.reload();
+  };
+
   return (
     <main className="app-shell">
       <Header header={header} />
       <HouseCard house={house} rewards={rewards} />
 
-      <div className="dashboard-grid ocus-controls">
+       <div className="dashboard-grid ocus-controls">
         <TimerCard timerSettings={timerSettings} music={music} session={session} />
 
         <NoiseCard noise={noise} />
 
         <ProgressCard progress={progress} />
-      </div>
+       </div>
+
+       <div className="clear-data-section">
+         <button className="clear-data-trigger" type="button" onClick={() => setShowClearData(true)}>
+           Erase saved data
+         </button>
+       </div>
 
       <SessionCompletionModal
         equipped={equipped}
@@ -414,14 +428,22 @@ const App = () => {
         duration={`${timer.durationSeconds / 60} minutes`}
       />
 
-      {showExportImport && (
+       {showExportImport && (
         <ExportImportModal
           classroomData={classroomData}
           validIds={validSaveIds}
           onClose={() => setShowExportImport(false)}
         />
-      )}
-    </main>
+       )}
+
+       {showClearData && (
+         <ClearDataModal
+           classroomData={classroomData}
+           onClose={() => setShowClearData(false)}
+           onConfirm={eraseSavedData}
+         />
+       )}
+     </main>
   );
 };
 
