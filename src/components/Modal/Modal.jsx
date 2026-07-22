@@ -12,7 +12,7 @@ const Modal = ({
   return (
     <ModalBackdrop onClose={onClose}>
       <ModalBox
-        className={`modal ${className}`}
+        className={className}
         onClose={onClose}
       >
         {children}

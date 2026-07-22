@@ -5,7 +5,7 @@ const ModalBox = ({
 }) => {
   return (
     <section
-      className={`modal ${className}`}
+      className={`modal-box ${className}`}
       role="dialog"
       aria-modal="true"
     >
@@ -13,6 +13,7 @@ const ModalBox = ({
         className="modal-close"
         type="button"
         aria-label="Close modal"
+        autoFocus
         onClick={onClose}
       >
         &times;
