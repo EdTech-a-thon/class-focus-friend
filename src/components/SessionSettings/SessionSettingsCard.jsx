@@ -22,17 +22,11 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     setHiddenTimerMode(event.target.value);
   };
 
-  const durationMinutes = Math.floor(timer.durationSeconds / 60);
-  const durationSeconds = timer.durationSeconds % 60;
+  const durationMinutes = timer.durationSeconds / 60;
 
   const handleDurationChange = (event) => {
-    const maximum = event.target.name === "seconds" ? 59 : Number.MAX_SAFE_INTEGER;
-    const value = Math.min(maximum, Math.max(0, Number(event.target.value) || 0));
-    const nextDuration = event.target.name === "minutes"
-      ? value * 60 + durationSeconds
-      : durationMinutes * 60 + value;
-
-    if (nextDuration > 0) chooseDuration(nextDuration);
+    const minutes = Math.max(1, Math.floor(Number(event.target.value) || 1));
+    chooseDuration(minutes * 60);
   };
 
   return (
@@ -51,23 +45,10 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
             <input
               type="number"
               name="minutes"
-              min="0"
+              min="1"
               step="1"
               inputMode="numeric"
               value={durationMinutes}
-              onChange={handleDurationChange}
-            />
-          </label>
-          <label>
-            Seconds
-            <input
-              type="number"
-              name="seconds"
-              min="0"
-              max="59"
-              step="1"
-              inputMode="numeric"
-              value={durationSeconds}
               onChange={handleDurationChange}
             />
           </label>

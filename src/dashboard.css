@@ -128,7 +128,7 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .choice-row { display: grid; gap: 8px; grid-template-columns: repeat(4, 1fr); }
 .choice-row button { background: #f4eee3; border: 1px solid transparent; color: #526a63; padding: 10px 6px; }
 .choice-row button.selected { background: #dce9d9; border-color: #6e9588; color: #25433d; }
-.duration-inputs { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.duration-inputs { max-width: 180px; }
 .duration-inputs label { color: #526a63; display: grid; font-size: .84rem; font-weight: 700; gap: 6px; }
 .duration-inputs input { background: #fffaf0; border: 1px solid #b8c6bf; border-radius: 10px; color: #25433d; font: inherit; font-size: 1rem; padding: 9px 10px; width: 100%; }
 .duration-inputs input:focus { border-color: #527b70; outline: 3px solid rgba(82, 123, 112, .2); outline-offset: 1px; }
@@ -160,6 +160,13 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .house-card { background: #e8dfcf; border: 1px solid #d7c8b3; border-radius: 34px; margin: 12px auto 30px; max-width: 1116px; padding: 36px 32px 32px; width: calc(100% - 48px); }
 .house-heading { align-items: end; display: flex; gap: 24px; justify-content: space-between; margin-bottom: 22px; }
 .house-heading .card-label { margin-bottom: 7px; }
+.friend-name-field { align-items: center; color: #526a63; display: flex; font-size: .8rem; font-weight: 700; gap: 8px; }
+.friend-name-field input { background: #fffaf0; border: 1px solid #c6b69e; border-radius: 8px; color: #304b42; font: inherit; font-weight: 500; padding: 7px 9px; width: 160px; }
+.friend-name-field input:focus { border-color: #526a63; outline: 2px solid #a5c6ba; outline-offset: 1px; }
+.friend-name-modal { display: grid; gap: 18px; }
+.friend-name-modal .friend-name-field { align-items: flex-start; flex-direction: column; gap: 6px; }
+.friend-name-modal .friend-name-field input { font-size: 1rem; width: 100%; }
+.friend-name-modal .outline { justify-self: start; }
 .house-progress { background: #fffaf0; border: 1px solid #d7c8b3; border-radius: 16px; color: #526a63; display: grid; font-size: .78rem; min-width: 190px; padding: 10px 14px; text-align: right; }
 .house-progress > span { align-items: baseline; display: flex; gap: 5px; justify-content: flex-end; }
 .house-progress b { color: #cb654e; font-family: inherit; font-size: 1.35rem; line-height: 1.2; }
@@ -347,6 +354,8 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
   .house-heading { align-items: flex-start; flex-direction: column; gap: 14px; }
   .house-progress { text-align: left; width: 100%; }
   .house-progress > span { justify-content: flex-start; }
+  .friend-name-field { align-items: flex-start; flex-direction: column; gap: 4px; }
+  .friend-name-field input { width: 100%; }
   .room-tabs { grid-template-columns: repeat(2, 1fr); }
   .house-actions { display: grid; grid-template-columns: 1fr; }
   .room-scene { min-height: 430px; }

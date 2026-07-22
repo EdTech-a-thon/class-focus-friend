@@ -23,6 +23,8 @@ const HouseCard = ({ house, rewards }) => {
     isFocusing,
     isMusicPlaying,
     noiseTone,
+    friendName,
+    setFriendName,
   } = house;
 
   const nextRoom = houseRooms.find((room) => completedSessions < room.sessionsRequired);
@@ -43,7 +45,7 @@ const HouseCard = ({ house, rewards }) => {
       <div className="house-heading">
         <div>
           <p className="card-label">Focus friend&apos;s house</p>
-          <h2>{activeRoomDetails.name} is ready for focus</h2>
+          <h2>{friendName || "Focus Friend"} is ready for focus</h2>
         </div>
         <div className="house-progress">
           <span><b>{completedSessions}</b> total sessions completed</span>
@@ -57,6 +59,7 @@ const HouseCard = ({ house, rewards }) => {
             <button className="outline" type="button" onClick={() => setOpenShop("rooms")}>Choose room</button>
             <button className="outline" type="button" disabled={completedSessions < activeRoomDetails.sessionsRequired} onClick={() => setOpenShop("decorations")}>Decorate room</button>
             <button className="outline" type="button" onClick={() => setOpenShop("accessories")}>Dress up friend</button>
+            <button className="outline" type="button" onClick={() => setOpenShop("name")}>Name your friend</button>
           </>
         )}
         <button
@@ -85,7 +88,27 @@ const HouseCard = ({ house, rewards }) => {
         }}>
           <section className="shop-modal" role="dialog" aria-modal="true" aria-labelledby="shop-title">
             <button className="modal-close" type="button" aria-label="Close shop" autoFocus onClick={() => setOpenShop(null)}>&times;</button>
-            {openShop === "rooms" ? (
+            {openShop === "name" ? (
+              <form className="friend-name-modal" onSubmit={(event) => {
+                event.preventDefault();
+                setOpenShop(null);
+              }}>
+                <p className="card-label">Focus friend</p>
+                <h2 id="shop-title">What should we call your friend?</h2>
+                <label className="friend-name-field">
+                  <span>Friend&apos;s name</span>
+                  <input
+                    type="text"
+                    value={friendName}
+                    maxLength="30"
+                    autoFocus
+                    onChange={(event) => setFriendName(event.target.value)}
+                    placeholder="Focus Friend"
+                  />
+                </label>
+                <button className="outline" type="submit">Save name</button>
+              </form>
+            ) : openShop === "rooms" ? (
               <div className="room-picker">
                 <p className="card-label">Focus friend&apos;s house</p>
                 <h2 id="shop-title">Choose a room to focus in</h2>

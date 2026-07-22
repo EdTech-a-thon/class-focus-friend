@@ -56,7 +56,8 @@ const validateSaveFile = (data, validIds) => {
     settings &&
     validIds.activities.includes(settings.activity) &&
     Number.isFinite(settings.preferredMinutes) &&
-    settings.preferredMinutes > 0;
+    settings.preferredMinutes > 0 &&
+    (settings.friendName === undefined || typeof settings.friendName === "string");
 
   const validPreferences =
     preferences &&
@@ -99,6 +100,10 @@ const validateSaveFile = (data, validIds) => {
   data.data.focusFriendRewards = {
     unlocked: [...new Set(rewards.unlocked)],
     equipped: [...new Set(rewards.equipped)],
+  };
+  data.data.focusFriendSettings = {
+    ...settings,
+    friendName: settings.friendName ?? "Focus Friend",
   };
   data.data.focusFriendHouse = {
     activeRoom: house.activeRoom,

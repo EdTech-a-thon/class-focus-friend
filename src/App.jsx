@@ -21,6 +21,7 @@ const App = () => {
   const [settings, setSettings] = useLocalStorage("focusFriendSettings", {
     activity: "independent",
     preferredMinutes: 15,
+    friendName: "Focus Friend",
   });
   const [progressData, setProgressData] = useLocalStorage("focusFriendProgress", {
     points: 0,
@@ -41,7 +42,7 @@ const App = () => {
     musicVolume: 55,
   });
 
-  const { activity, preferredMinutes } = settings;
+  const { activity, preferredMinutes, friendName = "Focus Friend" } = settings;
   const { points, totalPoints, history = [] } = progressData;
   // Older saved classrooms may only have session history, not this total.
   const completedSessions = progressData.completedSessions ?? history.length;
@@ -66,6 +67,10 @@ const App = () => {
           : value
       }
     ));
+
+  const setFriendName = (value) => setSettings(
+    (current) => ({ ...current, friendName: value })
+  );
 
   const setPoints = (value) => setProgressData(
     (current) => (
@@ -210,7 +215,7 @@ const App = () => {
     }
     if (recordedCompletion.current) return;
     recordedCompletion.current = true;
-    const completedMinutes = Math.max(1, Math.ceil(timer.durationSeconds / 60));
+    const completedMinutes = timer.durationSeconds / 60;
     const completedSession = {
       id: Date.now(),
       date: new Date().toISOString(),
@@ -357,6 +362,8 @@ const App = () => {
     isFocusing: timer.isRunning,
     isMusicPlaying: musicEnabled,
     noiseTone,
+    friendName,
+    setFriendName,
   };
 
   const header = {
@@ -365,7 +372,10 @@ const App = () => {
   };
 
   const classroomData = {
-    focusFriendSettings: settings,
+    focusFriendSettings: {
+      ...settings,
+      friendName,
+    },
     focusFriendProgress: {
       ...progressData,
       completedSessions: sessionCount,
@@ -401,7 +411,7 @@ const App = () => {
         isTimerAlertPlaying={isTimerAlertPlaying}
         onClose={closeCompletionModal}
         onSilenceAlert={silenceTimerAlert}
-        duration={formatTime(timer.durationSeconds)}
+        duration={`${timer.durationSeconds / 60} minutes`}
       />
 
       {showExportImport && (
