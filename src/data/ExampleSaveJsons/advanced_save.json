@@ -1,0 +1,96 @@
+    {
+    "app": "Focus Friend",
+    "version": 1,
+    "createdAt": "2026-07-22T12:00:00.000Z",
+    "data": {
+        "focusFriendSettings": {
+        "activity": "partner",
+        "preferredMinutes": 20,
+        "friendName": "Demo Friend"
+        },
+        "focusFriendProgress": {
+        "points": 550,
+        "totalPoints": 1000,
+        "completedSessions": 50,
+        "history": [
+            { "id": 5001, "date": "2026-07-22T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5002, "date": "2026-07-21T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5003, "date": "2026-07-20T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5004, "date": "2026-07-19T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5005, "date": "2026-07-18T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5006, "date": "2026-07-17T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5007, "date": "2026-07-16T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5008, "date": "2026-07-15T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5009, "date": "2026-07-14T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5010, "date": "2026-07-13T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5011, "date": "2026-07-12T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5012, "date": "2026-07-11T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5013, "date": "2026-07-10T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5014, "date": "2026-07-09T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5015, "date": "2026-07-08T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5016, "date": "2026-07-07T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5017, "date": "2026-07-06T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5018, "date": "2026-07-05T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5019, "date": "2026-07-04T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5020, "date": "2026-07-03T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5021, "date": "2026-07-02T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5022, "date": "2026-07-01T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5023, "date": "2026-06-30T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5024, "date": "2026-06-29T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5025, "date": "2026-06-28T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5026, "date": "2026-06-27T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5027, "date": "2026-06-26T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5028, "date": "2026-06-25T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5029, "date": "2026-06-24T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5030, "date": "2026-06-23T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5031, "date": "2026-06-22T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5032, "date": "2026-06-21T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5033, "date": "2026-06-20T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5034, "date": "2026-06-19T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5035, "date": "2026-06-18T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5036, "date": "2026-06-17T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5037, "date": "2026-06-16T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5038, "date": "2026-06-15T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5039, "date": "2026-06-14T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5040, "date": "2026-06-13T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5041, "date": "2026-06-12T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5042, "date": "2026-06-11T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5043, "date": "2026-06-10T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5044, "date": "2026-06-09T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5045, "date": "2026-06-08T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5046, "date": "2026-06-07T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5047, "date": "2026-06-06T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 },
+            { "id": 5048, "date": "2026-06-05T09:00:00.000Z", "minutes": 20, "activity": "partner", "pointsEarned": 20 },
+            { "id": 5049, "date": "2026-06-04T09:00:00.000Z", "minutes": 20, "activity": "presentation", "pointsEarned": 20 },
+            { "id": 5050, "date": "2026-06-03T09:00:00.000Z", "minutes": 20, "activity": "independent", "pointsEarned": 20 }
+        ]
+        },
+        "focusFriendRewards": {
+        "unlocked": [
+            "glasses"
+        ],
+        "equipped": [
+            "glasses"
+        ]
+        },
+        "focusFriendHouse": {
+        "activeRoom": "bedroom",
+        "houseItemsOwned": [
+            "leafy-plant",
+            "window-curtains",
+            "rainbow-rug",
+            "book-nook",
+            "story-lamp",
+            "cloud-pillows",
+            "record-player",
+            "tea-table",
+            "family-photo",
+            "cozy-bed"
+            ]
+        },
+        "focusFriendPreferences": {
+            "musicEnabled": true,
+            "musicVolume": 45
+        }
+    }
+    }
