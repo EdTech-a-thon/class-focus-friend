@@ -29,6 +29,63 @@ const downloadSaveFile = (data) => {
   return filename;
 };
 
+const openSubstituteHandoff = () => {
+  const handoffWindow = window.open("", "_blank");
+  if (!handoffWindow) return;
+
+  const instructions = `Hello,
+
+Thank you for covering our class today. Focus Friend is ready to use at:
+https://class-focus-friend.edtechathon.com
+
+The classroom's saved setup is in the Focus Friend Classroom Save JSON file that was shared with you. Please do not edit or rename that file.
+
+To use it:
+1. Open the Focus Friend webpage above.
+2. Select "Save Classroom Setup" near the top of the page.
+3. Select "Restore Classroom Save."
+4. Choose the shared Focus Friend Classroom Save JSON file.
+5. The page will refresh with our timer settings, points, rewards, and classroom setup.
+
+When you are finished, you can create a new Classroom Save File from the same menu if you would like to pass along the updated classroom progress.
+
+Thank you!`;
+
+  handoffWindow.document.title = "Focus Friend Substitute Handoff";
+  handoffWindow.document.body.innerHTML = `
+    <main>
+      <p class="label">Focus Friend Substitute Handoff</p>
+      <h1>Ready-to-send instructions</h1>
+      <p>Copy this message into an email, text, or substitute plan. The classroom save file is downloading separately.</p>
+      <textarea aria-label="Substitute teacher instructions" readonly>${instructions}</textarea>
+      <button type="button">Copy instructions</button>
+      <p class="status" aria-live="polite"></p>
+    </main>
+    <style>
+      body { background: #fbf7ed; color: #25433d; font-family: Arial, sans-serif; margin: 0; }
+      main { margin: 56px auto; max-width: 720px; padding: 0 24px; }
+      .label { color: #d76d54; font-size: 14px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+      h1 { font-size: clamp(30px, 6vw, 48px); margin: 10px 0 16px; }
+      p { font-size: 17px; line-height: 1.55; }
+      textarea { background: #fffdf7; border: 2px solid #9bceb4; border-radius: 12px; box-sizing: border-box; color: #25433d; font: 16px/1.55 Arial, sans-serif; height: 390px; margin: 18px 0; padding: 18px; resize: vertical; width: 100%; }
+      button { background: #25433d; border: 0; border-radius: 999px; color: #fffaf0; cursor: pointer; font-size: 16px; font-weight: 700; padding: 13px 22px; }
+      button:hover { background: #39675b; }
+      .status { color: #39675b; font-weight: 700; min-height: 26px; }
+    </style>
+    <script>
+      const textarea = document.querySelector("textarea");
+      const button = document.querySelector("button");
+      const status = document.querySelector(".status");
+      textarea.focus();
+      textarea.select();
+      button.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(textarea.value);
+        status.textContent = "Instructions copied.";
+      });
+    </script>
+  `;
+};
+
 const validateSaveFile = (data, validIds) => {
   if (
     !data
@@ -117,4 +174,4 @@ const restoreSaveFile = (data) => {
   importClassroomSave(data);
 };
 
-export { restoreSaveFile, validateSaveFile, createSaveFile, downloadSaveFile };
+export { restoreSaveFile, validateSaveFile, createSaveFile, downloadSaveFile, openSubstituteHandoff };
