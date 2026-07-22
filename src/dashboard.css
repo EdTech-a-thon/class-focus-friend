@@ -213,8 +213,34 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .friend-at-home .state-idle { animation: friend-wander 8s ease-in-out infinite; }
 @keyframes friend-wander { 0%, 100% { transform: translateX(-35px); } 50% { transform: translateX(35px); } }
 .empty-room { bottom: 18px; color: #fffaf0; font-size: .86rem; left: 20px; line-height: 1.5; margin: 0; max-width: 230px; position: absolute; text-shadow: 0 1px 2px rgba(37, 67, 61, .5); z-index: 5; }
-.placed-decorations { align-items: end; bottom: 16px; display: flex; gap: 8px; left: 18px; max-width: 220px; overflow-x: auto; padding-bottom: 2px; position: absolute; z-index: 5; }
-.placed-decorations img { border: 0; filter: drop-shadow(0 3px 4px rgba(20, 38, 34, .28)); height: 58px; object-fit: contain; width: 58px; }
+.placed-decorations { inset: 0; pointer-events: none; position: absolute; z-index: 3; }
+.room-item { align-items: center; display: flex; filter: drop-shadow(0 5px 4px rgba(47, 38, 31, .25)); justify-content: center; position: absolute; }
+.room-item span { filter: drop-shadow(0 1px 0 rgba(255, 255, 255, .45)); font-family: "Apple Color Emoji", "Segoe UI Emoji", sans-serif; line-height: 1; }
+.room-item-floor, .room-item-furniture, .room-item-table, .room-item-plant, .room-item-lamp, .room-item-soft { bottom: calc(40px + var(--item-rise) * 7px); }
+.room-item-furniture { background: #d98662; border: 4px solid #6d4b38; border-radius: 28px 28px 10px 10px; height: 105px; left: calc(5% + var(--item-position) * 22%); width: 150px; z-index: 2; }
+.room-item-furniture span { font-size: 64px; }
+.room-item-table { background: #c98a60; border: 4px solid #6d4b38; border-radius: 50% 50% 18px 18px; height: 76px; left: calc(10% + var(--item-position) * 20%); width: 108px; z-index: 3; }
+.room-item-table::after { background: #765039; bottom: -27px; content: ""; height: 29px; position: absolute; width: 13px; }
+.room-item-table span { font-size: 48px; transform: translateY(-6px); }
+.room-item-floor { background: #d79570; border: 4px solid #6d4b38; border-radius: 14px 14px 22px 22px; height: 64px; left: calc(7% + var(--item-position) * 22%); width: 70px; z-index: 3; }
+.room-item-floor span { font-size: 43px; }
+.room-item-plant { background: #c86e54; border: 4px solid #6d4b38; border-radius: 5px 5px 20px 20px; height: 62px; left: calc(6% + var(--item-position) * 22%); width: 62px; z-index: 3; }
+.room-item-plant span { font-size: 69px; transform: translateY(-25px); }
+.room-item-lamp { height: 138px; left: calc(9% + var(--item-position) * 21%); width: 65px; z-index: 3; }
+.room-item-lamp span { font-size: 70px; transform: translateY(-22px); }
+.room-item-soft { background: #d9e7e7; border: 3px solid #6d4b38; border-radius: 50%; height: 62px; left: calc(12% + var(--item-position) * 20%); width: 86px; z-index: 3; }
+.room-item-soft span { font-size: 48px; }
+.room-item-rug { background: rgba(239, 177, 176, .85); border: 4px solid #6d4b38; border-radius: 50%; bottom: 19px; height: 70px; left: calc(8% + var(--item-position) * 17%); transform: perspective(120px) rotateX(55deg); width: 200px; z-index: 1; }
+.room-item-rug span { font-size: 44px; transform: rotateX(-55deg); }
+.room-item-wall { background: #fff5dc; border: 7px solid #8e6044; box-shadow: 0 4px 0 rgba(91, 59, 40, .3); height: 88px; left: calc(12% + var(--item-position) * 18%); top: calc(85px + var(--item-rise) * 28px); width: 108px; z-index: 2; }
+.room-item-wall span { font-size: 55px; }
+.room-item-curtain { background: #b997c9; border: 4px solid #6d4b38; border-radius: 8px 8px 0 0; height: 166px; right: calc(7% + var(--item-position) * 2%); top: 51px; width: 72px; z-index: 2; }
+.room-item-curtain span { font-size: 49px; }
+.room-item-hanging { height: 105px; left: calc(19% + var(--item-position) * 18%); top: 45px; z-index: 2; }
+.room-item-hanging::before { background: #6d4b38; content: ""; height: 38px; left: 50%; position: absolute; top: -22px; width: 3px; }
+.room-item-hanging span { font-size: 57px; }
+.room-item-surface { background: #f4eee3; border: 3px solid #6d4b38; border-radius: 13px 13px 5px 5px; bottom: calc(96px + var(--item-rise) * 6px); height: 48px; left: calc(17% + var(--item-position) * 18%); width: 58px; z-index: 4; }
+.room-item-surface span { font-size: 37px; }
 .shop-modal { background: #fffaf0; border-radius: 28px; box-shadow: 0 25px 80px rgba(18, 42, 35, .35); max-height: calc(100vh - 40px); max-width: 680px; overflow-y: auto; padding: 36px; width: 100%; }
 .shop-modal .card-heading, .shop-modal .catalog-heading { padding-right: 48px; }
 .shop-modal .reward-list { margin-top: 24px; }
@@ -387,8 +413,13 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
   .room-shelf { left: 3%; transform: scale(.75); transform-origin: left bottom; }
   .room-sofa { bottom: 58px; right: -75px; transform: scale(.72); transform-origin: bottom right; }
   .room-rug { left: 5%; transform: scale(.72); transform-origin: bottom left; }
-  .friend-at-home { bottom: 50px; left: 16%; transform: scale(.8); transform-origin: bottom left; }
-  .room-plant { left: 3%; transform: scale(.75); transform-origin: bottom left; }
+   .friend-at-home { bottom: 50px; left: 16%; transform: scale(.8); transform-origin: bottom left; }
+   .room-plant { left: 3%; transform: scale(.75); transform-origin: bottom left; }
+   .room-item-furniture { left: calc(2% + var(--item-position) * 21%); transform: scale(.76); transform-origin: bottom left; }
+   .room-item-table { left: calc(4% + var(--item-position) * 20%); transform: scale(.76); transform-origin: bottom left; }
+   .room-item-rug { left: calc(4% + var(--item-position) * 16%); transform: perspective(120px) rotateX(55deg) scale(.72); transform-origin: bottom left; }
+   .room-item-wall { left: calc(5% + var(--item-position) * 18%); transform: scale(.76); transform-origin: top left; }
+   .room-item-surface { left: calc(10% + var(--item-position) * 18%); transform: scale(.8); transform-origin: bottom left; }
   .shop-modal { padding: 30px 22px; }
   .modal-box > .modal-close { right: 18px; top: 18px; }
   .catalog-heading { align-items: flex-start; gap: 12px; }

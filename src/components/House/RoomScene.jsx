@@ -38,12 +38,19 @@ const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isM
           className="placed-decorations"
           aria-label="Decorations in this room"
         >
-          {decorations.map((item) => (
-            <img
+          {decorations.map((item, index) => (
+            <div
               key={item.id}
-              src={item.image}
-              alt={item.name}
-            />
+              className={`room-item room-item-${item.sceneType}`}
+              style={{
+                "--item-position": index % 4,
+                "--item-rise": index % 3,
+              }}
+              aria-label={item.name}
+              role="img"
+            >
+              <span aria-hidden="true">{item.symbol}</span>
+            </div>
           ))}
         </div>
       ) : (
