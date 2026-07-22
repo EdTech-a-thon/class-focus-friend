@@ -23,12 +23,6 @@ const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isM
         <span className="window-cloud cloud-one" />
         <span className="window-cloud cloud-two" />
       </div>
-      <div className="wall-picture" aria-hidden="true">♥</div>
-      <div className="room-shelf" aria-hidden="true"><span>▥</span><span>●</span><span>▯</span></div>
-      <div className="room-sofa" aria-hidden="true"><span /><span /></div>
-      <div className="room-rug" aria-hidden="true" />
-      <div className="room-plant" aria-hidden="true"><span>✦</span></div>
-
       <div className="friend-at-home">
         <Friend
           equipped={equipped}
