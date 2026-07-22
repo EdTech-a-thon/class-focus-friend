@@ -440,13 +440,13 @@ const App = () => {
         <NoiseCard noise={noise} />
 
         <ProgressCard progress={progress} />
-       </div>
+      </div>
 
-       <div className="clear-data-section">
-         <button className="clear-data-trigger" type="button" onClick={() => setShowClearData(true)}>
-           Erase saved data
-         </button>
-       </div>
+      <div className="clear-data-section">
+        <button className="clear-data-trigger" type="button" onClick={() => setShowClearData(true)}>
+          Erase saved data
+        </button>
+      </div>
 
       <SessionCompletionModal
         equipped={equipped}
@@ -457,22 +457,22 @@ const App = () => {
         duration={`${timer.durationSeconds / 60} minutes`}
       />
 
-       {showExportImport && (
+      {showExportImport && (
         <ExportImportModal
           classroomData={classroomData}
           validIds={validSaveIds}
           onClose={() => setShowExportImport(false)}
         />
-       )}
+      )}
 
-       {showClearData && (
-         <ClearDataModal
-           classroomData={classroomData}
-           onClose={() => setShowClearData(false)}
-           onConfirm={eraseSavedData}
-         />
-       )}
-     </main>
+      {showClearData && (
+        <ClearDataModal
+          classroomData={classroomData}
+          onClose={() => setShowClearData(false)}
+          onConfirm={eraseSavedData}
+        />
+      )}
+    </main>
   );
 };
 
