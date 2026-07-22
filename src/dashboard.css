@@ -275,6 +275,60 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .export-import-dismiss { background: transparent; border: 0; color: #526a63; display: block; margin: 18px auto -10px; }
 .export-import-dismiss:hover { color: #25433d; text-decoration: underline; }
 
+.info-icon {
+  position: relative;
+  cursor: help;
+  color: var(--muted-text);
+}
+
+.info-icon:hover,
+.info-icon:focus {
+  color: var(--accent);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 0.75rem);
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 280px;
+  padding: 0.75rem;
+
+  background: #fbf7ed;;
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+
+  font-size: 0.875rem;
+  line-height: 1.4;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.15s ease;
+
+  z-index: 100;
+}
+
+.info-icon:hover .tooltip,
+.info-icon:focus .tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  border-width: 8px;
+  border-style: solid;
+  border-color: var(--card-background) transparent transparent transparent;
+}
+
+
 @media (max-width: 760px) {
   .app-header { padding: 20px; }
   .app-header p { display: none; }

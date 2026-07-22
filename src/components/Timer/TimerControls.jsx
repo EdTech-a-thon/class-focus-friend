@@ -1,33 +1,29 @@
-import { useState } from "react";
+import EncouragementMessage from "./EncouragementMessage";
 
-const TimerControls = ({ timerSettings }) => {
+const TimerControls = ({ timerSettings, displayCountdown }) => {
   const { timer, expectation, formatTime } = timerSettings;
-  const [showTime, setShowTime] = useState(true);
+  const {
+    showCountdown,
+    hiddenTimerMode,
+  } = displayCountdown
+
+  const message = <EncouragementMessage mode={hiddenTimerMode} timer={timer}/>
 
   return (
     <section>
       <p className="card-label">Focus session</p>
 
-      <div className={`timer-display ${showTime ? "" : "time-hidden"}`} aria-live="off">
-        {showTime ? formatTime(timer.secondsRemaining) : "Time hidden"}
+      <div className={`timer-display ${showCountdown ? "" : "time-hidden"}`} aria-live="off">
+        {showCountdown ? formatTime(timer.secondsRemaining) : message}
       </div>
 
       <p className="timer-caption">
         {timer.isRunning
           ? "Your class is building focus stamina." 
-          : showTime
+          : showCountdown
           ? `${timer.minutes} minute ${expectation.label.toLowerCase()} session`
           : `${expectation.label} focus session`}
       </p>
-
-      <button
-        className="timer-visibility-toggle"
-        type="button"
-        aria-pressed={!showTime}
-        onClick={() => setShowTime((visible) => !visible)}
-      >
-        {showTime ? "Hide exact time" : "Show exact time"}
-      </button>
 
       <div className="button-row">
         <button

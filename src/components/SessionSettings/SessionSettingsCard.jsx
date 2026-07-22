@@ -1,11 +1,27 @@
-const SessionSettingsCard = ({ session }) => {
+const SessionSettingsCard = ({ session, displayCountdown }) => {
   const {
     timer,
     activity,
     activities,
     chooseMinutes,
-    setActivity,
+    setActivity
   } = session;
+
+  const {
+    showCountdown,
+    setShowCountdown,
+    hiddenTimerMode,
+    setHiddenTimerMode
+  } = displayCountdown;
+
+  const handleShowCountdown = (event) => {
+    setShowCountdown(!showCountdown);
+  };
+
+  const handleHiddenTimerMode = (event) => {
+    setHiddenTimerMode(event.target.value);
+  };
+
   return (
     <>
       <div className="settings-heading">
@@ -32,6 +48,99 @@ const SessionSettingsCard = ({ session }) => {
           ))}
         </div>
       </fieldset>
+      <fieldset>
+        <legend>Countdown Display</legend>
+        <div>
+          <label>
+            <input
+              type="radio"
+              name="showCountdown"
+              value={true}
+              checked={showCountdown}
+              onChange={handleShowCountdown}
+            />
+            Show countdown
+          </label>
+
+          <br></br>
+
+          <label>
+            <input
+              type="radio"
+              name="showCountdown"
+              value={false}
+              checked={!showCountdown}
+              onChange={handleShowCountdown}
+            />
+            Hide countdown
+          </label>
+        </div>
+      </fieldset>
+
+      {!showCountdown && <fieldset>
+        <legend>When countdown is hidden...</legend>
+
+          <label>
+            <input
+              type="radio"
+              name="hiddenTimerMode"
+              value="none"
+              checked={hiddenTimerMode === "none"}
+              onChange={handleHiddenTimerMode}
+            />
+            No messages
+          </label>
+
+          <br />
+
+          <label>
+            <input
+              type="radio"
+              name="hiddenTimerMode"
+              value="generic"
+              checked={hiddenTimerMode === "generic"}
+              onChange={handleHiddenTimerMode}
+            />
+            General encouragements
+          </label>
+
+          <br />
+
+          <label className="tooltip-label">
+            <input
+              type="radio"
+              name="hiddenTimerMode"
+              value="progress"
+              checked={hiddenTimerMode === "progress"}
+              onChange={handleHiddenTimerMode}
+            />
+
+            <span className="label-text">
+              Session-aware encouragements
+
+              <span
+                className="info-icon"
+                tabIndex={0}
+                aria-label="Learn more about session-aware encouragements"
+              >
+                ⓘ
+
+                <span className="tooltip">
+                  <strong>Messages change as the session progresses.</strong>
+                  <br /><br />
+                  🌱 Beginning: "Let's get started!"
+                  <br />
+                  📚 Middle: "You're making great progress."
+                  <br />
+                  🌟 End: "Finish strong!"
+                  <br /><br />
+                  Encouragements help students stay motivated without revealing how much
+                  time remains.
+                </span>
+              </span>
+            </span>
+          </label>
+      </fieldset>}
     </>
 
   )
