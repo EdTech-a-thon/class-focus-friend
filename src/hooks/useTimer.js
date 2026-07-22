@@ -33,6 +33,10 @@ export const useTimer = (initialMinutes) => {
     setIsRunning(false);
   };
 
+  const resume = () => {
+    if (secondsRemaining > 0) setIsRunning(true);
+  };
+
   return {
     durationSeconds,
     secondsRemaining,
@@ -40,6 +44,7 @@ export const useTimer = (initialMinutes) => {
     isComplete: secondsRemaining === 0,
     chooseDuration,
     pause,
+    resume,
     reset,
     toggle: () => setIsRunning((running) => !running),
   };

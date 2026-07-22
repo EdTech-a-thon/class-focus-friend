@@ -1,7 +1,7 @@
 import {encouragementMessages, getProgressMessageType} from "../../data/encouragementMessages";
 import { useState } from "react";
 
-const EncouragementMessage = ({ mode, timer }) => {
+const EncouragementMessage = ({ mode, timer, noiseTone }) => {
   const [genericMessage] = useState(() => {
     const messages = encouragementMessages.generic;
     const randomIndex = Math.floor(Math.random() * messages.length);
@@ -9,6 +9,10 @@ const EncouragementMessage = ({ mode, timer }) => {
   })
 
   if (mode === "none") return null;
+
+  if (noiseTone === "loud") {
+    return <p>Too loud, but you can get back on track!</p>;
+  }
 
   if (mode === "generic") {
     return <p>{genericMessage}</p>;

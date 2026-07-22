@@ -1,13 +1,13 @@
 import EncouragementMessage from "./EncouragementMessage";
 
 const TimerControls = ({ timerSettings, displayCountdown }) => {
-  const { timer, expectation, formatTime } = timerSettings;
+  const { timer, expectation, noiseTone, formatTime } = timerSettings;
   const {
     showCountdown,
     hiddenTimerMode,
   } = displayCountdown
 
-  const message = <EncouragementMessage mode={hiddenTimerMode} timer={timer}/>
+  const message = <EncouragementMessage mode={hiddenTimerMode} timer={timer} noiseTone={noiseTone}/>
 
   return (
     <section>

@@ -174,21 +174,34 @@ const App = () => {
 
   const timer = useTimer(preferredMinutes);
   const pauseTimer = timer.pause;
+  const resumeTimer = timer.resume;
   const recordedCompletion = useRef(false);
   const redAlertPlayed = useRef(false);
+  const timerPausedForNoise = useRef(false);
   const stopTimerAlert = useRef(null);
   const [isTimerAlertPlaying, setIsTimerAlertPlaying] = useState(false);
 
   useEffect(() => {
-    if (noiseTone !== "loud") {
-      redAlertPlayed.current = false;
+    if (noiseTone === "loud") {
+      if (timer.isRunning) {
+        timerPausedForNoise.current = true;
+        pauseTimer();
+      }
+      if (redAlertPlayed.current) return;
+      redAlertPlayed.current = true;
+      playNoiseAlert();
       return;
     }
-    if (redAlertPlayed.current) return;
-    redAlertPlayed.current = true;
-    pauseTimer();
-    playNoiseAlert();
-  }, [noiseTone, pauseTimer]);
+
+    if (noiseTone === "good" && timerPausedForNoise.current && !timer.isComplete) {
+      timerPausedForNoise.current = false;
+      resumeTimer();
+    }
+
+    if (noiseTone !== "loud") {
+      redAlertPlayed.current = false;
+    }
+  }, [noiseTone, pauseTimer, resumeTimer, timer.isComplete, timer.isRunning]);
 
   useEffect(() => {
     if (!timer.isComplete) {
@@ -297,6 +310,7 @@ const App = () => {
   const timerSettings = {
     timer,
     expectation,
+    noiseTone,
     formatTime,
   };
 
