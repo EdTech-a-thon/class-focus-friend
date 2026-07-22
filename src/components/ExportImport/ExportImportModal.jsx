@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
-import { createSaveFile, downloadSaveFile, restoreSaveFile, validateSaveFile } from "./exportImportUtils";
+import { createSaveFile, downloadSaveFile, restoreSaveFile, validateSaveFile } from "../../utils/exportImportUtils";
 
-function detectComputerType() {
+const detectComputerType = () => {
   const platform = navigator.userAgentData?.platform || navigator.platform || "";
   return /Mac|iPhone|iPad/i.test(platform) ? "mac" : /Win/i.test(platform) ? "windows" : null;
 }
 
-export default function ExportImportModal({ classroomData, validIds, onClose }) {
+const ExportImportModal = ({ classroomData, validIds, onClose }) => {
   const fileInputRef = useRef(null);
   const [message, setMessage] = useState(null);
   const [computerType, setComputerType] = useState(detectComputerType);
 
   useEffect(() => {
-    function closeOnEscape(event) {
+    const closeOnEscape = (event) => {
       if (event.key === "Escape") onClose();
     }
 
@@ -20,12 +20,12 @@ export default function ExportImportModal({ classroomData, validIds, onClose }) 
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [onClose]);
 
-  function exportSetup() {
+  const exportSetup = () => {
     const filename = downloadSaveFile(createSaveFile(classroomData));
     setMessage({ type: "success", text: "Classroom Save Created!", filename });
   }
 
-  async function importSetup(event) {
+  const importSetup = async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -100,3 +100,5 @@ export default function ExportImportModal({ classroomData, validIds, onClose }) 
     </div>
   );
 }
+
+export default ExportImportModal;

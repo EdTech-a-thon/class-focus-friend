@@ -10,7 +10,7 @@ const TimerCard = ({ timerSettings, music, session }) => {
   useEffect(() => {
     if (!showSettings) return;
 
-    function closeOnEscape(event) {
+    const closeOnEscape = (event) => {
       if (event.key === "Escape") setShowSettings(false);
     }
 

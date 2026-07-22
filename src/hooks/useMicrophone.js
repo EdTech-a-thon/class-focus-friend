@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
-export function useMicrophone() {
+export const useMicrophone = () => {
   const [level, setLevel] = useState(0);
   const [status, setStatus] = useState("off");
   const cleanupRef = useRef(() => {});
 
-  async function start() {
+  const start = async () => {
     if (!navigator.mediaDevices?.getUserMedia) {
       setStatus("unsupported");
       return;
@@ -40,7 +40,7 @@ export function useMicrophone() {
     }
   }
 
-  function stop() {
+  const stop = () => {
     cleanupRef.current();
     cleanupRef.current = () => {};
     setLevel(0);

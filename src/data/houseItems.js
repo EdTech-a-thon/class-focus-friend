@@ -1,4 +1,4 @@
-function cartoonItem(label, symbol, color) {
+const cartoonItem = (label, symbol, color) => {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260">
     <defs><filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#29453e" flood-opacity=".22"/></filter></defs>
     <ellipse cx="180" cy="218" rx="104" ry="18" fill="#29453e" opacity=".13"/>
@@ -10,7 +10,7 @@ function cartoonItem(label, symbol, color) {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-function cartoonRoom(name, symbol, wall, floor) {
+const cartoonRoom = (name, symbol, wall, floor) => {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540">
     <rect width="900" height="540" fill="${wall}"/>
     <path d="M0 360h900v180H0z" fill="${floor}"/>

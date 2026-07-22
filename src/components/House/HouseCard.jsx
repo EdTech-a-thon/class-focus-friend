@@ -29,7 +29,7 @@ const HouseCard = ({ house, rewards }) => {
   useEffect(() => {
     if (!openShop) return;
 
-    function closeOnEscape(event) {
+    const closeOnEscape = (event) => {
       if (event.key === "Escape") setOpenShop(null);
     }
 

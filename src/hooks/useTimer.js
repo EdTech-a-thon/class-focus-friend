@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-export function useTimer(initialMinutes) {
+export const useTimer = (initialMinutes) => {
   const [minutes, setMinutes] = useState(initialMinutes);
   const [secondsRemaining, setSecondsRemaining] = useState(initialMinutes * 60);
   const [isRunning, setIsRunning] = useState(false);
@@ -17,18 +17,18 @@ export function useTimer(initialMinutes) {
     if (secondsRemaining === 0) setIsRunning(false);
   }, [secondsRemaining]);
 
-  function chooseMinutes(value) {
+  const chooseMinutes = (value) => {
     if (isRunning) return;
     setMinutes(value);
     setSecondsRemaining(value * 60);
   }
 
-  function reset() {
+  const reset = () => {
     setIsRunning(false);
     setSecondsRemaining(minutes * 60);
   }
 
-  function pause() {
+  const pause = () => {
     setIsRunning(false);
   }
 

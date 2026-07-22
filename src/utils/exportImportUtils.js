@@ -1,18 +1,18 @@
-import { exportClassroomSave, importClassroomSave } from "../../utils/storage.js";
+import { exportClassroomSave, importClassroomSave } from "./storage.js";
 
-function isFiniteNonNegativeNumber(value) {
+const isFiniteNonNegativeNumber = (value) => {
   return Number.isFinite(value) && value >= 0;
-}
+};
 
-function isStringArray(value) {
+const isStringArray = (value) => {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
-}
+};
 
-export function createSaveFile(data) {
+const createSaveFile = (data) => {
   return exportClassroomSave(data);
-}
+};
 
-export function downloadSaveFile(data) {
+const downloadSaveFile = (data) => {
   const blob = new Blob([JSON.stringify(data, null, 2)], {
     type: "application/json",
   });
@@ -27,10 +27,15 @@ export function downloadSaveFile(data) {
   link.remove();
   URL.revokeObjectURL(url);
   return filename;
-}
+};
 
-export function validateSaveFile(data, validIds) {
-  if (!data || data.app !== "Focus Friend" || data.version !== 1 || !data.data) {
+const validateSaveFile = (data, validIds) => {
+  if (
+    !data
+    || data.app !== "Focus Friend" 
+    || data.version !== 1
+    || !data.data
+  ) {
     throw new Error("Invalid classroom save file");
   }
 
@@ -81,7 +86,13 @@ export function validateSaveFile(data, validIds) {
     isStringArray(house.houseItemsOwned) &&
     house.houseItemsOwned.every((id) => validIds.houseItems.includes(id));
 
-  if (!validSettings || !validPreferences || !validProgress || !validRewards || !validHouse) {
+  if (
+    !validSettings 
+    || !validPreferences 
+    || !validProgress 
+    || !validRewards 
+    || !validHouse
+  ) {
     throw new Error("Invalid classroom save file");
   }
 
@@ -95,8 +106,10 @@ export function validateSaveFile(data, validIds) {
   };
 
   return data;
-}
+};
 
-export function restoreSaveFile(data) {
+const restoreSaveFile = (data) => {
   importClassroomSave(data);
-}
+};
+
+export { restoreSaveFile, validateSaveFile, createSaveFile, downloadSaveFile };

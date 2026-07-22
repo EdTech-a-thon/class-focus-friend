@@ -31,12 +31,12 @@ const LEGACY_STORAGE = {
   },
 };
 
-function readStoredValue(key) {
+const readStoredValue = (key) => {
   const value = localStorage.getItem(key);
   return value === null ? undefined : JSON.parse(value);
 }
 
-function migrateLegacyData(key, fallback) {
+const migrateLegacyData = (key, fallback) => {
   const legacyFields = LEGACY_STORAGE[key];
   if (!legacyFields) return fallback;
 
@@ -65,14 +65,14 @@ function migrateLegacyData(key, fallback) {
   return migrated;
 }
 
-export function saveData(key, value) {
+export const saveData = (key, value) => {
   if (!FOCUS_FRIEND_STORAGE_KEYS.includes(key)) {
     throw new Error("Unknown Focus Friend storage key");
   }
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-export function loadData(key, fallback) {
+export const loadData = (key, fallback) => {
   if (!FOCUS_FRIEND_STORAGE_KEYS.includes(key)) return fallback;
 
   try {
@@ -83,16 +83,27 @@ export function loadData(key, fallback) {
   }
 }
 
-export function exportClassroomSave(data) {
+export const exportClassroomSave = (data) => {
+  const progress = data.focusFriendProgress;
+  const completedSessions = Number.isInteger(progress?.completedSessions)
+    ? progress.completedSessions
+    : progress?.history?.length ?? 0;
+
   return {
     app: "Focus Friend",
     version: 1,
     createdAt: new Date().toISOString(),
-    data,
+    data: {
+      ...data,
+      focusFriendProgress: {
+        ...progress,
+        completedSessions,
+      },
+    },
   };
 }
 
-export function importClassroomSave(save) {
+export const importClassroomSave = (save) => {
   if (!save || save.app !== "Focus Friend" || save.version !== 1 || !save.data) {
     throw new Error("Invalid classroom save file");
   }

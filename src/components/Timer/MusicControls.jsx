@@ -24,7 +24,7 @@ const MusicControls = ({ music }) => {
   useEffect(() => {
     let active = true;
 
-    function createPlayer() {
+    const createPlayer = () => {
       if (!active || player.current || !playerElement.current) return;
       player.current = new window.YT.Player(playerElement.current, {
         videoId: trackId,
@@ -84,7 +84,7 @@ const MusicControls = ({ music }) => {
     if (playerReady) player.current.setVolume(musicVolume);
   }, [musicVolume, playerReady]);
 
-  function toggleMusic() {
+  const toggleMusic = () => {
     if (musicEnabled) player.current.pauseVideo();
     else player.current.playVideo();
     setMusicEnabled((enabled) => !enabled);
