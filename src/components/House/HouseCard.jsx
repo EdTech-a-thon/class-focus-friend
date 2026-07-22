@@ -6,6 +6,7 @@ import HouseCatalog from "./HouseCatalog";
 
 const HouseCard = ({ house, rewards }) => {
   const [openShop, setOpenShop] = useState(null);
+  const [showActions, setShowActions] = useState(true);
   const {
     points,
     houseRooms,
@@ -50,10 +51,22 @@ const HouseCard = ({ house, rewards }) => {
         </div>
       </div>
 
-      <div className="house-actions">
-        <button className="outline" type="button" onClick={() => setOpenShop("rooms")}>Choose room</button>
-        <button className="outline" type="button" disabled={completedSessions < activeRoomDetails.sessionsRequired} onClick={() => setOpenShop("decorations")}>Decorate room</button>
-        <button className="outline" type="button" onClick={() => setOpenShop("accessories")}>Dress up friend</button>
+      <div className={`house-actions ${showActions ? "" : "collapsed"}`}>
+        {showActions && (
+          <>
+            <button className="outline" type="button" onClick={() => setOpenShop("rooms")}>Choose room</button>
+            <button className="outline" type="button" disabled={completedSessions < activeRoomDetails.sessionsRequired} onClick={() => setOpenShop("decorations")}>Decorate room</button>
+            <button className="outline" type="button" onClick={() => setOpenShop("accessories")}>Dress up friend</button>
+          </>
+        )}
+        <button
+          className="house-actions-toggle"
+          type="button"
+          aria-expanded={showActions}
+          onClick={() => setShowActions((visible) => !visible)}
+        >
+          {showActions ? "Hide house actions" : "Show house actions"}
+        </button>
       </div>
 
       <RoomScene
