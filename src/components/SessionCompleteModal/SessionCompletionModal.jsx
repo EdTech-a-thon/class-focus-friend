@@ -1,6 +1,6 @@
 import Friend from "../Friend/Friend";
 
-const CompletionModal = ({ equipped, showComplete, setShowComplete, minutes }) => {
+const CompletionModal = ({ equipped, showComplete, duration, isTimerAlertPlaying, onClose, onSilenceAlert }) => {
   if (!showComplete) return null;
 
   return (
@@ -30,17 +30,19 @@ const CompletionModal = ({ equipped, showComplete, setShowComplete, minutes }) =
         </h2>
 
         <p>
-          You earned <b>{minutes} class points</b> for {minutes} minutes of shared focus.
+          Your class completed <b>{duration}</b> of shared focus.
         </p>
 
-        <button
-          className="primary"
-          type="button"
-          autoFocus
-          onClick={() => setShowComplete(false)}
-        >
-          Celebrate
-        </button>
+        <div className="completion-actions">
+          {isTimerAlertPlaying && (
+            <button className="outline" type="button" autoFocus onClick={onSilenceAlert}>
+              Turn off alarm
+            </button>
+          )}
+          <button className="primary" type="button" autoFocus={!isTimerAlertPlaying} onClick={onClose}>
+            Celebrate
+          </button>
+        </div>
       </section>
     </div>
   );

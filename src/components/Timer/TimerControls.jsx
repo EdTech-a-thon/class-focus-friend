@@ -21,7 +21,7 @@ const TimerControls = ({ timerSettings, displayCountdown }) => {
         {timer.isRunning
           ? "Your class is building focus stamina." 
           : showCountdown
-          ? `${timer.minutes} minute ${expectation.label.toLowerCase()} session`
+          ? `${formatTime(timer.durationSeconds)} ${expectation.label.toLowerCase()} session`
           : `${expectation.label} focus session`}
       </p>
 

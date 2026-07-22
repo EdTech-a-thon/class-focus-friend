@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 
 export const useTimer = (initialMinutes) => {
-  const [minutes, setMinutes] = useState(initialMinutes);
-  const [secondsRemaining, setSecondsRemaining] = useState(initialMinutes * 60);
+  const initialSeconds = initialMinutes * 60;
+  const [durationSeconds, setDurationSeconds] = useState(initialSeconds);
+  const [secondsRemaining, setSecondsRemaining] = useState(initialSeconds);
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
@@ -17,27 +18,27 @@ export const useTimer = (initialMinutes) => {
     if (secondsRemaining === 0) setIsRunning(false);
   }, [secondsRemaining]);
 
-  const chooseMinutes = (value) => {
+  const chooseDuration = (value) => {
     if (isRunning) return;
-    setMinutes(value);
-    setSecondsRemaining(value * 60);
-  }
+    setDurationSeconds(value);
+    setSecondsRemaining(value);
+  };
 
   const reset = () => {
     setIsRunning(false);
-    setSecondsRemaining(minutes * 60);
-  }
+    setSecondsRemaining(durationSeconds);
+  };
 
   const pause = () => {
     setIsRunning(false);
-  }
+  };
 
   return {
-    minutes,
+    durationSeconds,
     secondsRemaining,
     isRunning,
     isComplete: secondsRemaining === 0,
-    chooseMinutes,
+    chooseDuration,
     pause,
     reset,
     toggle: () => setIsRunning((running) => !running),

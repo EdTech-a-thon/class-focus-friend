@@ -14,7 +14,7 @@ const EncouragementMessage = ({ mode, timer }) => {
     return <p>{genericMessage}</p>;
   }
 
-  const totalSeconds = timer.minutes * 60;
+  const totalSeconds = timer.durationSeconds;
   const elapsedSeconds = totalSeconds - timer.secondsRemaining;
   const progress = elapsedSeconds / totalSeconds;
 

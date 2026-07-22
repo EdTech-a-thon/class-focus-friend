@@ -7,6 +7,7 @@ import { useMicrophone } from "./hooks/useMicrophone";
 import { useTimer } from "./hooks/useTimer";
 import { formatTime } from "./utils/formatTime";
 import { playNoiseAlert } from "./utils/playNoiseAlert";
+import { playTimerCompleteAlert } from "./utils/playTimerCompleteAlert";
 import Header from "./components/Header/Header";
 import NoiseCard from "./components/NoiseMeter/NoiseCard";
 import TimerCard from "./components/Timer/TimerCard";
@@ -175,6 +176,8 @@ const App = () => {
   const pauseTimer = timer.pause;
   const recordedCompletion = useRef(false);
   const redAlertPlayed = useRef(false);
+  const stopTimerAlert = useRef(null);
+  const [isTimerAlertPlaying, setIsTimerAlertPlaying] = useState(false);
 
   useEffect(() => {
     if (noiseTone !== "loud") {
@@ -194,28 +197,44 @@ const App = () => {
     }
     if (recordedCompletion.current) return;
     recordedCompletion.current = true;
+    const completedMinutes = Math.max(1, Math.ceil(timer.durationSeconds / 60));
     const completedSession = {
       id: Date.now(),
       date: new Date().toISOString(),
-      minutes: timer.minutes,
+      minutes: completedMinutes,
       activity,
-      pointsEarned: timer.minutes,
+      pointsEarned: completedMinutes,
     };
-    setPoints((value) => value + timer.minutes);
-    setTotalPoints((value) => value + timer.minutes);
+    setPoints((value) => value + completedMinutes);
+    setTotalPoints((value) => value + completedMinutes);
     setCompletedSessions((value) => value + 1);
     setHistory((sessions) => [completedSession, ...sessions].slice(0, 20));
+    stopTimerAlert.current = playTimerCompleteAlert();
+    setIsTimerAlertPlaying(true);
     setShowComplete(true);
-  }, [activity, setCompletedSessions, setHistory, setPoints, setTotalPoints, timer.isComplete, timer.minutes]);
+  }, [activity, setCompletedSessions, setHistory, setPoints, setTotalPoints, timer.durationSeconds, timer.isComplete]);
+
+  const silenceTimerAlert = () => {
+    stopTimerAlert.current?.();
+    stopTimerAlert.current = null;
+    setIsTimerAlertPlaying(false);
+  };
+
+  const closeCompletionModal = () => {
+    silenceTimerAlert();
+    setShowComplete(false);
+  };
+
+  useEffect(() => () => stopTimerAlert.current?.(), []);
 
   useEffect(() => {
     if (!showComplete) return;
     const closeOnEscape = (event) => {
-      if (event.key === "Escape") setShowComplete(false);
+      if (event.key === "Escape") closeCompletionModal();
     }
     window.addEventListener("keydown", closeOnEscape);
     return () => window.removeEventListener("keydown", closeOnEscape);
-  }, [showComplete]);
+  }, [showComplete, closeCompletionModal]);
 
   const totalMinutes = history.reduce(
     (sum, session) => sum + session.minutes, 0
@@ -238,10 +257,10 @@ const App = () => {
     setEquipped((items) => [...items, item.id]);
   }
 
-  const chooseMinutes = (value) => {
-    timer.chooseMinutes(value);
-    setPreferredMinutes(value);
-  }
+  const chooseDuration = (seconds) => {
+    timer.chooseDuration(seconds);
+    setPreferredMinutes(seconds / 60);
+  };
 
   const buyHouseItem = (item) => {
     const room = houseRooms.find((room) => room.id === item.room);
@@ -264,7 +283,7 @@ const App = () => {
     timer,
     activity,
     activities,
-    chooseMinutes,
+    chooseDuration,
     setActivity,
   };
 
@@ -365,8 +384,10 @@ const App = () => {
       <SessionCompletionModal
         equipped={equipped}
         showComplete={showComplete}
-        setShowComplete={setShowComplete}
-        minutes={timer.minutes}
+        isTimerAlertPlaying={isTimerAlertPlaying}
+        onClose={closeCompletionModal}
+        onSilenceAlert={silenceTimerAlert}
+        duration={formatTime(timer.durationSeconds)}
       />
 
       {showExportImport && (

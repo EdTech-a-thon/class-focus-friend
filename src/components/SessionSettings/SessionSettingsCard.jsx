@@ -3,7 +3,7 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     timer,
     activity,
     activities,
-    chooseMinutes,
+    chooseDuration,
     setActivity
   } = session;
 
@@ -22,6 +22,19 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     setHiddenTimerMode(event.target.value);
   };
 
+  const durationMinutes = Math.floor(timer.durationSeconds / 60);
+  const durationSeconds = timer.durationSeconds % 60;
+
+  const handleDurationChange = (event) => {
+    const maximum = event.target.name === "seconds" ? 59 : Number.MAX_SAFE_INTEGER;
+    const value = Math.min(maximum, Math.max(0, Number(event.target.value) || 0));
+    const nextDuration = event.target.name === "minutes"
+      ? value * 60 + durationSeconds
+      : durationMinutes * 60 + value;
+
+    if (nextDuration > 0) chooseDuration(nextDuration);
+  };
+
   return (
     <>
       <div className="settings-heading">
@@ -32,10 +45,32 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
       </div>
       <fieldset disabled={timer.isRunning}>
         <legend>Length</legend>
-        <div className="choice-row">
-          {[5, 10, 15, 20].map((value) => (
-            <button className={timer.minutes === value ? "selected" : ""} aria-pressed={timer.minutes === value} type="button" key={value} onClick={() => chooseMinutes(value)}>{value} min</button>
-          ))}
+        <div className="duration-inputs">
+          <label>
+            Minutes
+            <input
+              type="number"
+              name="minutes"
+              min="0"
+              step="1"
+              inputMode="numeric"
+              value={durationMinutes}
+              onChange={handleDurationChange}
+            />
+          </label>
+          <label>
+            Seconds
+            <input
+              type="number"
+              name="seconds"
+              min="0"
+              max="59"
+              step="1"
+              inputMode="numeric"
+              value={durationSeconds}
+              onChange={handleDurationChange}
+            />
+          </label>
         </div>
       </fieldset>
       <fieldset disabled={timer.isRunning}>
