@@ -3,6 +3,7 @@ import RewardShop from "../Rewards/RewardShop";
 import RoomTabs from "./RoomTabs";
 import RoomScene from "./RoomScene";
 import HouseCatalog from "./HouseCatalog";
+import Modal from "../Modal/Modal";
 
 const HouseCard = ({ house, rewards }) => {
   const [openShop, setOpenShop] = useState(null);
@@ -84,11 +85,13 @@ const HouseCard = ({ house, rewards }) => {
       />
 
       {openShop && (
-        <div className="modal-backdrop" onMouseDown={(event) => {
-          if (event.target === event.currentTarget) setOpenShop(null);
-        }}>
-          <section className="shop-modal" role="dialog" aria-modal="true" aria-labelledby="shop-title">
-            <button className="modal-close" type="button" aria-label="Close shop" autoFocus onClick={() => setOpenShop(null)}>&times;</button>
+        <Modal
+          isOpen={Boolean(openShop)}
+          onClose={() => setOpenShop(null)}
+          className="shop-modal"
+          ariaLabelledBy="shop-title"
+          closeLabel="Close shop"
+        >
             {openShop === "name" ? (
               <form className="friend-name-modal" onSubmit={(event) => {
                 event.preventDefault();
@@ -135,8 +138,7 @@ const HouseCard = ({ house, rewards }) => {
             ) : (
               <RewardShop rewards={rewards} titleId="shop-title" />
             )}
-          </section>
-        </div>
+        </Modal>
       )}
     </section>
   );

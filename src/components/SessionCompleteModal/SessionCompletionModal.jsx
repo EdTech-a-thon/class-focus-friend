@@ -1,16 +1,15 @@
 import Friend from "../Friend/Friend";
+import Modal from "../Modal/Modal";
 
 const CompletionModal = ({ equipped, showComplete, duration, isTimerAlertPlaying, onClose, onSilenceAlert }) => {
-  if (!showComplete) return null;
-
   return (
-    <div className="modal-backdrop">
-      <section
-        className="completion-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="complete-title"
-      >
+    <Modal
+      isOpen={showComplete}
+      onClose={onClose}
+      className="completion-modal"
+      ariaLabelledBy="complete-title"
+      showCloseButton={false}
+    >
         <div className="completion-friend">
           <Friend
             equipped={equipped}
@@ -43,8 +42,7 @@ const CompletionModal = ({ equipped, showComplete, duration, isTimerAlertPlaying
             Celebrate
           </button>
         </div>
-      </section>
-    </div>
+    </Modal>
   );
 };
 

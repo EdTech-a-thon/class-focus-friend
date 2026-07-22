@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { createSaveFile, downloadSaveFile, openSubstituteHandoff, restoreSaveFile, validateSaveFile } from "../../utils/exportImportUtils";
+import Modal from "../Modal/Modal";
 
 const detectComputerType = () => {
   const platform = navigator.userAgentData?.platform || navigator.platform || "";
@@ -42,11 +43,13 @@ const ExportImportModal = ({ classroomData, validIds, onClose }) => {
   }
 
   return (
-    <div className="export-import-backdrop" role="presentation" onMouseDown={(event) => {
-      if (event.target === event.currentTarget) onClose();
-    }}>
-      <section className="export-import-modal" role="dialog" aria-modal="true" aria-labelledby="export-import-title">
-        <button className="export-import-close" type="button" aria-label="Close classroom save window" onClick={onClose}>×</button>
+    <Modal
+      isOpen
+      onClose={onClose}
+      className="export-import-modal"
+      ariaLabelledBy="export-import-title"
+      closeLabel="Close classroom save window"
+    >
         <p className="export-import-label">Classroom Save File</p>
         <h2 id="export-import-title">Save or restore your classroom</h2>
         <p className="export-import-copy">Create one file that can bring your Focus Friend classroom setup back later.</p>
@@ -97,8 +100,7 @@ const ExportImportModal = ({ classroomData, validIds, onClose }) => {
         </div>
 
         <button className="export-import-dismiss" type="button" onClick={onClose}>Close</button>
-      </section>
-    </div>
+    </Modal>
   );
 }
 

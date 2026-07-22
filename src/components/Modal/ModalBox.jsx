@@ -1,6 +1,9 @@
 const ModalBox = ({
   className = "modal",
   onClose,
+  ariaLabelledBy,
+  closeLabel = "Close modal",
+  showCloseButton = true,
   children,
 }) => {
   return (
@@ -8,16 +11,19 @@ const ModalBox = ({
       className={`modal-box ${className}`}
       role="dialog"
       aria-modal="true"
+      aria-labelledby={ariaLabelledBy}
     >
-      <button
-        className="modal-close"
-        type="button"
-        aria-label="Close modal"
-        autoFocus
-        onClick={onClose}
-      >
-        &times;
-      </button>
+      {showCloseButton && (
+        <button
+          className="modal-close"
+          type="button"
+          aria-label={closeLabel}
+          autoFocus
+          onClick={onClose}
+        >
+          &times;
+        </button>
+      )}
 
       {children}
     </section>
