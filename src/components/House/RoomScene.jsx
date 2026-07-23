@@ -38,20 +38,30 @@ const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isM
           className="placed-decorations"
           aria-label="Decorations in this room"
         >
-          {decorations.map((item, index) => (
-            <div
-              key={item.id}
-              className={`room-item room-item-${item.sceneType}`}
-              style={{
-                "--item-position": index % 4,
-                "--item-rise": index % 3,
-              }}
-              aria-label={item.name}
-              role="img"
-            >
-              <span aria-hidden="true">{item.symbol}</span>
-            </div>
-          ))}
+          {decorations.map((item) => {
+            const pos = item.roomPosition;
+            const isAnchorTop = pos.anchor === "top";
+            return (
+              <div
+                key={item.id}
+                className="room-item"
+                style={{
+                  left: pos.x + "%",
+                  [isAnchorTop ? "top" : "bottom"]: pos.y + "%",
+                  width: pos.w + "%",
+                }}
+                aria-label={item.name}
+                role="img"
+              >
+                <img
+                  src={item.roomImage}
+                  alt={item.name}
+                  style={{ width: "100%", height: "auto" }}
+                  draggable={false}
+                />
+              </div>
+            );
+          })}
         </div>
       ) : (
         <p className="empty-room">
