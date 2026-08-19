@@ -13,3 +13,7 @@ dist
 
 # Finder (MacOS) folder config
 .DS_Store
+# PocketBase is downloaded per machine; its records are local and private.
+pocketbase
+pb_data/
+pb_backups/

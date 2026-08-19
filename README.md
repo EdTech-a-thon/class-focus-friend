@@ -18,7 +18,7 @@ Class Focus Friend turns a focus session into a shared goal. When the class comp
 
 ## MVP: The First Version
 
-The first version keeps the experience simple and useful for one classroom. It saves classroom progress on the current device and does not use teacher or student accounts.
+The first version keeps the experience simple and useful for one classroom. It saves classroom progress on the current device, with an optional teacher account for carrying that progress between computers. Students never sign in.
 
 - A shared focus-session timer where the teacher can enter a session length in minutes, save a named setup as a favorite, and return to favorites for future sessions.
 - A classroom character that earns points when a focus session is completed.
@@ -36,6 +36,17 @@ The first version keeps the experience simple and useful for one classroom. It s
 2. The class watches the timer and noise meter while they work. If the room becomes too loud, the timer pauses until the sound level returns to the goal.
 3. When the session is completed, the class earns points for its character.
 4. The class can use earned points to personalize the character over time.
+
+## Teacher Accounts
+
+Focus Friend works with no account at all: everything a class earns stays on the
+computer it was earned on. A teacher who wants their classroom to follow them can
+make an account with an email and password. From then on the class points, the
+timer and music settings, the reward shop, and the friend's house save themselves
+as they change, and come back by signing in on any computer.
+
+Signing in loads the classroom saved to that account, replacing whatever is on the
+screen. Signing out leaves the classroom on that computer untouched.
 
 ## Later Ideas
 
@@ -69,9 +80,24 @@ You will need [Bun](https://bun.sh/) installed on your computer.
    bun run dev
    ```
 
-3. Open the local address shown in your terminal to view the app.
+3. Start the accounts database in a second terminal:
 
-There are no environment variables or configuration files required for the current version of the app.
+   ```bash
+   bun run db
+   ```
+
+   The first time on a new computer, run `bun run db:install` once to download it.
+
+4. Open the local address shown in your terminal to view the app.
+
+Copy `.env.example` to `.env.local` if you need to point the app at a database
+somewhere other than the one running alongside it.
+
+### Reviewing teacher accounts
+
+The database comes with its own admin page, reachable at `/_/` on the same
+address as the app. Sign in there to see the list of teacher accounts and the
+classroom saved with each one.
 
 To create a production build, run:
 

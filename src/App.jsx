@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { accessories } from "./data/accessories";
 import { activities } from "./data/activities";
 import { classMilestones, houseItems, houseRooms } from "./data/houseItems";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useTeacherAccount } from "./hooks/useTeacherAccount";
 import { useMicrophone } from "./hooks/useMicrophone";
 import { useTimer } from "./hooks/useTimer";
 import { formatTime } from "./utils/formatTime";
@@ -16,6 +17,7 @@ import ProgressCard from "./components/Progress/ProgressCard";
 import SessionCompletionModal from "./components/SessionCompleteModal/SessionCompletionModal";
 import ExportImportModal from "./components/ExportImport/ExportImportModal";
 import ClearDataModal from "./components/ClearData/ClearDataModal";
+import AccountModal from "./components/Account/AccountModal";
 import { clearFocusFriendData } from "./utils/storage";
 
 const App = () => {
@@ -184,6 +186,7 @@ const App = () => {
   // temporary session state
   const [showComplete, setShowComplete] = useState(false);
   const [showExportImport, setShowExportImport] = useState(false);
+  const [showAccount, setShowAccount] = useState(false);
   const [showClearData, setShowClearData] = useState(false);
 
   // runtime state
@@ -398,11 +401,6 @@ const App = () => {
     setFriendName,
   };
 
-  const header = {
-    points,
-    onOpenExportImport: () => setShowExportImport(true),
-  };
-
   const classroomData = {
     focusFriendSettings: {
       ...settings,
@@ -417,6 +415,24 @@ const App = () => {
     focusFriendPreferences: preferences,
   };
 
+  // Puts a classroom loaded from a teacher's account onto the screen.
+  const applyClassroom = useCallback((classroom) => {
+    setSettings(classroom.focusFriendSettings);
+    setProgressData(classroom.focusFriendProgress);
+    setRewardData(classroom.focusFriendRewards);
+    setHouseData(classroom.focusFriendHouse);
+    setPreferences(classroom.focusFriendPreferences);
+  }, [setHouseData, setPreferences, setProgressData, setRewardData, setSettings]);
+
+  const account = useTeacherAccount({ classroomData, applyClassroom });
+
+  const header = {
+    points,
+    account,
+    onOpenAccount: () => setShowAccount(true),
+    onOpenExportImport: () => setShowExportImport(true),
+  };
+
   const validSaveIds = {
     activities: Object.keys(activities),
     accessories: accessories.map((item) => item.id),
@@ -424,7 +440,14 @@ const App = () => {
     rooms: houseRooms.map((room) => room.id),
   };
 
-  const eraseSavedData = () => {
+  const eraseSavedData = async () => {
+    // A signed-in teacher's account is emptied too, so the erased classroom
+    // cannot come back the next time they open Focus Friend.
+    try {
+      await account.eraseSavedClassroom();
+    } catch {
+      // This device is still erased even if the account could not be reached.
+    }
     clearFocusFriendData();
     window.location.reload();
   };
@@ -457,6 +480,10 @@ const App = () => {
         duration={`${timer.durationSeconds / 60} minutes`}
       />
 
+      {showAccount && (
+        <AccountModal account={account} onClose={() => setShowAccount(false)} />
+      )}
+
       {showExportImport && (
         <ExportImportModal
           classroomData={classroomData}
@@ -468,6 +495,7 @@ const App = () => {
       {showClearData && (
         <ClearDataModal
           classroomData={classroomData}
+          isSignedIn={Boolean(account.teacher)}
           onClose={() => setShowClearData(false)}
           onConfirm={eraseSavedData}
         />
