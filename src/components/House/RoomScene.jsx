@@ -1,11 +1,11 @@
-import Friend from "../Friend/Friend";
+import Otter from "../Otter/Otter";
 
-const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isMusicPlaying, noiseTone, friendName }) => {
+const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, noiseTone, otterName }) => {
   
   return (
     <section
       className="room-scene"
-      aria-label={`${room.name} in the friend's house`}
+      aria-label={`${room.name} in the otter's house`}
     >
       <div className="room-scene-label">
         <span>
@@ -23,12 +23,11 @@ const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isM
         <span className="window-cloud cloud-one" />
         <span className="window-cloud cloud-two" />
       </div>
-      <div className="friend-at-home">
-        <Friend
+      <div className="otter-at-home">
+        <Otter
           equipped={equipped}
           isCelebrating={isCelebrating}
           isFocusing={isFocusing}
-          isMusicPlaying={isMusicPlaying}
           noiseTone={noiseTone}
         />
       </div>
@@ -65,7 +64,7 @@ const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isM
         </div>
       ) : (
         <p className="empty-room">
-          {friendName} is settling in. Decorate this room to make it your own.
+          {otterName} is settling in. Decorate this room to make it your own.
         </p>
       )}
     </section>

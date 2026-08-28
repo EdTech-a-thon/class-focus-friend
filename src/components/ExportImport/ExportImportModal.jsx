@@ -53,12 +53,12 @@ const ExportImportModal = ({ classroomData, validIds, onClose }) => {
     >
         <p className="export-import-label">Classroom Save File</p>
         <h2 id="export-import-title">Save or restore your classroom</h2>
-        <p className="export-import-copy">Create one file that can bring your Focus Friend classroom setup back later.</p>
+        <p className="export-import-copy">Create one file that can bring your On-task Otter classroom setup back later.</p>
 
         <div className="export-import-included">
           <h3>What&apos;s included</h3>
           <ul>
-            <li>✓ Timer settings and music preferences</li>
+            <li>✓ Timer settings and saved favorites</li>
             <li>✓ Points, completed sessions, and history</li>
             <li>✓ Reward shop and house progress</li>
             <li>✓ Classroom customization</li>
@@ -88,7 +88,7 @@ const ExportImportModal = ({ classroomData, validIds, onClose }) => {
           </div>
         )}
 
-        {message?.type === "error" && <p className="export-import-message error" role="alert">⚠ {message.text}. Choose a Focus Friend Classroom Save File.</p>}
+        {message?.type === "error" && <p className="export-import-message error" role="alert">⚠ {message.text}. Choose an On-task Otter Classroom Save File.</p>}
 
         <div className="export-import-instructions">
           <h3>How to use your save file</h3>
@@ -96,7 +96,7 @@ const ExportImportModal = ({ classroomData, validIds, onClose }) => {
             <li><b>To save:</b> Select “Create Classroom Save File.” Your browser places the JSON file in Downloads.</li>
             <li><b>Keep it safe:</b> Leave the filename unchanged and move or copy it anywhere you store classroom files.</li>
             <li><b>To restore:</b> Return here, select “Restore Classroom Save,” then choose that JSON file.</li>
-            <li><b>Finish:</b> Focus Friend checks the file and reloads with your saved setup. The current setup is replaced.</li>
+            <li><b>Finish:</b> On-task Otter checks the file and reloads with your saved setup. The current setup is replaced.</li>
           </ol>
         </div>
 

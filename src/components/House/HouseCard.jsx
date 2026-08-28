@@ -22,10 +22,9 @@ const HouseCard = ({ house, rewards }) => {
     equipped,
     isCelebrating,
     isFocusing,
-    isMusicPlaying,
     noiseTone,
-    friendName,
-    setFriendName,
+    otterName,
+    setOtterName,
   } = house;
 
   const nextRoom = houseRooms.find((room) => completedSessions < room.sessionsRequired);
@@ -45,8 +44,8 @@ const HouseCard = ({ house, rewards }) => {
     <section className="house-card" id="dashboard">
       <div className="house-heading">
         <div>
-          <p className="card-label">{friendName || "Focus Friend"}'s house</p>
-          <h2>{friendName || "Focus Friend"} is ready to focus</h2>
+          <p className="card-label">{otterName || "Otter"}'s house</p>
+          <h2>{otterName || "Otter"} is ready to focus</h2>
         </div>
         <div className="house-progress">
           <span><b>{completedSessions}</b> total sessions completed</span>
@@ -59,8 +58,8 @@ const HouseCard = ({ house, rewards }) => {
           <>
             <button className="outline" type="button" onClick={() => setOpenShop("rooms")}>Choose room</button>
             <button className="outline" type="button" disabled={completedSessions < activeRoomDetails.sessionsRequired} onClick={() => setOpenShop("decorations")}>Decorate room</button>
-            <button className="outline" type="button" onClick={() => setOpenShop("accessories")}>Dress up friend</button>
-            <button className="outline" type="button" onClick={() => setOpenShop("name")}>Name your friend</button>
+            <button className="outline" type="button" onClick={() => setOpenShop("accessories")}>Dress up otter</button>
+            <button className="outline" type="button" onClick={() => setOpenShop("name")}>Name your otter</button>
           </>
         )}
         <button
@@ -79,9 +78,8 @@ const HouseCard = ({ house, rewards }) => {
         equipped={equipped}
         isCelebrating={isCelebrating}
         isFocusing={isFocusing}
-        isMusicPlaying={isMusicPlaying}
         noiseTone={noiseTone}
-        friendName={friendName || "Focus Friend"}
+        otterName={otterName || "Otter"}
       />
 
       {openShop && (
@@ -93,28 +91,28 @@ const HouseCard = ({ house, rewards }) => {
           closeLabel="Close shop"
         >
             {openShop === "name" ? (
-              <form className="friend-name-modal" onSubmit={(event) => {
+              <form className="otter-name-modal" onSubmit={(event) => {
                 event.preventDefault();
                 setOpenShop(null);
               }}>
-                <p className="card-label">Focus friend</p>
-                <h2 id="shop-title">What should we call your friend?</h2>
-                <label className="friend-name-field">
-                  <span>Friend&apos;s name</span>
+                <p className="card-label">Your otter</p>
+                <h2 id="shop-title">What should we call your otter?</h2>
+                <label className="otter-name-field">
+                  <span>Otter&apos;s name</span>
                   <input
                     type="text"
-                    value={friendName}
+                    value={otterName}
                     maxLength="30"
                     autoFocus
-                    onChange={(event) => setFriendName(event.target.value)}
-                    placeholder="Focus Friend"
+                    onChange={(event) => setOtterName(event.target.value)}
+                    placeholder="Otter"
                   />
                 </label>
                 <button className="outline" type="submit">Save name</button>
               </form>
             ) : openShop === "rooms" ? (
               <div className="room-picker">
-                <p className="card-label">Focus friend&apos;s house</p>
+                <p className="card-label">Otter&apos;s house</p>
                 <h2 id="shop-title">Choose a room to focus in</h2>
                 <RoomTabs
                   rooms={houseRooms}

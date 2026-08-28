@@ -4,7 +4,7 @@ const RoomTabs = ({ rooms, activeRoom, setActiveRoom, completedSessions }) => {
     <div 
       className="room-tabs" 
       role="tablist" 
-      aria-label="Rooms in the friend's house"
+      aria-label="Rooms in the otter's house"
     >
       {rooms.map((room) => {
         const isLocked = completedSessions < room.sessionsRequired;

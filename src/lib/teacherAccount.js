@@ -1,5 +1,5 @@
 import PocketBase from "pocketbase";
-import { FOCUS_FRIEND_STORAGE_KEYS } from "../utils/storage.js";
+import { CLASSROOM_STORAGE_KEYS } from "../utils/storage.js";
 
 // The browser talks to PocketBase directly. An empty setting means PocketBase
 // answers on the same address as the website itself, which is the normal setup.
@@ -60,7 +60,7 @@ export const classroomFingerprint = (classroom) => JSON.stringify(withSortedKeys
 
 /** A saved classroom is only usable if it carries every part of the setup. */
 const isCompleteClassroom = (classroom) =>
-  Boolean(classroom) && FOCUS_FRIEND_STORAGE_KEYS.every((key) => key in classroom);
+  Boolean(classroom) && CLASSROOM_STORAGE_KEYS.every((key) => key in classroom);
 
 export const fetchSavedClassroom = async (teacherId) => {
   const record = await pb.collection(TEACHERS).getOne(teacherId);

@@ -20,12 +20,12 @@ The MVP intentionally avoids a backend to keep development lightweight and focus
 
 ## 🎯 MVP Features
 
-The hackathon version of Class Focus Friend will include:
+The hackathon version of On-task Otter will include:
 
 * [ ] Focus session timer
 * [ ] Session setup controls
 * [ ] Classroom noise meter
-* [ ] Classroom focus friend
+* [ ] Classroom otter
 * [ ] Points system
 * [ ] Reward shop
 * [ ] Session history
@@ -43,7 +43,7 @@ components/
     Timer/
     SessionSetup/
     NoiseMeter/
-    Classroomfocus friend/
+    Otter/
     PointsDisplay/
     RewardShop/
     SessionCompleteModal/
@@ -72,13 +72,13 @@ The application will be a **single-page classroom dashboard**. Teachers should b
 ```text
 ----------------------------------
 
-CLASS FOCUS FRIEND
+ON-TASK OTTER
 
 ----------------------------------
 
         15:00
 
-      Classroom focus friend
+      Classroom otter
 
        Points: 40
 
@@ -187,9 +187,9 @@ AnalyserNode
 
 ---
 
-## 🐾 Classroom focus friend Component
+## 🐾 Classroom Otter Component
 
-The classroom focus friend is the primary gamification mechanic.
+The classroom otter is the primary gamification mechanic.
 
 ### Responsibilities
 
@@ -199,14 +199,14 @@ The classroom focus friend is the primary gamification mechanic.
 
 ### MVP Assets
 
-* 3 focus friend bodies
+* 3 otter bodies
 * 3 hats
 * 3 accessories
 
 Example:
 
 ```javascript
-const focus friend = {
+const otter = {
     hat: "party-hat",
     accessory: "glasses"
 }
@@ -350,7 +350,7 @@ Points are awarded
         ↓
 Teacher unlocks classroom rewards
         ↓
-Classroom focus friend gets new accessories
+Classroom otter gets new accessories
         ↓
 Session is saved to history
 ```
@@ -383,9 +383,9 @@ Session is saved to history
 
 ---
 
-### Phase 4: Classroom focus friend
+### Phase 4: Classroom otter
 
-* [ ] Build focus friend component
+* [ ] Build otter component
 * [ ] Add cosmetic accessories
 * [ ] Add initial environment - house
 * [ ] Add equip functionality
@@ -429,7 +429,7 @@ Session is saved to history
 
 ## 🌱 Future Enhancements
 
-Ideas for future versions of Class Focus Friend:
+Ideas for future versions of On-task Otter:
 
 * Teacher accounts and authentication
 * Multiple classroom profiles
@@ -447,6 +447,6 @@ Ideas for future versions of Class Focus Friend:
 
 The MVP goal is intentionally small and polished.
 
-> Teachers can run a classroom focus session, monitor classroom noise levels, reward students with points, and customize a classroom focus friend that celebrates their progress.
+> Teachers can run a classroom focus session, monitor classroom noise levels, reward students with points, and customize a classroom otter that celebrates their progress.
 
-By focusing on a single-page React application and leveraging browser APIs and localStorage, Class Focus Friend can deliver a complete and engaging classroom experience within the constraints of a hackathon timeline.
+By focusing on a single-page React application and leveraging browser APIs and localStorage, On-task Otter can deliver a complete and engaging classroom experience within the constraints of a hackathon timeline.

@@ -12,7 +12,7 @@ const Header = ({ header }) => {
     <header className="app-header">
       <a className="brand" href="#dashboard">
         <span>✦</span>
-        Class Focus Friend
+        On-task Otter
       </a>
 
       <p>

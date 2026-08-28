@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import SessionSettingsCard from "../SessionSettings/SessionSettingsCard";
-import MusicControls from "./MusicControls";
 import TimerControls from "./TimerControls";
 import Modal from "../Modal/Modal";
 
-const TimerCard = ({ timerSettings, music, session }) => {
+const TimerCard = ({ timerSettings, session }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showCountdown, setShowCountdown] = useState(true);
 
@@ -44,7 +43,6 @@ const TimerCard = ({ timerSettings, music, session }) => {
             </svg>
           </button>
           <TimerControls timerSettings={timerSettings} displayCountdown={displayCountdown}/>
-          <MusicControls music={music}/>
         </section>
 
         {showSettings && (

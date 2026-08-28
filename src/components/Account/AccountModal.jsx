@@ -106,7 +106,7 @@ const AccountModal = ({ account, onClose }) => {
           </button>
 
           <p className="account-note">
-            No account needed to use Focus Friend. Without one, your classroom stays on this
+            No account needed to use On-task Otter. Without one, your classroom stays on this
             computer only.
           </p>
         </>

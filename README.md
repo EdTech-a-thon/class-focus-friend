@@ -1,14 +1,14 @@
-# Class Focus Friend
+# On-task Otter
 
-Class Focus Friend is a shared classroom focus tool that helps students build stamina for staying on task. It gives a whole class a friendly, visual reason to focus during independent work, while giving teachers a simple timer and noise meter to support classroom routines.
+On-task Otter is a shared classroom focus tool that helps students build stamina for staying on task. It gives a whole class a friendly, visual reason to focus during independent work, while giving teachers a simple timer and noise meter to support classroom routines.
 
-It is inspired by [Focus Friend](https://www.yourfocusfriend.com/), refreshed for a new school year and designed for use on a classroom display, such as a projector or TV.
+The class looks after an otter that cheers them on while they work. It is an original classroom tool, not affiliated with any other focus app, and it is designed for use on a classroom display, such as a projector or TV.
 
 ## The Classroom Need
 
 During activities such as an independent math warm-up, students may struggle to stay quiet and focused for the full work period. A regular timer can show how much time is left, but it does not always give students a reason to keep going.
 
-Class Focus Friend turns a focus session into a shared goal. When the class completes a session, their character earns points that can be used to unlock clothes and accessories. The noise meter also helps the class notice whether the room matches the kind of work they are doing.
+On-task Otter turns a focus session into a shared goal. When the class completes a session, their character earns points that can be used to unlock clothes and accessories. The noise meter also helps the class notice whether the room matches the kind of work they are doing.
 
 ## Who It Helps
 
@@ -39,10 +39,10 @@ The first version keeps the experience simple and useful for one classroom. It s
 
 ## Teacher Accounts
 
-Focus Friend works with no account at all: everything a class earns stays on the
+On-task Otter works with no account at all: everything a class earns stays on the
 computer it was earned on. A teacher who wants their classroom to follow them can
 make an account with an email and password. From then on the class points, the
-timer and music settings, the reward shop, and the friend's house save themselves
+timer settings, the reward shop, and the otter's house save themselves
 as they change, and come back by signing in on any computer.
 
 Signing in loads the classroom saved to that account, replacing whatever is on the
@@ -55,7 +55,6 @@ These are valuable possibilities, but are not needed for the first version:
 - Support for multiple class sections.
 - Easy display options for a TV or Roku through HDMI or AirPlay.
 - A choice to use silence or calming background audio.
-- A selectable or integrated calming lofi YouTube video for the background.
 
 ## Project Principles
 

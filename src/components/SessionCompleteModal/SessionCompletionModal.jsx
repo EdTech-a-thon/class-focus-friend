@@ -1,4 +1,4 @@
-import Friend from "../Friend/Friend";
+import Otter from "../Otter/Otter";
 import Modal from "../Modal/Modal";
 
 const CompletionModal = ({ equipped, showComplete, duration, isTimerAlertPlaying, onClose, onSilenceAlert }) => {
@@ -10,12 +10,11 @@ const CompletionModal = ({ equipped, showComplete, duration, isTimerAlertPlaying
       ariaLabelledBy="complete-title"
       showCloseButton={false}
     >
-        <div className="completion-friend">
-          <Friend
+        <div className="completion-otter">
+          <Otter
             equipped={equipped}
             isCelebrating
             isFocusing={false}
-            isMusicPlaying={false}
             noiseTone="neutral"
           />
         </div>

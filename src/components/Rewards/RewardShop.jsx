@@ -8,7 +8,7 @@ const RewardShop = ({ rewards, titleId }) => {
       <div className="card-heading">
         <div>
           <p className="card-label">Reward shelf</p>
-          <h2 id={titleId}>Dress up your class friend.</h2>
+          <h2 id={titleId}>Dress up your class otter.</h2>
         </div>
 
         <span className="points-badge">★ {points}</span>

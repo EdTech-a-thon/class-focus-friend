@@ -18,39 +18,35 @@ import SessionCompletionModal from "./components/SessionCompleteModal/SessionCom
 import ExportImportModal from "./components/ExportImport/ExportImportModal";
 import ClearDataModal from "./components/ClearData/ClearDataModal";
 import AccountModal from "./components/Account/AccountModal";
-import { clearFocusFriendData } from "./utils/storage";
+import { clearClassroomData } from "./utils/storage";
 
 const App = () => {
   // persistent classroom data
-  const [settings, setSettings] = useLocalStorage("focusFriendSettings", {
+  const [settings, setSettings] = useLocalStorage("onTaskOtterSettings", {
     activity: "independent",
     preferredMinutes: 15,
-    friendName: "Focus Friend",
+    otterName: "Otter",
     favoriteSessions: [],
   });
-  const [progressData, setProgressData] = useLocalStorage("focusFriendProgress", {
+  const [progressData, setProgressData] = useLocalStorage("onTaskOtterProgress", {
     points: 0,
     totalPoints: 0,
     completedSessions: 0,
     history: [],
   });
-  const [rewardData, setRewardData] = useLocalStorage("focusFriendRewards", {
+  const [rewardData, setRewardData] = useLocalStorage("onTaskOtterRewards", {
     unlocked: [],
     equipped: [],
   });
-  const [houseData, setHouseData] = useLocalStorage("focusFriendHouse", {
+  const [houseData, setHouseData] = useLocalStorage("onTaskOtterHouse", {
     activeRoom: "living",
     houseItemsOwned: [],
-  });
-  const [preferences, setPreferences] = useLocalStorage("focusFriendPreferences", {
-    musicEnabled: false,
-    musicVolume: 55,
   });
 
   const {
     activity,
     preferredMinutes,
-    friendName = "Focus Friend",
+    otterName = "Otter",
     favoriteSessions: savedFavoriteSessions = [],
   } = settings;
   const favoriteSessions = Array.isArray(savedFavoriteSessions) ? savedFavoriteSessions : [];
@@ -59,7 +55,6 @@ const App = () => {
   const completedSessions = progressData.completedSessions ?? history.length;
   const { unlocked, equipped } = rewardData;
   const { activeRoom, houseItemsOwned } = houseData;
-  const { musicEnabled, musicVolume } = preferences;
 
   const setActivity = (value) => setSettings(
     (current) => (
@@ -79,8 +74,8 @@ const App = () => {
       }
     ));
 
-  const setFriendName = (value) => setSettings(
-    (current) => ({ ...current, friendName: value })
+  const setOtterName = (value) => setSettings(
+    (current) => ({ ...current, otterName: value })
   );
 
   const saveFavoriteSession = (name) => setSettings((current) => ({
@@ -163,22 +158,6 @@ const App = () => {
       {
         ...current, houseItemsOwned: typeof value === "function"
           ? value(current.houseItemsOwned)
-          : value
-      }
-    ));
-  const setMusicEnabled = (value) => setPreferences(
-    (current) => (
-      {
-        ...current, musicEnabled: typeof value === "function"
-          ? value(current.musicEnabled)
-          : value
-      }
-    ));
-  const setMusicVolume = (value) => setPreferences(
-    (current) => (
-      {
-        ...current, musicVolume: typeof value === "function"
-          ? value(current.musicVolume)
           : value
       }
     ));
@@ -354,13 +333,6 @@ const App = () => {
     formatTime,
   };
 
-  const music = {
-    musicEnabled,
-    setMusicEnabled,
-    musicVolume,
-    setMusicVolume,
-  };
-
   const rewards = {
     points,
     accessories,
@@ -395,34 +367,31 @@ const App = () => {
     equipped,
     isCelebrating: showComplete,
     isFocusing: timer.isRunning,
-    isMusicPlaying: musicEnabled,
     noiseTone,
-    friendName,
-    setFriendName,
+    otterName,
+    setOtterName,
   };
 
   const classroomData = {
-    focusFriendSettings: {
+    onTaskOtterSettings: {
       ...settings,
-      friendName,
+      otterName,
     },
-    focusFriendProgress: {
+    onTaskOtterProgress: {
       ...progressData,
       completedSessions: sessionCount,
     },
-    focusFriendRewards: rewardData,
-    focusFriendHouse: houseData,
-    focusFriendPreferences: preferences,
+    onTaskOtterRewards: rewardData,
+    onTaskOtterHouse: houseData,
   };
 
   // Puts a classroom loaded from a teacher's account onto the screen.
   const applyClassroom = useCallback((classroom) => {
-    setSettings(classroom.focusFriendSettings);
-    setProgressData(classroom.focusFriendProgress);
-    setRewardData(classroom.focusFriendRewards);
-    setHouseData(classroom.focusFriendHouse);
-    setPreferences(classroom.focusFriendPreferences);
-  }, [setHouseData, setPreferences, setProgressData, setRewardData, setSettings]);
+    setSettings(classroom.onTaskOtterSettings);
+    setProgressData(classroom.onTaskOtterProgress);
+    setRewardData(classroom.onTaskOtterRewards);
+    setHouseData(classroom.onTaskOtterHouse);
+  }, [setHouseData, setProgressData, setRewardData, setSettings]);
 
   const account = useTeacherAccount({ classroomData, applyClassroom });
 
@@ -442,13 +411,13 @@ const App = () => {
 
   const eraseSavedData = async () => {
     // A signed-in teacher's account is emptied too, so the erased classroom
-    // cannot come back the next time they open Focus Friend.
+    // cannot come back the next time they open On-task Otter.
     try {
       await account.eraseSavedClassroom();
     } catch {
       // This device is still erased even if the account could not be reached.
     }
-    clearFocusFriendData();
+    clearClassroomData();
     window.location.reload();
   };
 
@@ -458,7 +427,7 @@ const App = () => {
       <HouseCard house={house} rewards={rewards} />
 
         <div className="dashboard-grid focus-controls">
-        <TimerCard timerSettings={timerSettings} music={music} session={session} />
+        <TimerCard timerSettings={timerSettings} session={session} />
 
         <NoiseCard noise={noise} />
 

@@ -1,6 +1,6 @@
 # Teacher Guide: Points, Sessions, and Milestones
 
-Class Focus Friend turns focused classroom time into a shared class goal. The class completes focus sessions, earns points, unlocks rooms, and uses points to decorate the Focus Friend's house or dress up the Focus Friend.
+On-task Otter turns focused classroom time into a shared class goal. The class completes focus sessions, earns points, unlocks rooms, and uses points to decorate the otter's house or dress up the otter.
 
 This guide explains how to use the system and what the class can work toward.
 
@@ -57,7 +57,7 @@ The app shows the most recent five sessions on the Class Progress card. It remem
 
 The class can spend available points in two ways. Select **Decorate room** to buy house pieces, or select **Dress up friend** to unlock accessories.
 
-### Focus Friend Accessories
+### Otter Accessories
 
 | Accessory | Cost |
 | --- | ---: |
@@ -90,7 +90,7 @@ The class can use **Choose room** to visit any room it has unlocked.
 
 The Class Progress card follows the milestones in the order below and shows the first milestone that still has an uncollected piece. To finish a milestone, buy every listed decoration. The class may buy a piece from a later milestone early; that piece will already count when the class reaches that milestone.
 
-There is no extra point prize for completing a milestone. The reward is seeing the completed themed space in the Focus Friend's house and moving on to the next class goal.
+There is no extra point prize for completing a milestone. The reward is seeing the completed themed space in the otter's house and moving on to the next class goal.
 
 ### Living Room Milestones
 
@@ -137,7 +137,7 @@ These decorations can also be purchased, but they are not required for any miles
 | Kitchen | Tea Kettle (120), Wall Clock (140), Herb Garden (145) |
 | Bathroom | Toothbrush Cup (230), Wash Basket (245) |
 
-Optional decorations and Focus Friend accessories use the same available points as milestone pieces. Rooms unlock through completed sessions and do not cost points.
+Optional decorations and otter accessories use the same available points as milestone pieces. Rooms unlock through completed sessions and do not cost points.
 
 ## Helpful Classroom Routine
 
