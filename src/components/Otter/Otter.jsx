@@ -52,21 +52,23 @@ const Otter = ({ equipped, isCelebrating, isFocusing, noiseTone }) => {
           <path className="otter-heart" transform="translate(5 5)" d="M105 153 C98 145 86 153 105 169 C124 151 112 145 105 153Z" />
           {equipped.includes("glasses") && (
             <g className="otter-glasses">
-              <rect x="72" y="78" width="31" height="24" rx="8" />
-              <rect x="121" y="76" width="31" height="24" rx="8" />
+              <rect x="72" y="78" width="31" height="24" rx="10" />
+              <rect x="121" y="76" width="31" height="24" rx="10" />
               <path d="M103 87 C109 84 115 84 121 86 M72 86 L60 82 M152 84 L163 79" />
+              <path className="glasses-shine" d="m78 83 8 14m5-14 7 12m36-14 8 14" />
             </g>
           )}
           {equipped.includes("party-hat") && (
             <g className="otter-hat" transform="translate(-6 0)">
               <path d="M88 39 L123 3 L144 47Z" />
               <path d="M101 26 L132 34 M113 14 L138 42" />
+              <circle className="hat-dot" cx="118" cy="31" r="3" />
               <circle cx="123" cy="4" r="6" />
             </g>
           )}
           {equipped.includes("bow-tie") && (
             <g className="otter-bow" transform="translate(5 -24)">
-              <path d="M83 157 C70 146 65 158 70 174 C76 180 89 170 105 162 C121 175 133 179 140 171 C144 154 132 147 105 162Z" />
+              <path d="M105 162C88 148 72 147 70 157v14c5 10 21 4 35-9 14 13 30 19 35 9v-14c-2-10-18-9-35 5Z" />
               <circle cx="105" cy="162" r="8" />
             </g>
           )}

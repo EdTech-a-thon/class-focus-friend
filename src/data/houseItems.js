@@ -1,20 +1,50 @@
-const cartoonItem = (label, symbol, color) => {
+const iconSVG = (id, color = "#e98769") => {
+  const groups = [
+    [["leafy-plant", "herb-garden", "bathroom-plant", "office-plant"], `<path d="M60 96V45M60 65C45 62 34 51 32 36c17-1 28 8 28 23M60 53c12-15 25-19 38-14-2 17-15 27-38 28"/><path d="M37 95h46l-6 19H43z" fill="${color}"/>`],
+    [["story-lamp", "moon-lamp", "desk-lamp"], `<path d="M39 64h42L70 31H50z" fill="${color}"/><path d="M60 64v35M43 103h34"/>`],
+    [["family-photo", "art-wall", "wall-art"], `<rect x="23" y="25" width="74" height="68" rx="5" fill="#fffaf0"/><circle cx="73" cy="45" r="8" fill="#f8d97a"/><path d="m31 82 20-23 13 13 11-10 14 20z" fill="${color}"/>`],
+    [["record-player"], `<circle cx="59" cy="66" r="30" fill="#fffaf0"/><circle cx="59" cy="66" r="15" fill="${color}"/><circle cx="59" cy="66" r="5"/><path d="M88 42v34l-12 12"/>`],
+    [["tea-table", "tea-kettle"], `<path d="M38 50h38v34c0 18-38 18-38 0z" fill="${color}"/><path d="M76 59c24-2 24 25 2 24M38 60 25 69l13 7M46 43h23"/>`],
+    [["fruit-bowl", "dinner-feast"], `<path d="M27 68c4 31 17 40 33 40s29-9 33-40z" fill="${color}"/><circle cx="45" cy="60" r="13" fill="#e98769"/><circle cx="64" cy="56" r="14" fill="#f8d97a"/><circle cx="77" cy="63" r="12" fill="#7ab88a"/>`],
+    [["mixing-bowls", "place-settings"], `<path d="M25 57h70c-4 34-17 48-35 48S29 91 25 57z" fill="${color}"/><path d="M38 72h44M33 84h54"/>`],
+    [["cookie-jar"], `<path d="M35 42h50l7 62H28z" fill="${color}"/><path d="M31 42h58M42 31h36"/><circle cx="48" cy="67" r="5"/><circle cx="70" cy="83" r="5"/><circle cx="55" cy="96" r="4"/>`],
+    [["happy-toaster"], `<rect x="27" y="47" width="66" height="57" rx="14" fill="${color}"/><path d="M39 47v-9h42v9M42 65h36"/><circle cx="79" cy="87" r="4"/>`],
+    [["wall-clock"], `<circle cx="60" cy="66" r="39" fill="#fffaf0"/><path d="M60 38v28l19 12M60 27v7M60 98v7M21 66h7M92 66h7"/>`],
+    [["recipe-board", "wall-calendar"], `<rect x="27" y="29" width="66" height="78" rx="5" fill="#fffaf0"/><path d="M39 23v15M81 23v15M27 49h66M40 65h40M40 78h30M40 91h35"/>`],
+    [["cake-stand"], `<path d="M31 64h58v22H31z" fill="${color}"/><path d="M25 88h70M60 88v17M42 108h36"/><path d="M35 64c2-18 12-27 25-27s23 9 25 27" fill="#f7c6d8"/>`],
+    [["soft-towels", "wash-basket"], `<path d="M28 62h64l-8 45H36z" fill="${color}"/><path d="M40 62c0-27 40-27 40 0M42 77h36M39 90h42"/>`],
+    [["round-mirror"], `<circle cx="60" cy="58" r="35" fill="#bfe3ea"/><path d="M60 93v16M43 110h34"/>`],
+    [["toothbrush-cup", "skin-care"], `<path d="M38 59h44l-5 49H43z" fill="${color}"/><path d="M49 59 45 26M61 59V20M73 59l5-31"/>`],
+    [["soap-set", "face-masks"], `<rect x="28" y="67" width="64" height="35" rx="17" fill="${color}"/><path d="M43 64c1-15 33-15 34 0"/><circle cx="39" cy="47" r="7" fill="#bfe3ea"/><circle cx="58" cy="35" r="10" fill="#bfe3ea"/>`],
+    [["rubber-duck"], `<circle cx="73" cy="48" r="18" fill="#f8d97a"/><path d="m90 48 16 7-16 6M82 48h1"/><path d="M27 87c8-28 31-33 48-17 9 9 14 25 5 34H38c-10-2-16-8-11-17z" fill="#f8d97a"/>`],
+    [["dream-mobile"], `<path d="M60 20v24M30 45h60M38 45v18M82 45v18M60 45v31"/><path d="m38 64 5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2z" fill="#f8d97a"/><path d="M73 72c16 0 22 20 9 29-11 8-27 0-27-14 5 4 14 4 18-1 4-4 4-9 0-14z" fill="${color}"/>`],
+    [["kitchen-utensils"], `<path d="M38 24v82M27 24v27c0 15 22 15 22 0V24M71 24v82M71 24c26 8 25 38 0 43"/>`],
+    [["fuzzy-robe"], `<path d="m40 28 20 12 20-12 22 22-13 15-9-8v54H40V57l-9 8-13-15z" fill="${color}"/><path d="M60 40v71M40 76h40M52 40l8 13 8-13"/>`],
+    [["coffee-maker"], `<rect x="34" y="25" width="52" height="82" rx="7" fill="${color}"/><path d="M43 54h34M46 68h28v27H46zM52 107h38"/><circle cx="71" cy="40" r="5"/>`],
+  ];
+  const match = groups.find(([ids]) => ids.includes(id));
+  const body = match?.[1] || `<path d="M60 25 70 50l27 3-20 18 6 27-23-13-23 13 6-27-20-18 27-3z" fill="${color}"/>`;
+  return `<g fill="none" stroke="#29453e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">${body}</g>`;
+};
+
+const cartoonItem = (id, color) => {
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 260">
     <defs><filter id="shadow" x="-30%" y="-30%" width="160%" height="180%"><feDropShadow dx="0" dy="10" stdDeviation="9" flood-color="#29453e" flood-opacity=".22"/></filter></defs>
     <ellipse cx="180" cy="218" rx="104" ry="18" fill="#29453e" opacity=".13"/>
     <g filter="url(#shadow)">
       <path d="M64 190c8-77 48-124 116-124s108 47 116 124c-27 22-66 34-116 34S91 212 64 190z" fill="${color}" stroke="#29453e" stroke-width="7"/>
-      <text x="180" y="179" text-anchor="middle" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif" font-size="104">${symbol}</text>
+      <g transform="translate(90 82) scale(1.5)">${iconSVG(id, color)}</g>
     </g>
   </svg>`;
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-const roomItemSVG = (sceneType, color, symbol) => {
+const roomItemSVG = (id, sceneType, color) => {
   const stroke = "#29453e";
   const sw = 4;
   const make = (body) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">${body}</svg>`;
   const dataUri = (body) => `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(make(body))}`;
+  const detail = `<g transform="translate(72 90) scale(.8)">${iconSVG(id, color)}</g>`;
 
   switch (sceneType) {
     case "furniture": {
@@ -68,7 +98,7 @@ const roomItemSVG = (sceneType, color, symbol) => {
       return dataUri(`
         <rect x="30" y="25" width="180" height="140" rx="8" fill="#fff5dc" stroke="${stroke}" stroke-width="7"/>
         <rect x="44" y="39" width="152" height="112" rx="4" fill="${color}" opacity=".5"/>
-        <text x="120" y="115" text-anchor="middle" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif" font-size="80">${symbol}</text>
+        <g transform="translate(72 42) scale(.8)">${iconSVG(id, color)}</g>
       `);
     }
     case "soft": {
@@ -84,7 +114,7 @@ const roomItemSVG = (sceneType, color, symbol) => {
         <rect x="100" y="150" width="40" height="52" rx="6" fill="#735342"/>
         <ellipse cx="120" cy="150" rx="75" ry="24" fill="${color}" stroke="${stroke}" stroke-width="${sw}"/>
         <ellipse cx="120" cy="145" rx="65" ry="18" fill="#fffaf0" opacity=".25"/>
-        <text x="120" y="163" text-anchor="middle" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif" font-size="48">${symbol}</text>
+        ${detail}
       `);
     }
     case "surface": {
@@ -92,7 +122,7 @@ const roomItemSVG = (sceneType, color, symbol) => {
         <ellipse cx="120" cy="210" rx="35" ry="9" fill="#29453e" opacity=".14"/>
         <rect x="74" y="148" width="92" height="56" rx="10" fill="#f4eee3" stroke="${stroke}" stroke-width="${sw}"/>
         <rect x="82" y="156" width="76" height="40" rx="6" fill="${color}" opacity=".5"/>
-        <text x="120" y="185" text-anchor="middle" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif" font-size="42">${symbol}</text>
+        ${detail}
       `);
     }
     case "hanging": {
@@ -101,14 +131,14 @@ const roomItemSVG = (sceneType, color, symbol) => {
         <line x1="120" y1="35" x2="120" y2="55" stroke="#735342" stroke-width="3"/>
         <ellipse cx="120" cy="85" rx="14" ry="10" fill="#fffaf0" opacity=".4"/>
         <ellipse cx="120" cy="135" rx="55" ry="65" fill="${color}" stroke="${stroke}" stroke-width="${sw}"/>
-        <text x="120" y="150" text-anchor="middle" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif" font-size="52">${symbol}</text>
+        ${detail}
       `);
     }
     default: {
       return dataUri(`
         <ellipse cx="120" cy="210" rx="52" ry="12" fill="#29453e" opacity=".14"/>
         <rect x="50" y="130" width="140" height="72" rx="16" fill="${color}" stroke="${stroke}" stroke-width="${sw}"/>
-        <text x="120" y="178" text-anchor="middle" font-family="Apple Color Emoji, Segoe UI Emoji, sans-serif" font-size="52">${symbol}</text>
+        ${detail}
       `);
     }
   }
@@ -138,22 +168,22 @@ const item = (id, name, cost, room, symbol, color, sceneType = "floor", roomPosi
   room,
   symbol,
   sceneType,
-  image: cartoonItem(name, symbol, color),
-  roomImage: roomItemSVG(sceneType, color, symbol),
+  image: cartoonItem(id, color),
+  roomImage: roomItemSVG(id, sceneType, color),
   roomPosition,
 });
 
 export const houseItems = [
   item("sunny-sofa", "Sunny Sofa", 15, "living", "🛋️", "#efac64", "furniture", { x: 2, y: 12, w: 28, anchor: "bottom" }),
-  item("story-lamp", "Story Lamp", 20, "living", "💡", "#e98769", "lamp", { x: 60, y: 10, w: 12, anchor: "bottom" }),
-  item("leafy-plant", "Leafy Plant", 25, "living", "🪴", "#83b68b", "plant", { x: 3, y: 10, w: 11, anchor: "bottom" }),
+  item("story-lamp", "Story Lamp", 20, "living", "💡", "#e98769", "lamp", { x: 85, y: 10, w: 11, anchor: "bottom" }),
+  item("leafy-plant", "Leafy Plant", 25, "living", "🪴", "#83b68b", "plant", { x: 31, y: 10, w: 10, anchor: "bottom" }),
   item("rainbow-rug", "Rainbow Rug", 30, "living", "🌈", "#d88cbe", "rug", { x: 22, y: 2, w: 36, anchor: "bottom" }),
-  item("book-nook", "Book Nook", 35, "living", "📚", "#7198d2", "furniture", { x: 46, y: 11, w: 22, anchor: "bottom" }),
+  item("book-nook", "Book Nook", 35, "living", "📚", "#7198d2", "furniture", { x: 52, y: 11, w: 20, anchor: "bottom" }),
   item("window-curtains", "Window Curtains", 40, "living", "🪟", "#ae92c4", "curtain", { x: 73, y: 12, w: 14, anchor: "top" }),
-  item("cloud-pillows", "Cloud Pillows", 45, "living", "☁️", "#98c4d8", "soft", { x: 65, y: 20, w: 13, anchor: "bottom" }),
+  item("cloud-pillows", "Cloud Pillows", 45, "living", "☁️", "#98c4d8", "soft", { x: 72, y: 8, w: 12, anchor: "bottom" }),
   item("family-photo", "Friendship Frame", 50, "living", "🖼️", "#f0b867", "wall", { x: 1, y: 20, w: 16, anchor: "top" }),
-  item("record-player", "Record Player", 55, "living", "🎵", "#6fa89a", "surface", { x: 18, y: 39, w: 12, anchor: "bottom" }),
-  item("tea-table", "Little Tea Table", 60, "living", "🫖", "#d98573", "table", { x: 38, y: 12, w: 17, anchor: "bottom" }),
+  item("record-player", "Record Player", 55, "living", "🎵", "#6fa89a", "surface", { x: 40, y: 10, w: 10, anchor: "bottom" }),
+  item("tea-table", "Little Tea Table", 60, "living", "🫖", "#d98573", "table", { x: 64, y: 10, w: 14, anchor: "bottom" }),
 
   item("cozy-bed", "Cozy Bed", 65, "bedroom", "🛏️", "#8aa5d1", "furniture", { x: 40, y: 12, w: 32, anchor: "bottom" }),
   item("star-rug", "Star Rug", 70, "bedroom", "⭐", "#e9bd62", "rug", { x: 32, y: 2, w: 28, anchor: "bottom" }),

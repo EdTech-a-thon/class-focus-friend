@@ -46,9 +46,10 @@ h2 { font-size: 1.65rem; }
 .otter-mouth-smile { opacity: 1; }
 .otter-mouth-loud, .otter-mouth-celebrate { fill: #25433d; }
 .otter-heart { fill: #e98769; }
-.otter-glasses { fill: rgba(255, 250, 240, .2); stroke: #25433d; stroke-linecap: round; stroke-width: 4; }
+.otter-glasses { fill: rgba(164, 216, 228, .55); stroke: #25433d; stroke-linecap: round; stroke-width: 4; }
+.otter-glasses .glasses-shine { fill: none; opacity: .7; stroke: #fffaf0; stroke-width: 2; }
 .otter-hat path:first-child { fill: #7198d2; stroke: #25433d; stroke-linejoin: round; stroke-width: 4; }
-.otter-hat path:not(:first-child) { fill: none; stroke: #f8d97a; stroke-width: 4; }.otter-hat circle { fill: #e98769; stroke: #25433d; stroke-width: 3; }
+.otter-hat path:not(:first-child) { fill: none; stroke: #f8d97a; stroke-width: 4; }.otter-hat circle { fill: #e98769; stroke: #25433d; stroke-width: 3; }.otter-hat .hat-dot { fill: #fffaf0; stroke: none; }
 .otter-bow path { fill: #f8d97a; stroke: #25433d; stroke-linejoin: round; stroke-width: 4; }.otter-bow circle { fill: #e98769; stroke: #25433d; stroke-width: 3; }
 .sparkle { opacity: 0; pointer-events: none; position: absolute; z-index: 5; }
 .sparkle { color: #d76d54; font-size: 28px; }.sparkle.one { right: 0; top: 42px; }.sparkle.two { left: 0; top: 105px; }
