@@ -26,8 +26,6 @@ const HouseCard = ({ house, rewards }) => {
     otterName,
     setOtterName,
     isPreviewing,
-    startPreview,
-    stopPreview,
   } = house;
 
   const nextRoom = houseRooms.find((room) => completedSessions < room.sessionsRequired);
@@ -63,9 +61,6 @@ const HouseCard = ({ house, rewards }) => {
             <button className="outline" type="button" disabled={!isPreviewing && completedSessions < activeRoomDetails.sessionsRequired} onClick={() => setOpenShop("decorations")}>Decorate room</button>
             <button className="outline" type="button" onClick={() => setOpenShop("accessories")}>Dress up otter</button>
             <button className="outline" type="button" onClick={() => setOpenShop("name")}>Name your otter</button>
-            {!isPreviewing && (
-              <button className="outline" type="button" onClick={startPreview}>Preview everything</button>
-            )}
           </>
         )}
         <button
@@ -77,19 +72,6 @@ const HouseCard = ({ house, rewards }) => {
           {showActions ? "Hide house actions" : "Show house actions"}
         </button>
       </div>
-
-      {isPreviewing && (
-        <div className="preview-banner" role="status">
-          <div>
-            <b>Preview mode</b>
-            <small>
-              Every room and every decoration is switched on, so you can show the class where
-              the year is heading. Nothing here is saved, and your real points and rooms are waiting.
-            </small>
-          </div>
-          <button className="outline" type="button" onClick={stopPreview}>Exit preview</button>
-        </div>
-      )}
 
       <RoomScene
         room={activeRoomDetails}

@@ -480,7 +480,15 @@ const App = () => {
   };
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell ${isPreviewing ? "previewing" : ""}`}>
+      {isPreviewing && (
+        <div className="preview-bar" role="status">
+          <b>Preview mode</b>
+          <small>Every room and decoration is switched on. Nothing here is saved.</small>
+          <button className="outline" type="button" onClick={stopPreview}>Exit preview</button>
+        </div>
+      )}
+
       <Header header={header} />
       <HouseCard house={house} rewards={rewards} />
 
@@ -493,6 +501,9 @@ const App = () => {
       </div>
 
       <div className="clear-data-section">
+        <button className="preview-trigger" type="button" onClick={isPreviewing ? stopPreview : startPreview}>
+          {isPreviewing ? "Exit preview mode" : "Preview everything"}
+        </button>
         <button className="clear-data-trigger" type="button" onClick={() => setShowClearData(true)}>
           Erase saved data
         </button>
