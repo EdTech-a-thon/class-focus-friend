@@ -4,6 +4,7 @@ const HouseCatalog = ({
   ownedItems,
   points,
   buyHouseItem,
+  isPreviewing,
   titleId,
 }) => {
   const catalogItems = items.filter(
@@ -17,7 +18,7 @@ const HouseCatalog = ({
           <p className="catalog-label">House shop</p>
           <h2 id={titleId}>Decorate the {room.name.toLowerCase()}</h2>
         </div>
-        <span className="points-badge">{points} points</span>
+        <span className="points-badge">{isPreviewing ? "Preview" : `${points} points`}</span>
       </div>
 
       <div className="reward-list">
@@ -41,10 +42,10 @@ const HouseCatalog = ({
 
               <button
                 type="button"
-                disabled={owned || points < item.cost}
+                disabled={!isPreviewing && (owned || points < item.cost)}
                 onClick={() => buyHouseItem(item)}
               >
-                {owned ? "Placed" : "Buy"}
+                {isPreviewing ? (owned ? "Take away" : "Place") : owned ? "Placed" : "Buy"}
               </button>
             </article>
           );

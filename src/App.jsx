@@ -303,9 +303,63 @@ const App = () => {
     setHouseItemsOwned((items) => [...items, item.id]);
   }
 
-  const activeRoomDetails = houseRooms.find((room) => room.id === activeRoom);
+  // Preview mode lets a teacher walk through every room and every customization
+  // at once, so they can show a class where the year is heading. Nothing chosen
+  // in preview is saved: the class keeps the points, rooms, and decorations it
+  // actually earned.
+  const [preview, setPreview] = useState(null);
+  const isPreviewing = preview !== null;
+
+  const startPreview = () => setPreview({
+    activeRoom: houseRooms[0].id,
+    houseItemsOwned: houseItems.map((item) => item.id),
+    equipped: accessories.map((item) => item.id),
+    otterName,
+  });
+
+  const stopPreview = () => setPreview(null);
+
+  const togglePreviewId = (ids, id) =>
+    ids.includes(id) ? ids.filter((current) => current !== id) : [...ids, id];
+
+  // What the screen shows: the preview classroom while previewing, the real one
+  // the rest of the time.
+  const shownActiveRoom = isPreviewing ? preview.activeRoom : activeRoom;
+  const shownHouseItemsOwned = isPreviewing ? preview.houseItemsOwned : houseItemsOwned;
+  const shownEquipped = isPreviewing ? preview.equipped : equipped;
+  const shownUnlocked = isPreviewing ? accessories.map((item) => item.id) : unlocked;
+  const shownOtterName = isPreviewing ? preview.otterName : otterName;
+
+  const changeOtterName = (name) => {
+    if (!isPreviewing) return setOtterName(name);
+    setPreview((current) => ({ ...current, otterName: name }));
+  };
+
+  const chooseRoom = (room) => {
+    if (!isPreviewing) return setActiveRoom(room);
+    setPreview((current) => ({ ...current, activeRoom: room }));
+  };
+
+  /** In preview every piece is free to place or take away again. */
+  const placeOrBuyHouseItem = (item) => {
+    if (!isPreviewing) return buyHouseItem(item);
+    setPreview((current) => ({
+      ...current,
+      houseItemsOwned: togglePreviewId(current.houseItemsOwned, item.id),
+    }));
+  };
+
+  const wearOrBuyAccessory = (item) => {
+    if (!isPreviewing) return buyOrEquip(item);
+    setPreview((current) => ({
+      ...current,
+      equipped: togglePreviewId(current.equipped, item.id),
+    }));
+  };
+
+  const activeRoomDetails = houseRooms.find((room) => room.id === shownActiveRoom);
   const roomDecorations = houseItems.filter(
-    (item) => item.room === activeRoom && houseItemsOwned.includes(item.id)
+    (item) => item.room === shownActiveRoom && shownHouseItemsOwned.includes(item.id)
   );
 
   const session = {
@@ -336,9 +390,10 @@ const App = () => {
   const rewards = {
     points,
     accessories,
-    unlocked,
-    equipped,
-    buyOrEquip,
+    unlocked: shownUnlocked,
+    equipped: shownEquipped,
+    buyOrEquip: wearOrBuyAccessory,
+    isPreviewing,
   };
 
   const progress = {
@@ -349,27 +404,30 @@ const App = () => {
     activities,
     classMilestones,
     houseItems,
-    houseItemsOwned,
+    houseItemsOwned: shownHouseItemsOwned,
     houseRooms,
   };
 
   const house = {
     points,
     houseRooms,
-    activeRoom,
-    setActiveRoom,
+    activeRoom: shownActiveRoom,
+    setActiveRoom: chooseRoom,
     activeRoomDetails,
     roomDecorations,
     houseItems,
-    houseItemsOwned,
-    buyHouseItem,
+    houseItemsOwned: shownHouseItemsOwned,
+    buyHouseItem: placeOrBuyHouseItem,
     completedSessions: sessionCount,
-    equipped,
+    equipped: shownEquipped,
+    isPreviewing,
+    startPreview,
+    stopPreview,
     isCelebrating: showComplete,
     isFocusing: timer.isRunning,
     noiseTone,
-    otterName,
-    setOtterName,
+    otterName: shownOtterName,
+    setOtterName: changeOtterName,
   };
 
   const classroomData = {
@@ -441,7 +499,7 @@ const App = () => {
       </div>
 
       <SessionCompletionModal
-        equipped={equipped}
+        equipped={shownEquipped}
         showComplete={showComplete}
         isTimerAlertPlaying={isTimerAlertPlaying}
         onClose={closeCompletionModal}

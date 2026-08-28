@@ -179,6 +179,11 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .room-tab-copy small { font-size: .78rem; font-weight: 500; opacity: .88; }
 .house-actions { display: flex; gap: 9px; justify-content: flex-end; }
 .house-actions .outline { background: #fffaf0; }
+.preview-banner { align-items: center; background: #25433d; border-radius: 18px; color: #fffaf0; display: flex; gap: 18px; justify-content: space-between; margin: 14px 0 0; padding: 14px 18px; }
+.preview-banner b { color: #f8d97a; display: block; font-size: .95rem; }
+.preview-banner small { color: #c9d7d0; display: block; font-size: .84rem; line-height: 1.5; margin-top: 3px; max-width: 70ch; }
+.preview-banner .outline { background: transparent; border-color: #9bceb4; color: #fffaf0; flex-shrink: 0; }
+.preview-banner .outline:hover { background: rgba(155, 206, 180, .18); }
 .house-actions-toggle { background: transparent; border: 0; color: #526a63; cursor: pointer; font: inherit; font-size: .82rem; font-weight: 700; padding: 10px 8px; text-decoration: underline; text-underline-offset: 3px; }
 .room-scene { background: linear-gradient(180deg, #f4dcae 0 68%, #bd855e 68% 100%); border: 8px solid #fffaf0; border-radius: 24px; box-shadow: inset 0 -12px 0 rgba(100, 58, 38, .08); margin-top: 10px; min-height: 440px; overflow: hidden; padding: 20px; position: relative; }
 .room-scene::before { background: repeating-linear-gradient(90deg, rgba(100, 57, 34, .13) 0 2px, transparent 2px 116px); bottom: 0; content: ""; height: 32%; inset-inline: 0; position: absolute; transform: skewX(-12deg); }
@@ -373,6 +378,7 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
   .otter-name-field input { width: 100%; }
   .room-tabs { grid-template-columns: repeat(2, 1fr); }
   .house-actions { display: grid; grid-template-columns: 1fr; }
+  .preview-banner { align-items: flex-start; flex-direction: column; gap: 12px; }
   .room-scene { min-height: 430px; }
   .room-window { right: 5%; transform: scale(.78); transform-origin: top right; }
   .wall-picture { left: 38%; transform: scale(.8) rotate(2deg); transform-origin: top left; }
