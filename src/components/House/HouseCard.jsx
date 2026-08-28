@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
-import RewardShop from "../Rewards/RewardShop";
 import RoomTabs from "./RoomTabs";
 import RoomScene from "./RoomScene";
-import HouseCatalog from "./HouseCatalog";
 import Modal from "../Modal/Modal";
 
 const HouseCard = ({ house, rewards }) => {
   const [openShop, setOpenShop] = useState(null);
   const [editingMode, setEditingMode] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [showActions, setShowActions] = useState(true);
   const {
     points,
@@ -59,8 +58,8 @@ const HouseCard = ({ house, rewards }) => {
         {showActions && (
           <>
             <button className="outline" type="button" onClick={() => setOpenShop("rooms")}>Choose room</button>
-            <button className="outline" type="button" disabled={!isPreviewing && completedSessions < activeRoomDetails.sessionsRequired} onClick={() => setEditingMode((mode) => mode === "decorations" ? null : "decorations")}>Decorate room</button>
-            <button className="outline" type="button" onClick={() => setEditingMode((mode) => mode === "accessories" ? null : "accessories")}>Dress up otter</button>
+            <button className="outline" type="button" disabled={!isPreviewing && completedSessions < activeRoomDetails.sessionsRequired} onClick={() => { setEditingMode((mode) => mode === "decorations" ? null : "decorations"); setSelectedItem(null); }}>Decorate room</button>
+            <button className="outline" type="button" onClick={() => { setEditingMode((mode) => mode === "accessories" ? null : "accessories"); setSelectedItem(null); }}>Dress up otter</button>
             <button className="outline" type="button" onClick={() => setOpenShop("name")}>Name your otter</button>
           </>
         )}
@@ -84,27 +83,19 @@ const HouseCard = ({ house, rewards }) => {
         noiseTone={noiseTone}
         otterName={otterName || "Otter"}
         editingMode={editingMode}
-        onChooseItem={buyHouseItem}
+        accessoryItems={rewards.accessories}
+        unlockedAccessories={rewards.unlocked}
+        points={points}
+        isPreviewing={isPreviewing}
+        selectedItem={selectedItem}
+        onChooseItem={setSelectedItem}
+        onCloseEditor={() => { setEditingMode(null); setSelectedItem(null); }}
+        onConfirmItem={(item) => {
+          if (editingMode === "decorations") buyHouseItem(item);
+          else rewards.buyOrEquip(item);
+          setSelectedItem(null);
+        }}
       />
-
-      {editingMode && (
-        <section className="inline-shop" aria-label={editingMode === "decorations" ? "Room decorations" : "Otter clothing"}>
-          <button className="inline-shop-close" type="button" onClick={() => setEditingMode(null)}>Done</button>
-          {editingMode === "decorations" ? (
-            <HouseCatalog
-              room={activeRoomDetails}
-              items={houseItems}
-              ownedItems={houseItemsOwned}
-              points={points}
-              buyHouseItem={buyHouseItem}
-              isPreviewing={isPreviewing}
-              titleId="inline-shop-title"
-            />
-          ) : (
-            <RewardShop rewards={rewards} titleId="inline-shop-title" />
-          )}
-        </section>
-      )}
 
       {openShop && (
         <Modal

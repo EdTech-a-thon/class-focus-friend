@@ -1,7 +1,13 @@
 import Otter from "../Otter/Otter";
 
-const RoomScene = ({ room, decorations, availableItems = [], equipped, isCelebrating, isFocusing, noiseTone, otterName, editingMode, onChooseItem }) => {
+const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = [], unlockedAccessories = [], equipped, isCelebrating, isFocusing, noiseTone, otterName, editingMode, points, isPreviewing, selectedItem, onChooseItem, onConfirmItem, onCloseEditor }) => {
   const visibleItems = editingMode === "decorations" ? availableItems : decorations;
+  const selectedIsOwned = selectedItem && (
+    editingMode === "decorations"
+      ? decorations.some((item) => item.id === selectedItem.id)
+      : unlockedAccessories.includes(selectedItem.id)
+  );
+  const selectedX = selectedItem?.roomPosition?.x ?? 40;
   
   return (
     <section
@@ -32,7 +38,30 @@ const RoomScene = ({ room, decorations, availableItems = [], equipped, isCelebra
           isFocusing={isFocusing}
           noiseTone={noiseTone}
         />
+        {editingMode === "accessories" && (
+          <div className="accessory-price-spots" aria-label="Clothing choices">
+            {accessoryItems.filter((item) => !equipped.includes(item.id)).map((item) => (
+              <button
+                className={`accessory-price-spot accessory-${item.id}`}
+                key={item.id}
+                type="button"
+                aria-label={`${item.name}, ${unlockedAccessories.includes(item.id) ? "owned" : `$${item.cost}`}`}
+                onClick={() => onChooseItem(item)}
+              >
+                <span>{unlockedAccessories.includes(item.id) ? "Owned" : `$${item.cost}`}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
+
+      {editingMode && (
+        <div className="scene-shop-toolbar">
+          <b>{editingMode === "decorations" ? "Choose a gray room item" : "Choose a gray clothing spot"}</b>
+          <span>{isPreviewing ? "Preview" : `$${points} budget`}</span>
+          <button type="button" onClick={onCloseEditor}>Done</button>
+        </div>
+      )}
 
       {visibleItems.length ? (
         <div
@@ -54,8 +83,8 @@ const RoomScene = ({ room, decorations, availableItems = [], equipped, isCelebra
                 }}
                 aria-label={item.name}
                 type="button"
-                disabled={!editingMode || owned}
-                onClick={() => onChooseItem?.(item)}
+                disabled={editingMode !== "decorations" || owned}
+                onClick={() => onChooseItem(item)}
               >
                 <img
                   src={item.roomImage}
@@ -63,7 +92,12 @@ const RoomScene = ({ room, decorations, availableItems = [], equipped, isCelebra
                   style={{ width: "100%", height: "auto" }}
                   draggable={false}
                 />
-                {!owned && <span className="room-item-add">+</span>}
+                {!owned && (
+                  <span className="room-item-price">
+                    <b>+</b>
+                    <small>${item.cost}</small>
+                  </span>
+                )}
               </button>
             );
           })}
@@ -72,6 +106,31 @@ const RoomScene = ({ room, decorations, availableItems = [], equipped, isCelebra
         <p className="empty-room">
           {otterName} is settling in. Decorate this room to make it your own.
         </p>
+      )}
+
+      {selectedItem && (
+        <aside className={`scene-purchase-card ${selectedX < 50 ? "side-right" : "side-left"}`} aria-live="polite">
+          <button className="scene-purchase-close" type="button" aria-label="Close item details" onClick={() => onChooseItem(null)}>×</button>
+          {selectedItem.image ? (
+            <img src={selectedItem.image} alt="" />
+          ) : (
+            <span className="scene-purchase-icon" aria-hidden="true">{selectedItem.icon}</span>
+          )}
+          <div>
+            <small>{editingMode === "decorations" ? "Room decoration" : "Otter clothing"}</small>
+            <h3>{selectedItem.name}</h3>
+            <b>{selectedIsOwned ? "Already owned" : `$${selectedItem.cost}`}</b>
+            {!isPreviewing && !selectedIsOwned && <p>${Math.max(0, points - selectedItem.cost)} left after purchase</p>}
+          </div>
+          <button
+            className="scene-purchase-button"
+            type="button"
+            disabled={!isPreviewing && !selectedIsOwned && points < selectedItem.cost}
+            onClick={() => onConfirmItem(selectedItem)}
+          >
+            {isPreviewing ? "Place in preview" : selectedIsOwned ? "Wear it" : points < selectedItem.cost ? "Not enough budget" : `Buy for $${selectedItem.cost}`}
+          </button>
+        </aside>
       )}
     </section>
   );
