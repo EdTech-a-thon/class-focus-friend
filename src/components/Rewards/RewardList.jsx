@@ -16,7 +16,7 @@ const RewardList = ({ points, accessories, unlocked, equipped, buyOrEquip, isPre
               ? wearing
                 ? "Wearing now"
                 : "Unlocked"
-              : `${item.cost} points`}
+              : `$${item.cost}`}
           </small>
         </div>
 

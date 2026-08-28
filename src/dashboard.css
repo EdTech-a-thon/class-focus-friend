@@ -214,8 +214,19 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 @keyframes otter-wander { 0%, 100% { transform: translateX(-35px); } 50% { transform: translateX(35px); } }
 .empty-room { bottom: 18px; color: #fffaf0; font-size: .86rem; left: 20px; line-height: 1.5; margin: 0; max-width: 230px; position: absolute; text-shadow: 0 1px 2px rgba(37, 67, 61, .5); z-index: 5; }
 .placed-decorations { inset: 0; pointer-events: none; position: absolute; z-index: 3; }
-.room-item { position: absolute; }
+.room-item { background: transparent; border: 0; border-radius: 12px; margin: 0; padding: 0; position: absolute; }
 .room-item img { display: block; filter: drop-shadow(0 4px 3px rgba(47, 38, 31, .22)); }
+.room-item-placeholder { cursor: pointer; pointer-events: auto; }
+.room-item-placeholder:disabled { cursor: default; }
+.room-item-placeholder img { filter: grayscale(1); opacity: .2; }
+.room-item-placeholder:not(:disabled):hover { background: rgba(255, 255, 255, .3); outline: 2px dashed #7f8b88; }
+.room-item-add { align-items: center; background: #eef0ef; border: 2px solid #9aa3a0; border-radius: 50%; color: #52605c; display: flex; font-size: 1rem; font-weight: 800; height: 24px; justify-content: center; left: 50%; position: absolute; top: 50%; transform: translate(-50%, -50%); width: 24px; }
+.accessory-placeholder { fill: #d3d6d5; opacity: .65; stroke: #929b98; stroke-dasharray: 5 4; stroke-width: 3; }
+.inline-shop { background: #fffaf0; border: 1px solid #d7c8b3; border-radius: 22px; margin-top: 16px; padding: 24px; position: relative; }
+.inline-shop-close { background: #e4e6e5; border: 0; color: #40554e; position: absolute; right: 24px; top: 24px; z-index: 1; }
+.inline-shop .card-heading, .inline-shop .catalog-heading { padding-right: 72px; }
+.inline-shop .house-catalog { background: transparent; }
+.inline-shop .house-catalog .reward-list { max-height: 330px; }
 .shop-modal { background: #fffaf0; border-radius: 28px; box-shadow: 0 25px 80px rgba(18, 42, 35, .35); max-height: calc(100vh - 40px); max-width: 680px; overflow-y: auto; padding: 36px; width: 100%; }
 .shop-modal .card-heading, .shop-modal .catalog-heading { padding-right: 48px; }
 .shop-modal .reward-list { margin-top: 24px; }

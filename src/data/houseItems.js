@@ -161,10 +161,17 @@ const cartoonRoom = (name, symbol, wall, floor) => {
   return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
-const item = (id, name, cost, room, symbol, color, sceneType = "floor", roomPosition = {}) => ({
+const roomPriceCounts = {};
+const nextRoomPrice = (room) => {
+  const pricePosition = roomPriceCounts[room] || 0;
+  roomPriceCounts[room] = pricePosition + 1;
+  return 30 + pricePosition * 5;
+};
+
+const item = (id, name, _cost, room, symbol, color, sceneType = "floor", roomPosition = {}) => ({
   id,
   name,
-  cost,
+  cost: nextRoomPrice(room),
   room,
   symbol,
   sceneType,

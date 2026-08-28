@@ -1,4 +1,4 @@
-const Otter = ({ equipped, isCelebrating, isFocusing, noiseTone }) => {
+const Otter = ({ equipped, isCelebrating, isFocusing, noiseTone, showAccessorySlots = false }) => {
   const isLoud = noiseTone === "loud";
   const state = isCelebrating ? "celebrating" : isLoud ? "loud" : isFocusing ? "focusing" : "idle";
   const messages = {
@@ -71,6 +71,19 @@ const Otter = ({ equipped, isCelebrating, isFocusing, noiseTone }) => {
               <path d="M105 162C88 148 72 147 70 157v14c5 10 21 4 35-9 14 13 30 19 35 9v-14c-2-10-18-9-35 5Z" />
               <circle cx="105" cy="162" r="8" />
             </g>
+          )}
+          {showAccessorySlots && !equipped.includes("glasses") && (
+            <g className="accessory-placeholder otter-glasses">
+              <rect x="72" y="78" width="31" height="24" rx="10" />
+              <rect x="121" y="76" width="31" height="24" rx="10" />
+              <path d="M103 87 C109 84 115 84 121 86" />
+            </g>
+          )}
+          {showAccessorySlots && !equipped.includes("party-hat") && (
+            <path className="accessory-placeholder" d="M82 45 L117 7 L145 48Z" />
+          )}
+          {showAccessorySlots && !equipped.includes("bow-tie") && (
+            <path className="accessory-placeholder" d="M110 143 C92 130 78 133 76 143v12c6 8 21 2 34-9 13 11 28 17 34 9v-12c-2-10-16-13-34 0Z" />
           )}
         </svg>
       </div>
