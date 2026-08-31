@@ -172,7 +172,7 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .status-dot.loud { background: #db694f; box-shadow: 0 0 0 7px rgba(219, 105, 79, .17); }
 .noise-expectation { color: #75867f; font-size: .86rem; margin: 12px 0 25px; }
 .meter { background: linear-gradient(90deg, #cce2d3 0 34%, #f3dda4 34% 67%, #efc0b0 67%); border-radius: 999px; height: 22px; overflow: hidden; padding: 5px; }
-.meter span { background: #99a7a2; border-radius: inherit; display: block; height: 100%; min-width: 0; transition: width .18s linear; }
+.meter span { background: #99a7a2; border-radius: inherit; display: block; height: 100%; min-width: 0; transition: width .75s ease-out, background-color .4s ease; }
 .meter span.good { background: #39765d; }.meter span.warn { background: #ce9224; }.meter span.loud { background: #c94f35; }
 .noise-scale { color: #6f807a; display: flex; font-size: .82rem; justify-content: space-between; margin: 7px 0 24px; }
 .noise-card .outline { align-self: flex-start; }

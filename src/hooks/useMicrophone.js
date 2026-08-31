@@ -62,12 +62,23 @@ export const useMicrophone = () => {
       await refreshDevices();
       setStatus("on");
       let frame;
-      let average = 0;
+      let smoothedLevel = 0;
+      let lastUpdate = performance.now();
+      let lastPublished = 0;
       const measure = () => {
         analyser.getByteTimeDomainData(values);
         const volume = Math.sqrt(values.reduce((sum, value) => sum + (value - 128) ** 2, 0) / values.length);
-        average = average * 0.82 + Math.min(100, volume * 7) * 0.18;
-        setRawLevel(average);
+        const measuredLevel = Math.min(100, volume * 7);
+        const now = performance.now();
+        const elapsed = Math.min(250, now - lastUpdate);
+        const smoothingTime = measuredLevel > smoothedLevel ? 1400 : 2400;
+        const weight = 1 - Math.exp(-elapsed / smoothingTime);
+        smoothedLevel += (measuredLevel - smoothedLevel) * weight;
+        lastUpdate = now;
+        if (now - lastPublished >= 100) {
+          setRawLevel(smoothedLevel);
+          lastPublished = now;
+        }
         frame = requestAnimationFrame(measure);
       };
       measure();

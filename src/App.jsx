@@ -170,18 +170,45 @@ const App = () => {
   // runtime state
   const expectation = activities[activity];
   const microphone = useMicrophone();
+  const loudThreshold = expectation.threshold + 18;
+  const noiseSamples = useRef([]);
+  const [sustainedNoiseLevel, setSustainedNoiseLevel] = useState(0);
+  const [hasSustainedLoudNoise, setHasSustainedLoudNoise] = useState(false);
+  const [needsTeacherResume, setNeedsTeacherResume] = useState(false);
+
+  useEffect(() => {
+    if (microphone.status !== "on") {
+      noiseSamples.current = [];
+      setSustainedNoiseLevel(0);
+      setHasSustainedLoudNoise(false);
+      return;
+    }
+
+    const now = Date.now();
+    noiseSamples.current = [
+      ...noiseSamples.current.filter((sample) => sample.time >= now - 10500),
+      { time: now, level: microphone.level },
+    ];
+    const samples = noiseSamples.current;
+    const average = samples.reduce((sum, sample) => sum + sample.level, 0) / samples.length;
+    const coversTenSeconds = samples[0]?.time <= now - 10000;
+    setSustainedNoiseLevel(average);
+    setHasSustainedLoudNoise(coversTenSeconds && average > loudThreshold);
+  }, [loudThreshold, microphone.level, microphone.rawLevel, microphone.status]);
 
   const noiseTone = microphone.status !== "on"
     ? "neutral"
-    : microphone.level <= expectation.threshold
+    : needsTeacherResume || hasSustainedLoudNoise
+      ? "loud"
+      : sustainedNoiseLevel <= expectation.threshold
       ? "good"
-      : microphone.level <= expectation.threshold + 18
-        ? "warn"
-        : "loud";
+      : "warn";
 
   const noiseMessage = microphone.status !== "on"
     ? "Ready when you are"
-    : noiseTone === "good"
+    : needsTeacherResume
+      ? "Paused for a teacher check-in"
+      : noiseTone === "good"
       ? "On track"
       : noiseTone === "warn"
         ? "Getting loud"
@@ -189,34 +216,44 @@ const App = () => {
 
   const timer = useTimer(preferredMinutes);
   const pauseTimer = timer.pause;
-  const resumeTimer = timer.resume;
   const recordedCompletion = useRef(false);
   const redAlertPlayed = useRef(false);
-  const timerPausedForNoise = useRef(false);
+  const noisePauseArmed = useRef(true);
   const stopTimerAlert = useRef(null);
   const [isTimerAlertPlaying, setIsTimerAlertPlaying] = useState(false);
 
   useEffect(() => {
-    if (noiseTone === "loud") {
-      if (timer.isRunning) {
-        timerPausedForNoise.current = true;
-        pauseTimer();
-      }
-      if (redAlertPlayed.current) return;
-      redAlertPlayed.current = true;
-      playNoiseAlert();
+    if (!hasSustainedLoudNoise) {
+      noisePauseArmed.current = true;
+      redAlertPlayed.current = false;
       return;
     }
 
-    if (noiseTone === "good" && timerPausedForNoise.current && !timer.isComplete) {
-      timerPausedForNoise.current = false;
-      resumeTimer();
+    if (!timer.isRunning || !noisePauseArmed.current) return;
+    noisePauseArmed.current = false;
+    setNeedsTeacherResume(true);
+    pauseTimer();
+    if (!redAlertPlayed.current) {
+      redAlertPlayed.current = true;
+      playNoiseAlert();
     }
+  }, [hasSustainedLoudNoise, pauseTimer, timer.isRunning]);
 
-    if (noiseTone !== "loud") {
-      redAlertPlayed.current = false;
-    }
-  }, [noiseTone, pauseTimer, resumeTimer, timer.isComplete, timer.isRunning]);
+  const resumeAfterNoise = () => {
+    setNeedsTeacherResume(false);
+    setHasSustainedLoudNoise(false);
+    setSustainedNoiseLevel(microphone.level);
+    noiseSamples.current = [];
+    noisePauseArmed.current = false;
+    redAlertPlayed.current = false;
+    timer.resume();
+  };
+
+  const resetTimer = () => {
+    setNeedsTeacherResume(false);
+    noisePauseArmed.current = true;
+    timer.reset();
+  };
 
   useEffect(() => {
     if (!timer.isComplete) {
@@ -394,6 +431,9 @@ const App = () => {
     expectation,
     noiseTone,
     formatTime,
+    needsTeacherResume,
+    resumeAfterNoise,
+    resetTimer,
   };
 
   const rewards = {

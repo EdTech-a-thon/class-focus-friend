@@ -1,7 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import NoiseScale from "./NoiseScale";
 
-const SAMPLE_SECONDS = 4;
+const SAMPLE_SECONDS = 5;
+
+const getStableAverage = (samples) => {
+  const sorted = [...samples].sort((a, b) => a - b);
+  const trim = Math.floor(sorted.length * 0.15);
+  const stableSamples = sorted.slice(trim, sorted.length - trim || sorted.length);
+  return stableSamples.reduce((sum, value) => sum + value, 0) / Math.max(1, stableSamples.length);
+};
 
 const NoiseCard = ({ noise }) => {
   const { noiseMessage, noiseTone, expectation, microphone } = noise;
@@ -24,7 +31,7 @@ const NoiseCard = ({ noise }) => {
     const countdown = window.setInterval(() => setSecondsLeft((value) => Math.max(0, value - 1)), 1000);
     const finish = window.setTimeout(() => {
       const samples = samplesRef.current;
-      const average = samples.reduce((sum, value) => sum + value, 0) / Math.max(1, samples.length);
+      const average = getStableAverage(samples);
       if (calibrationStage === "quiet") {
         setQuietSample(average);
         setCalibrationStage("ready");

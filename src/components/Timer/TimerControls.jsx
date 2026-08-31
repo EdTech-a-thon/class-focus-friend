@@ -1,7 +1,7 @@
 import EncouragementMessage from "./EncouragementMessage";
 
 const TimerControls = ({ timerSettings, displayCountdown }) => {
-  const { timer, expectation, noiseTone, formatTime } = timerSettings;
+  const { timer, expectation, noiseTone, formatTime, needsTeacherResume, resumeAfterNoise, resetTimer } = timerSettings;
   const {
     showCountdown,
     hiddenTimerMode,
@@ -18,7 +18,9 @@ const TimerControls = ({ timerSettings, displayCountdown }) => {
       </div>
 
       <p className="timer-caption">
-        {timer.isRunning
+        {needsTeacherResume
+          ? "The class is waiting for a teacher check-in."
+          : timer.isRunning
           ? "Your class is building focus stamina." 
           : showCountdown
           ? `${timer.durationSeconds / 60} minute ${expectation.label.toLowerCase()} session`
@@ -29,20 +31,22 @@ const TimerControls = ({ timerSettings, displayCountdown }) => {
         <button
           className="primary" 
           type="button" 
-          onClick={timer.toggle} 
+          onClick={needsTeacherResume ? resumeAfterNoise : timer.toggle}
           disabled={timer.isComplete}
         >
           {timer.isRunning
             ? "Pause session" 
             : timer.isComplete 
             ? "Session complete" 
+            : needsTeacherResume
+            ? "Resume session"
             : "Start session"}
         </button>
 
         <button 
           className="plain-button" 
           type="button" 
-          onClick={timer.reset}>
+          onClick={resetTimer}>
             Reset
         </button>
       </div>
