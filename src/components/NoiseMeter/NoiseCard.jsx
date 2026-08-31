@@ -10,7 +10,7 @@ const getStableAverage = (samples) => {
   return stableSamples.reduce((sum, value) => sum + value, 0) / Math.max(1, stableSamples.length);
 };
 
-const NoiseCard = ({ noise }) => {
+const NoiseCard = ({ noise, focusMode = false }) => {
   const { noiseMessage, noiseTone, expectation, microphone } = noise;
   const [showSetup, setShowSetup] = useState(false);
   const [calibrationStage, setCalibrationStage] = useState("idle");
@@ -59,14 +59,14 @@ const NoiseCard = ({ noise }) => {
       <p className="noise-expectation">Goal for {expectation.label.toLowerCase()}: <b>{expectation.detail}</b></p>
       <NoiseScale microphone={microphone} noiseTone={noiseTone}/>
 
-      <div className="noise-actions">
+      {!focusMode && <div className="noise-actions">
         <button className="outline" type="button" aria-pressed={microphone.status === "on"} disabled={microphone.status === "starting"} onClick={microphone.status === "on" ? microphone.stop : () => microphone.start()}>
           {microphone.status === "on" ? "Stop sound meter" : microphone.status === "starting" ? "Starting sound meter..." : "Turn on sound meter"}
         </button>
         <button className="plain-button" type="button" onClick={() => setShowSetup((value) => !value)} aria-expanded={showSetup}>Microphone setup</button>
-      </div>
+      </div>}
 
-      {showSetup && (
+      {!focusMode && showSetup && (
         <div className="microphone-setup">
           <label htmlFor="microphone-choice">Microphone</label>
           <select id="microphone-choice" value={microphone.selectedDeviceId} onChange={(event) => microphone.selectDevice(event.target.value)}>

@@ -3,7 +3,7 @@ import RoomTabs from "./RoomTabs";
 import RoomScene from "./RoomScene";
 import Modal from "../Modal/Modal";
 
-const HouseCard = ({ house, rewards }) => {
+const HouseCard = ({ house, rewards, focusMode = false }) => {
   const [openShop, setOpenShop] = useState(null);
   const [editingMode, setEditingMode] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -45,7 +45,7 @@ const HouseCard = ({ house, rewards }) => {
 
   return (
     <section className="house-card" id="dashboard">
-      <div className="house-heading">
+      {!focusMode && <div className="house-heading">
         <div>
           <p className="card-label">{otterName || "Otter"}'s house</p>
           <h2>{otterName || "Otter"} is ready to focus</h2>
@@ -54,9 +54,9 @@ const HouseCard = ({ house, rewards }) => {
           <span><b>{activeRoomItems.length - itemsStillNeeded}</b> of {activeRoomItems.length} room items bought</span>
           <small>{allRoomsUnlocked ? "Every room is available!" : "Buy every item to open the next room"}</small>
         </div>
-      </div>
+      </div>}
 
-      <div className={`house-actions ${showActions ? "" : "collapsed"}`}>
+      {!focusMode && <div className={`house-actions ${showActions ? "" : "collapsed"}`}>
         {showActions && (
           <>
             <button className="outline" type="button" onClick={() => setOpenShop("rooms")}>Choose room</button>
@@ -73,7 +73,7 @@ const HouseCard = ({ house, rewards }) => {
         >
           {showActions ? "Hide house actions" : "Show house actions"}
         </button>
-      </div>
+      </div>}
 
       <RoomScene
         room={activeRoomDetails}
@@ -84,7 +84,7 @@ const HouseCard = ({ house, rewards }) => {
         isFocusing={isFocusing}
         noiseTone={noiseTone}
         otterName={otterName || "Otter"}
-        editingMode={editingMode}
+        editingMode={focusMode ? null : editingMode}
         accessoryItems={rewards.accessories}
         unlockedAccessories={rewards.unlocked}
         points={points}
@@ -99,7 +99,7 @@ const HouseCard = ({ house, rewards }) => {
         }}
       />
 
-      {openShop && (
+      {!focusMode && openShop && (
         <Modal
           isOpen={Boolean(openShop)}
           onClose={() => setOpenShop(null)}

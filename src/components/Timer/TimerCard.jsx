@@ -3,7 +3,7 @@ import SessionSettingsCard from "../SessionSettings/SessionSettingsCard";
 import TimerControls from "./TimerControls";
 import Modal from "../Modal/Modal";
 
-const TimerCard = ({ timerSettings, session }) => {
+const TimerCard = ({ timerSettings, session, focusMode = false }) => {
   const [showSettings, setShowSettings] = useState(false);
   const [showCountdown, setShowCountdown] = useState(true);
 
@@ -31,7 +31,7 @@ const TimerCard = ({ timerSettings, session }) => {
   return (
     <>
         <section className="card timer-card">
-          <button
+          {!focusMode && <button
             className="settings-button"
             type="button"
             aria-label="Open session settings"
@@ -41,11 +41,11 @@ const TimerCard = ({ timerSettings, session }) => {
               <path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Z" />
               <path d="m19.4 13.5 1.1 1.9-2 3.4h-2.2l-1.2.7-1.1 1.9h-4l-1.1-1.9-1.2-.7H5.5l-2-3.4 1.1-1.9v-1.4l-1.1-1.9 2-3.4h2.2l1.2-.7L10 4.2h4l1.1 1.9 1.2.7h2.2l2 3.4-1.1 1.9v1.4Z" />
             </svg>
-          </button>
+          </button>}
           <TimerControls timerSettings={timerSettings} displayCountdown={displayCountdown}/>
         </section>
 
-        {showSettings && (
+        {!focusMode && showSettings && (
           <Modal
             isOpen={showSettings}
             onClose={() => setShowSettings(false)}

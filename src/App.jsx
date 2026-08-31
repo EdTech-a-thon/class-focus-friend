@@ -166,6 +166,7 @@ const App = () => {
   const [showExportImport, setShowExportImport] = useState(false);
   const [showAccount, setShowAccount] = useState(false);
   const [showClearData, setShowClearData] = useState(false);
+  const [appMode, setAppMode] = useState("configure");
 
   // runtime state
   const expectation = activities[activity];
@@ -361,6 +362,11 @@ const App = () => {
 
   const stopPreview = () => setPreview(null);
 
+  const enterFocusMode = () => {
+    stopPreview();
+    setAppMode("focus");
+  };
+
   const togglePreviewId = (ids, id) =>
     ids.includes(id) ? ids.filter((current) => current !== id) : [...ids, id];
 
@@ -461,7 +467,7 @@ const App = () => {
     startPreview,
     stopPreview,
     isCelebrating: showComplete,
-    isFocusing: timer.isRunning,
+    isFocusing: appMode === "focus",
     noiseTone,
     otterName: shownOtterName,
     setOtterName: changeOtterName,
@@ -517,7 +523,7 @@ const App = () => {
   };
 
   return (
-    <main className={`app-shell ${isPreviewing ? "previewing" : ""}`}>
+    <main className={`app-shell mode-${appMode} ${isPreviewing ? "previewing" : ""}`}>
       {isPreviewing && (
         <div className="preview-bar" role="status">
           <b>Preview mode</b>
@@ -526,24 +532,44 @@ const App = () => {
         </div>
       )}
 
-      <Header header={header} />
-      <HouseCard house={house} rewards={rewards} />
+      {appMode === "configure" && <Header header={header} />}
 
-        <div className="dashboard-grid focus-controls">
-        <TimerCard timerSettings={timerSettings} session={session} />
+      <nav className="mode-switcher" aria-label="Classroom mode">
+        <button
+          className={appMode === "configure" ? "selected" : ""}
+          type="button"
+          aria-pressed={appMode === "configure"}
+          onClick={() => setAppMode("configure")}
+        >
+          Configure
+        </button>
+        <button
+          className={appMode === "focus" ? "selected" : ""}
+          type="button"
+          aria-pressed={appMode === "focus"}
+          onClick={enterFocusMode}
+        >
+          Focus
+        </button>
+      </nav>
 
-        <NoiseCard noise={noise} />
+      <HouseCard house={house} rewards={rewards} focusMode={appMode === "focus"} />
+
+      <div className="dashboard-grid focus-controls">
+        <TimerCard timerSettings={timerSettings} session={session} focusMode={appMode === "focus"} />
+
+        <NoiseCard noise={noise} focusMode={appMode === "focus"} />
 
       </div>
 
-      <div className="clear-data-section">
+      {appMode === "configure" && <div className="clear-data-section">
         <button className="preview-trigger" type="button" onClick={isPreviewing ? stopPreview : startPreview}>
           {isPreviewing ? "Exit preview mode" : "Preview everything"}
         </button>
         <button className="clear-data-trigger" type="button" onClick={() => setShowClearData(true)}>
           Erase saved data
         </button>
-      </div>
+      </div>}
 
       <SessionCompletionModal
         equipped={shownEquipped}
