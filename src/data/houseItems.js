@@ -332,9 +332,9 @@ export const classMilestones = [
 ];
 
 export const houseRooms = [
-  { id: "living", name: "Living Room", icon: "⌂", description: "A sunny place to focus together.", sessionsRequired: 0, image: cartoonRoom("Living Room", "HOME", "#d9e9db", "#caa27a") },
-  { id: "bedroom", name: "Bedroom", icon: "☾", description: "A quiet space for cozy dreams.", sessionsRequired: 25, image: cartoonRoom("Bedroom", "DREAM", "#ded8ee", "#b89072") },
-  { id: "kitchen", name: "Kitchen", icon: "♨", description: "A cheerful spot for snacks.", sessionsRequired: 50, image: cartoonRoom("Kitchen", "YUM", "#f6ddad", "#c99d75") },
-  { id: "bathroom", name: "Bathroom", icon: "◌", description: "A fresh space to get ready.", sessionsRequired: 75, image: cartoonRoom("Bathroom", "SPLASH", "#d1e9ed", "#b58d6d") },
-  { id: "office", name: "Office", icon: "▣", description: "A bright space for big ideas.", sessionsRequired: 100, image: cartoonRoom("Office", "FOCUS", "#e9e2d3", "#a88161") },
+  { id: "living", name: "Living Room", icon: "⌂", description: "A sunny place to focus together.", image: cartoonRoom("Living Room", "HOME", "#d9e9db", "#caa27a") },
+  { id: "bedroom", name: "Bedroom", icon: "☾", description: "A quiet space for cozy dreams.", image: cartoonRoom("Bedroom", "DREAM", "#ded8ee", "#b89072") },
+  { id: "kitchen", name: "Kitchen", icon: "♨", description: "A cheerful spot for snacks.", image: cartoonRoom("Kitchen", "YUM", "#f6ddad", "#c99d75") },
+  { id: "bathroom", name: "Bathroom", icon: "◌", description: "A fresh space to get ready.", image: cartoonRoom("Bathroom", "SPLASH", "#d1e9ed", "#b58d6d") },
+  { id: "office", name: "Office", icon: "▣", description: "A bright space for big ideas.", image: cartoonRoom("Office", "FOCUS", "#e9e2d3", "#a88161") },
 ];

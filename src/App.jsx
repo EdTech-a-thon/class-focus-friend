@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { accessories } from "./data/accessories";
 import { activities } from "./data/activities";
-import { classMilestones, houseItems, houseRooms } from "./data/houseItems";
+import { houseItems, houseRooms } from "./data/houseItems";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useTeacherAccount } from "./hooks/useTeacherAccount";
 import { useMicrophone } from "./hooks/useMicrophone";
@@ -13,7 +13,6 @@ import Header from "./components/Header/Header";
 import NoiseCard from "./components/NoiseMeter/NoiseCard";
 import TimerCard from "./components/Timer/TimerCard";
 import HouseCard from "./components/House/HouseCard";
-import ProgressCard from "./components/Progress/ProgressCard";
 import SessionCompletionModal from "./components/SessionCompleteModal/SessionCompletionModal";
 import ExportImportModal from "./components/ExportImport/ExportImportModal";
 import ClearDataModal from "./components/ClearData/ClearDataModal";
@@ -50,7 +49,7 @@ const App = () => {
     favoriteSessions: savedFavoriteSessions = [],
   } = settings;
   const favoriteSessions = Array.isArray(savedFavoriteSessions) ? savedFavoriteSessions : [];
-  const { points, totalPoints, history = [] } = progressData;
+  const { points, history = [] } = progressData;
   // Older saved classrooms may only have session history, not this total.
   const completedSessions = progressData.completedSessions ?? history.length;
   const { unlocked, equipped } = rewardData;
@@ -265,11 +264,18 @@ const App = () => {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [showComplete, closeCompletionModal]);
 
-  const totalMinutes = history.reduce(
-    (sum, session) => sum + session.minutes, 0
-  );
-
   const sessionCount = completedSessions;
+
+  const unlockedRoomIds = houseRooms
+    .filter((room, index) => {
+      const earlierRooms = houseRooms.slice(0, index);
+      return earlierRooms.every((earlierRoom) =>
+        houseItems
+          .filter((item) => item.room === earlierRoom.id)
+          .every((item) => houseItemsOwned.includes(item.id))
+      );
+    })
+    .map((room) => room.id);
 
   const buyOrEquip = (item) => {
     if (unlocked.includes(item.id)) {
@@ -292,9 +298,8 @@ const App = () => {
   };
 
   const buyHouseItem = (item) => {
-    const room = houseRooms.find((room) => room.id === item.room);
     if (
-      sessionCount < room.sessionsRequired 
+      !unlockedRoomIds.includes(item.room)
       || houseItemsOwned.includes(item.id) 
       || points < item.cost
     ) return;
@@ -324,7 +329,11 @@ const App = () => {
 
   // What the screen shows: the preview classroom while previewing, the real one
   // the rest of the time.
-  const shownActiveRoom = isPreviewing ? preview.activeRoom : activeRoom;
+  const shownActiveRoom = isPreviewing
+    ? preview.activeRoom
+    : unlockedRoomIds.includes(activeRoom)
+      ? activeRoom
+      : unlockedRoomIds.at(-1);
   const shownHouseItemsOwned = isPreviewing ? preview.houseItemsOwned : houseItemsOwned;
   const shownEquipped = isPreviewing ? preview.equipped : equipped;
   const shownUnlocked = isPreviewing ? accessories.map((item) => item.id) : unlocked;
@@ -396,18 +405,6 @@ const App = () => {
     isPreviewing,
   };
 
-  const progress = {
-    totalMinutes,
-    history,
-    totalPoints,
-    points,
-    activities,
-    classMilestones,
-    houseItems,
-    houseItemsOwned: shownHouseItemsOwned,
-    houseRooms,
-  };
-
   const house = {
     points,
     houseRooms,
@@ -418,7 +415,7 @@ const App = () => {
     houseItems,
     houseItemsOwned: shownHouseItemsOwned,
     buyHouseItem: placeOrBuyHouseItem,
-    completedSessions: sessionCount,
+    unlockedRoomIds: isPreviewing ? houseRooms.map((room) => room.id) : unlockedRoomIds,
     equipped: shownEquipped,
     isPreviewing,
     startPreview,
@@ -497,7 +494,6 @@ const App = () => {
 
         <NoiseCard noise={noise} />
 
-        <ProgressCard progress={progress} />
       </div>
 
       <div className="clear-data-section">

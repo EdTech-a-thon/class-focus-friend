@@ -18,7 +18,7 @@ const HouseCard = ({ house, rewards }) => {
     houseItems,
     houseItemsOwned,
     buyHouseItem,
-    completedSessions,
+    unlockedRoomIds,
     equipped,
     isCelebrating,
     isFocusing,
@@ -28,7 +28,9 @@ const HouseCard = ({ house, rewards }) => {
     isPreviewing,
   } = house;
 
-  const nextRoom = houseRooms.find((room) => completedSessions < room.sessionsRequired);
+  const activeRoomItems = houseItems.filter((item) => item.room === activeRoomDetails.id);
+  const itemsStillNeeded = activeRoomItems.filter((item) => !houseItemsOwned.includes(item.id)).length;
+  const allRoomsUnlocked = unlockedRoomIds.length === houseRooms.length;
 
   useEffect(() => {
     if (!openShop) return;
@@ -49,8 +51,8 @@ const HouseCard = ({ house, rewards }) => {
           <h2>{otterName || "Otter"} is ready to focus</h2>
         </div>
         <div className="house-progress">
-          <span><b>{completedSessions}</b> total sessions completed</span>
-          <small>{nextRoom ? `${nextRoom.sessionsRequired - completedSessions} until ${nextRoom.name}` : "Every room unlocked!"}</small>
+          <span><b>{activeRoomItems.length - itemsStillNeeded}</b> of {activeRoomItems.length} room items bought</span>
+          <small>{allRoomsUnlocked ? "Every room is available!" : "Buy every item to open the next room"}</small>
         </div>
       </div>
 
@@ -58,7 +60,7 @@ const HouseCard = ({ house, rewards }) => {
         {showActions && (
           <>
             <button className="outline" type="button" onClick={() => setOpenShop("rooms")}>Choose room</button>
-            <button className="outline" type="button" disabled={!isPreviewing && completedSessions < activeRoomDetails.sessionsRequired} onClick={() => { setEditingMode((mode) => mode === "decorations" ? null : "decorations"); setSelectedItem(null); }}>Decorate room</button>
+            <button className="outline" type="button" onClick={() => { setEditingMode((mode) => mode === "decorations" ? null : "decorations"); setSelectedItem(null); }}>Decorate room</button>
             <button className="outline" type="button" onClick={() => { setEditingMode((mode) => mode === "accessories" ? null : "accessories"); setSelectedItem(null); }}>Dress up otter</button>
             <button className="outline" type="button" onClick={() => setOpenShop("name")}>Name your otter</button>
           </>
@@ -136,7 +138,7 @@ const HouseCard = ({ house, rewards }) => {
                     setActiveRoom(room);
                     setOpenShop(null);
                   }}
-                  completedSessions={completedSessions}
+                  unlockedRoomIds={unlockedRoomIds}
                   unlockAll={isPreviewing}
                 />
               </div>

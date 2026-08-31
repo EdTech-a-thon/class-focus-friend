@@ -1,4 +1,4 @@
-const RoomTabs = ({ rooms, activeRoom, setActiveRoom, completedSessions, unlockAll }) => {
+const RoomTabs = ({ rooms, activeRoom, setActiveRoom, unlockedRoomIds, unlockAll }) => {
   
   return (
     <div 
@@ -7,8 +7,7 @@ const RoomTabs = ({ rooms, activeRoom, setActiveRoom, completedSessions, unlockA
       aria-label="Rooms in the otter's house"
     >
       {rooms.map((room) => {
-        const notYetEarned = completedSessions < room.sessionsRequired;
-        const isLocked = notYetEarned && !unlockAll;
+        const isLocked = !unlockedRoomIds.includes(room.id) && !unlockAll;
 
         return (
         <button 
@@ -27,7 +26,7 @@ const RoomTabs = ({ rooms, activeRoom, setActiveRoom, completedSessions, unlockA
           <span className="room-tab-copy">
             <b>{room.name}</b>
             <small>
-              {notYetEarned ? `${room.sessionsRequired} sessions` : "Unlocked"}
+              {isLocked ? "Buy everything in the previous room" : "Available"}
             </small>
           </span>
 
