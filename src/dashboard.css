@@ -51,12 +51,31 @@ h2 { font-size: 1.65rem; }
 .otter-hat path:first-child { fill: #7198d2; stroke: #25433d; stroke-linejoin: round; stroke-width: 4; }
 .otter-hat path:not(:first-child) { fill: none; stroke: #f8d97a; stroke-width: 4; }.otter-hat circle { fill: #e98769; stroke: #25433d; stroke-width: 3; }.otter-hat .hat-dot { fill: #fffaf0; stroke: none; }
 .otter-bow path { fill: #f8d97a; stroke: #25433d; stroke-linejoin: round; stroke-width: 4; }.otter-bow circle { fill: #e98769; stroke: #25433d; stroke-width: 3; }
+.focus-chair, .focus-workspace { display: none; }
+.focus-chair { fill: none; stroke: #7198d2; stroke-linecap: round; stroke-linejoin: round; stroke-width: 12; }
+.focus-arm-resting, .focus-writing-arm > path { fill: none; stroke: #25433d; stroke-linecap: round; stroke-width: 7; }
+.focus-writing-arm { transform-box: view-box; transform-origin: 166px 117px; }
+.focus-paw { fill: #b98155; stroke: #25433d; stroke-width: 4; }
+.focus-pencil { transform-box: view-box; transform-origin: 129px 151px; }
+.pencil-body { fill: none; stroke: #f4c968; stroke-linecap: round; stroke-width: 6; }
+.pencil-tip { fill: none; stroke: #25433d; stroke-linecap: round; stroke-width: 3; }
+.pencil-eraser { fill: none; stroke: #e98769; stroke-linecap: round; stroke-width: 6; }
+.desk-top { fill: #d99a58; stroke: #25433d; stroke-linejoin: round; stroke-width: 4; }
+.desk-front { fill: #b9753f; stroke: #25433d; stroke-linejoin: round; stroke-width: 4; }
+.desk-leg { fill: none; stroke: #25433d; stroke-linecap: round; stroke-width: 7; }
+.focus-paper > path:first-child { fill: #fffaf0; stroke: #25433d; stroke-linejoin: round; stroke-width: 3; }
+.paper-line { fill: none; stroke: #a9c8cf; stroke-linecap: round; stroke-width: 2; }
 .sparkle { opacity: 0; pointer-events: none; position: absolute; z-index: 5; }
 .sparkle { color: #d76d54; font-size: 28px; }.sparkle.one { right: 0; top: 42px; }.sparkle.two { left: 0; top: 105px; }
 
 .state-idle .otter { animation: otter-float 3.2s ease-in-out infinite; }
 .state-idle .otter-eye { animation: otter-blink 4.5s ease-in-out infinite; }
-.state-focusing .otter-blob { animation: otter-breathe 2.8s ease-in-out infinite; }
+.state-focusing .focus-chair, .state-focusing .focus-workspace { display: initial; }
+.state-focusing .otter-leg, .state-focusing .otter-arm, .state-focusing .otter-belly, .state-focusing .otter-heart { display: none; }
+.state-focusing .otter { animation: otter-work-bob 2.4s ease-in-out infinite; }
+.state-focusing .focus-writing-arm { animation: otter-write .65s ease-in-out infinite alternate; }
+.state-focusing .focus-pencil { animation: pencil-write .65s ease-in-out infinite alternate; }
+.state-focusing .paper-line.line-two { animation: writing-appear 2.6s ease-in-out infinite; }
 .state-focusing .otter-eye { transform: scaleY(.35); }
 .state-focusing .otter-mouth-smile { opacity: 0; }.state-focusing .otter-mouth-focus { opacity: 1; }
 .state-loud .otter { animation: otter-startle .4s ease-out both; }
@@ -72,7 +91,10 @@ h2 { font-size: 1.65rem; }
 
 @keyframes otter-float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-7px) rotate(1deg); } }
 @keyframes otter-blink { 0%, 44%, 50%, 100% { transform: scaleY(1); } 47% { transform: scaleY(.08); } }
-@keyframes otter-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025, 1.04); } }
+@keyframes otter-work-bob { 0%, 100% { transform: rotate(-.7deg); } 50% { transform: translateY(2px) rotate(.7deg); } }
+@keyframes otter-write { from { transform: rotate(-3deg) translate(-2px, 0); } to { transform: rotate(3deg) translate(3px, 1px); } }
+@keyframes pencil-write { from { transform: rotate(-2deg); } to { transform: translate(5px, 1px) rotate(3deg); } }
+@keyframes writing-appear { 0%, 15% { stroke-dasharray: 0 40; } 55%, 100% { stroke-dasharray: 40 0; } }
 @keyframes otter-startle { 0% { transform: scale(1); } 45% { transform: scale(1.04, .95) translateY(5px); } 100% { transform: scale(1); } }
 @keyframes otter-celebrate { 0%, 100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-20px) rotate(4deg); } }
 @keyframes otter-feet-left { 0%, 100% { transform: rotate(0); } 50% { transform: rotate(18deg) translateY(-3px); } }

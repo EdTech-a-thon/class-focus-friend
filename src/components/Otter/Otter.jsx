@@ -13,8 +13,12 @@ const Otter = ({ equipped, isCelebrating, isFocusing, noiseTone, showAccessorySl
       <p className="otter-message" aria-live="polite">{messages[state]}</p>
       <span className="sparkle one" aria-hidden="true">✦</span>
       <span className="sparkle two" aria-hidden="true">✦</span>
-      <div className="otter" role="img" aria-label={`Otter is ${state}`}>
+      <div className="otter" role="img" aria-label={state === "focusing" ? "Otter is sitting at a desk and writing" : `Otter is ${state}`}>
         <svg className="otter-svg" viewBox="0 0 220 220" aria-hidden="true">
+          <g className="focus-chair">
+            <path d="M48 126 Q42 126 42 135 L42 203" />
+            <path d="M42 171 H72" />
+          </g>
           <path className="otter-tail" d="M152 156 C181 172 205 159 208 135 C210 122 201 114 193 118 C186 122 192 133 184 141 C175 150 161 148 150 142Z" />
           <g className="otter-leg otter-leg-left">
             <path d="M82 169 C78 185 75 195 68 204" />
@@ -85,6 +89,26 @@ const Otter = ({ equipped, isCelebrating, isFocusing, noiseTone, showAccessorySl
           {showAccessorySlots && !equipped.includes("bow-tie") && (
             <path className="accessory-placeholder" d="M110 143 C92 130 78 133 76 143v12c6 8 21 2 34-9 13 11 28 17 34 9v-12c-2-10-16-13-34 0Z" />
           )}
+          <g className="focus-workspace">
+            <path className="desk-top" d="M17 157 Q17 151 23 151 H197 Q203 151 203 157 V166 H17Z" />
+            <path className="desk-front" d="M25 166 H195 L188 184 H32Z" />
+            <path className="desk-leg" d="M39 181 L35 220 M181 181 L185 220" />
+            <g className="focus-paper">
+              <path d="M82 145 L151 145 L165 160 H72Z" />
+              <path className="paper-line line-one" d="M93 151 H134" />
+              <path className="paper-line line-two" d="M88 156 H126" />
+            </g>
+            <path className="focus-arm-resting" d="M54 118 Q71 142 91 151" />
+            <g className="focus-writing-arm">
+              <path d="M166 117 Q153 139 132 151" />
+              <ellipse className="focus-paw" cx="129" cy="151" rx="9" ry="7" />
+              <g className="focus-pencil">
+                <path className="pencil-body" d="M129 150 L151 132" />
+                <path className="pencil-tip" d="M126 153 L130 148" />
+                <path className="pencil-eraser" d="M149 134 L153 130" />
+              </g>
+            </g>
+          </g>
         </svg>
       </div>
     </div>
