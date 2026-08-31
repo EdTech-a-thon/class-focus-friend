@@ -76,8 +76,8 @@ h2 { font-size: 1.65rem; }
 .state-focusing .otter-leg, .state-focusing .otter-arm, .state-focusing .otter-belly, .state-focusing .otter-heart { display: none; }
 .state-focusing .focus-writing-arm { animation: otter-write .65s ease-in-out infinite alternate; }
 .state-focusing .focus-pencil { animation: pencil-write .65s ease-in-out infinite alternate; }
-.state-focusing .focus-arm-resting { animation: resting-paw-pause 8s linear infinite; }
-.state-focusing .focus-scratch-arm { animation: otter-head-scratch 8s ease-in-out infinite; }
+.state-focusing .focus-arm-resting { animation: resting-paw-pause 120s linear infinite; }
+.state-focusing .focus-scratch-arm { animation: otter-head-scratch 120s ease-in-out infinite; }
 .state-focusing .paper-line.line-two { animation: writing-appear 2.6s ease-in-out infinite; }
 .state-focusing .otter-eye { animation: otter-blink 4.5s ease-in-out infinite; }
 .state-loud .otter { animation: otter-startle .4s ease-out both; }
@@ -95,11 +95,11 @@ h2 { font-size: 1.65rem; }
 @keyframes otter-blink { 0%, 44%, 50%, 100% { transform: scaleY(1); } 47% { transform: scaleY(.08); } }
 @keyframes otter-write { from { transform: rotate(-3deg) translate(-2px, 0); } to { transform: rotate(3deg) translate(3px, 1px); } }
 @keyframes pencil-write { from { transform: rotate(-2deg); } to { transform: translate(5px, 1px) rotate(3deg); } }
-@keyframes resting-paw-pause { 0%, 69%, 90%, 100% { opacity: 1; } 72%, 87% { opacity: 0; } }
+@keyframes resting-paw-pause { 0%, 96.9%, 99.6%, 100% { opacity: 1; } 97%, 99.5% { opacity: 0; } }
 @keyframes otter-head-scratch {
-  0%, 69%, 90%, 100% { opacity: 0; transform: rotate(-8deg); }
-  72%, 76%, 82%, 87% { opacity: 1; transform: rotate(0); }
-  79%, 85% { opacity: 1; transform: rotate(7deg); }
+  0%, 96.9%, 99.6%, 100% { opacity: 0; transform: rotate(-8deg); }
+  97%, 97.6%, 98.4%, 99.5% { opacity: 1; transform: rotate(0); }
+  98%, 99% { opacity: 1; transform: rotate(7deg); }
 }
 @keyframes writing-appear { 0%, 15% { stroke-dasharray: 0 40; } 55%, 100% { stroke-dasharray: 40 0; } }
 @keyframes otter-startle { 0% { transform: scale(1); } 45% { transform: scale(1.04, .95) translateY(5px); } 100% { transform: scale(1); } }
