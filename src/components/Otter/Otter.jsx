@@ -99,6 +99,11 @@ const Otter = ({ equipped, isCelebrating, isFocusing, noiseTone, showAccessorySl
               <path className="paper-line line-two" d="M88 156 H126" />
             </g>
             <path className="focus-arm-resting" d="M54 118 Q71 142 91 151" />
+            <g className="focus-scratch-arm">
+              <path d="M54 118 Q48 91 67 68" />
+              <ellipse className="focus-paw" cx="68" cy="65" rx="8" ry="7" />
+              <path className="scratch-lines" d="M74 58 L80 53 M77 64 L84 62" />
+            </g>
             <g className="focus-writing-arm">
               <path d="M166 117 Q153 139 132 151" />
               <ellipse className="focus-paw" cx="129" cy="151" rx="9" ry="7" />
