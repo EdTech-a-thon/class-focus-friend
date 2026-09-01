@@ -103,3 +103,33 @@ To create a production build, run:
 ```bash
 bun run build
 ```
+
+## Publishing the Website
+
+The website is published on Vercel, and `vercel.json` describes how addresses on
+it are answered:
+
+- Vercel builds the site with `bun run build` and serves the finished `dist`
+  folder.
+- The whole app is one page, so every address that is not a real file loads that
+  page. A teacher can refresh, bookmark, or share a link and still land on a
+  working app instead of a "not found" screen.
+- Addresses starting with `/api` and `/_` are left out of that rule, because they
+  belong to PocketBase. Without this, a sign-in request would be answered with
+  the page itself, and the app would report a confusing error instead of a clear
+  one.
+- Each build names its files after their contents, so browsers keep them for a
+  year, while the page itself is checked on every visit. A classroom always opens
+  the newest version without a hard refresh.
+
+### Teacher accounts on the published site
+
+Vercel hosts the website only. PocketBase keeps its records in a file and needs
+to stay running, so it lives on its own always-on computer rather than on Vercel.
+Until it has one, the published site works fully on its own, saving each
+classroom on the computer it is used on, and only the optional teacher accounts
+are unavailable.
+
+Once PocketBase is running somewhere with its own web address, add a
+`VITE_POCKETBASE_URL` environment variable in the Vercel project settings, set it
+to that address, and redeploy. Nothing in `vercel.json` needs to change.

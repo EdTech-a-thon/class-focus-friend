@@ -17,3 +17,6 @@ dist
 pocketbase
 pb_data/
 pb_backups/
+
+# Vercel CLI writes this folder when linking the project locally.
+.vercel
