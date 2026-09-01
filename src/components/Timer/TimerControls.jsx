@@ -1,6 +1,6 @@
 import EncouragementMessage from "./EncouragementMessage";
 
-const TimerControls = ({ timerSettings, displayCountdown }) => {
+const TimerControls = ({ timerSettings, displayCountdown, focusMode = false }) => {
   const { timer, expectation, noiseTone, formatTime, needsTeacherResume, resumeAfterNoise, resetTimer } = timerSettings;
   const {
     showCountdown,
@@ -27,7 +27,7 @@ const TimerControls = ({ timerSettings, displayCountdown }) => {
           : `${expectation.label} focus session`}
       </p>
 
-      <div className="button-row">
+      {focusMode && <div className="button-row">
         <button
           className="primary" 
           type="button" 
@@ -49,7 +49,7 @@ const TimerControls = ({ timerSettings, displayCountdown }) => {
           onClick={resetTimer}>
             Reset
         </button>
-      </div>
+      </div>}
     </section>
   )
 }

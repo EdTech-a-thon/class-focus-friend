@@ -59,12 +59,12 @@ const NoiseCard = ({ noise, focusMode = false }) => {
       <p className="noise-expectation">Goal for {expectation.label.toLowerCase()}: <b>{expectation.detail}</b></p>
       <NoiseScale microphone={microphone} noiseTone={noiseTone}/>
 
-      {!focusMode && <div className="noise-actions">
-        <button className="outline" type="button" aria-pressed={microphone.status === "on"} disabled={microphone.status === "starting"} onClick={microphone.status === "on" ? microphone.stop : () => microphone.start()}>
+      <div className="noise-actions">
+        {focusMode && <button className="outline" type="button" aria-pressed={microphone.status === "on"} disabled={microphone.status === "starting"} onClick={microphone.status === "on" ? microphone.stop : () => microphone.start()}>
           {microphone.status === "on" ? "Stop sound meter" : microphone.status === "starting" ? "Starting sound meter..." : "Turn on sound meter"}
-        </button>
-        <button className="plain-button" type="button" onClick={() => setShowSetup((value) => !value)} aria-expanded={showSetup}>Microphone setup</button>
-      </div>}
+        </button>}
+        {!focusMode && <button className="plain-button" type="button" onClick={() => setShowSetup((value) => !value)} aria-expanded={showSetup}>Microphone setup</button>}
+      </div>
 
       {!focusMode && showSetup && (
         <div className="microphone-setup">

@@ -42,7 +42,7 @@ const TimerCard = ({ timerSettings, session, focusMode = false }) => {
               <path d="m19.4 13.5 1.1 1.9-2 3.4h-2.2l-1.2.7-1.1 1.9h-4l-1.1-1.9-1.2-.7H5.5l-2-3.4 1.1-1.9v-1.4l-1.1-1.9 2-3.4h2.2l1.2-.7L10 4.2h4l1.1 1.9 1.2.7h2.2l2 3.4-1.1 1.9v1.4Z" />
             </svg>
           </button>}
-          <TimerControls timerSettings={timerSettings} displayCountdown={displayCountdown}/>
+          <TimerControls timerSettings={timerSettings} displayCountdown={displayCountdown} focusMode={focusMode}/>
         </section>
 
         {!focusMode && showSettings && (

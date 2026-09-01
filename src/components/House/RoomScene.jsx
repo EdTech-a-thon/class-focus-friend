@@ -1,6 +1,6 @@
 import Otter from "../Otter/Otter";
 
-const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = [], unlockedAccessories = [], equipped, isCelebrating, isFocusing, noiseTone, otterName, editingMode, points, isPreviewing, selectedItem, onChooseItem, onConfirmItem, onCloseEditor }) => {
+const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = [], unlockedAccessories = [], equipped, isCelebrating, isFocusing, noiseTone, otterName, focusMode = false, editingMode, points, isPreviewing, selectedItem, onChooseItem, onConfirmItem, onCloseEditor }) => {
   const visibleItems = editingMode === "decorations" ? availableItems : decorations;
   const selectedIsOwned = selectedItem && (
     editingMode === "decorations"
@@ -14,7 +14,7 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
       className="room-scene"
       aria-label={`${room.name} in the otter's house`}
     >
-      <div className="room-scene-label">
+      {!focusMode && <div className="room-scene-label">
         <span>
           {room.icon}
         </span>
@@ -23,7 +23,7 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
           <b>{room.name}</b>
           <small>{room.description}</small>
         </div>
-      </div>
+      </div>}
 
       <div className="room-window" aria-hidden="true">
         <span className="window-sun" />
@@ -102,11 +102,11 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
             );
           })}
         </div>
-      ) : (
+      ) : !focusMode ? (
         <p className="empty-room">
           {otterName} is settling in. Decorate this room to make it your own.
         </p>
-      )}
+      ) : null}
 
       {selectedItem && (
         <aside className={`scene-purchase-card ${selectedX < 50 ? "side-right" : "side-left"}`} aria-live="polite">

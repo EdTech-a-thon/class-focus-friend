@@ -84,6 +84,7 @@ const HouseCard = ({ house, rewards, focusMode = false }) => {
         isFocusing={isFocusing}
         noiseTone={noiseTone}
         otterName={otterName || "Otter"}
+        focusMode={focusMode}
         editingMode={focusMode ? null : editingMode}
         accessoryItems={rewards.accessories}
         unlockedAccessories={rewards.unlocked}
