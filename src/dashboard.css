@@ -129,6 +129,9 @@ h2 { font-size: 1.65rem; }
 .primary:disabled { cursor: default; opacity: .55; }
 .timer-card { align-items: center; background: #25433d; color: #fffaf0; display: flex; flex-direction: column; justify-content: center; min-height: 410px; position: relative; text-align: center; }
 .timer-setup-card { align-items: stretch; background: #fffaf0; color: #25433d; justify-content: flex-start; text-align: left; }
+.combined-session-setup { display: grid; gap: 30px; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.combined-session-setup > .embedded-noise-setup { border-left: 1px solid #ded7ca; padding-left: 30px; }
+.focus-controls > .timer-card:only-child { grid-column: 1 / -1; }
 .timer-setup-card .card-label { color: #cb654e; }
 .timer-setup-card .settings-heading { margin-bottom: 20px; }
 .timer-card .card-label { color: #f4c968; }
@@ -141,6 +144,17 @@ h2 { font-size: 1.65rem; }
 .timer-visibility-toggle { background: transparent; border: 0; color: #f8d97a; cursor: pointer; font: inherit; font-size: .85rem; font-weight: 700; margin: -15px 0 20px; padding: 2px 6px; text-decoration: underline; text-underline-offset: 3px; }
 .timer-card .primary { background: #f8d97a; color: #25433d; }
 .timer-card .plain-button { color: #dce9d9; }
+.focus-launcher { display: grid; gap: 24px; text-align: left; }
+.focus-launcher h2 { color: #fffaf0; font-size: 1.05rem; margin: 0 0 10px; }
+.focus-favorites { display: grid; gap: 8px; }
+.focus-favorites button { background: rgba(255, 250, 240, .1); border: 1px solid rgba(220, 233, 217, .35); border-radius: 14px; color: #fffaf0; cursor: pointer; display: grid; font: inherit; gap: 3px; padding: 11px 13px; text-align: left; }
+.focus-favorites button span { color: #c9d7d0; font-size: .82rem; }
+.quick-start { border-top: 1px solid rgba(220, 233, 217, .28); display: grid; gap: 12px; padding-top: 20px; }
+.quick-start > label:first-of-type { color: #dce9d9; display: grid; font-size: .82rem; font-weight: 700; gap: 5px; }
+.quick-start input[type="number"] { background: #fffaf0; border: 0; border-radius: 9px; color: #25433d; font: inherit; padding: 9px; width: 110px; }
+.quick-work-types { display: flex; flex-wrap: wrap; gap: 14px; }
+.quick-work-types label, .quick-start .checkbox-option { color: #dce9d9; font-size: .86rem; }
+.checkbox-option { align-items: center; display: flex; gap: 8px; }
 .modal-box { position: relative; }
 .modal-box > .modal-close { position: absolute; right: 24px; top: 24px; z-index: 1; }
 .setup-modal { background: #fffaf0; border-radius: 28px; box-shadow: 0 25px 80px rgba(18, 42, 35, .35); max-height: calc(100vh - 40px); max-width: 560px; overflow-y: auto; padding: 36px; width: 100%; }
@@ -462,6 +476,8 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
   .focus-controls { padding: 12px; }
   .card { padding: 24px; }
   .quick-durations { grid-template-columns: repeat(3, 1fr); }
+  .combined-session-setup { grid-template-columns: 1fr; }
+  .combined-session-setup > .embedded-noise-setup { border-left: 0; border-top: 1px solid #ded7ca; padding-left: 0; padding-top: 26px; }
   .setup-modal { padding: 27px 22px; }
   .history-card { grid-column: auto; }
   .house-card { border-radius: 0 0 28px 28px; margin-top: 0; padding: 28px 18px 20px; width: 100%; }

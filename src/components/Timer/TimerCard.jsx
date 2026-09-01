@@ -1,8 +1,9 @@
 import { useState } from "react";
 import SessionSettingsCard from "../SessionSettings/SessionSettingsCard";
 import TimerControls from "./TimerControls";
+import NoiseCard from "../NoiseMeter/NoiseCard";
 
-const TimerCard = ({ timerSettings, session, focusMode = false }) => {
+const TimerCard = ({ timerSettings, session, noise, focusMode = false }) => {
   const [showCountdown, setShowCountdown] = useState(true);
 
   // "none", "generic", "progressive"
@@ -16,10 +17,13 @@ const TimerCard = ({ timerSettings, session, focusMode = false }) => {
   }
 
   return (
-    <section className={`card timer-card ${focusMode ? "" : "timer-setup-card"}`}>
+    <section className={`card timer-card ${focusMode ? "" : "timer-setup-card combined-session-setup"}`}>
       {focusMode
-        ? <TimerControls timerSettings={timerSettings} displayCountdown={displayCountdown} focusMode />
-        : <SessionSettingsCard session={session} displayCountdown={displayCountdown} />}
+        ? <TimerControls timerSettings={timerSettings} session={session} displayCountdown={displayCountdown} focusMode />
+        : <>
+            <SessionSettingsCard session={session} displayCountdown={displayCountdown} />
+            <NoiseCard noise={noise} embedded />
+          </>}
     </section>
   )
 }

@@ -10,6 +10,8 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     favoriteSessions,
     saveFavoriteSession,
     deleteFavoriteSession,
+    trackSound,
+    setTrackSound,
   } = session;
   const [favoriteName, setFavoriteName] = useState("");
 
@@ -46,6 +48,7 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
   const chooseFavorite = (favorite) => {
     chooseDuration(favorite.minutes * 60);
     setActivity(activities[favorite.activity] ? favorite.activity : "partner");
+    setTrackSound(favorite.trackSound ?? true);
   };
 
   return (
@@ -68,7 +71,7 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
                     onClick={() => chooseFavorite(favorite)}
                   >
                     <b>{favorite.name}</b>
-                    <span>{favorite.minutes} min · {(activities[favorite.activity] ?? activities.partner).label}</span>
+                    <span>{favorite.minutes} min · {(activities[favorite.activity] ?? activities.partner).label} · {favorite.trackSound === false ? "No sound meter" : "Tracks sound"}</span>
                   </button>
                   <button
                     className="favorite-delete"
@@ -121,6 +124,13 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
             </button>
           ))}
         </div>
+      </fieldset>
+      <fieldset>
+        <legend>Classroom sound</legend>
+        <label className="checkbox-option">
+          <input type="checkbox" checked={trackSound} onChange={(event) => setTrackSound(event.target.checked)} />
+          Track acceptable volume during this session
+        </label>
       </fieldset>
       <fieldset>
         <legend>Countdown Display</legend>

@@ -10,7 +10,7 @@ const getStableAverage = (samples) => {
   return stableSamples.reduce((sum, value) => sum + value, 0) / Math.max(1, stableSamples.length);
 };
 
-const NoiseCard = ({ noise, focusMode = false }) => {
+const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
   const { noiseMessage, noiseTone, expectation, microphone, activities, soundThresholds, setSoundThreshold, applySoundCalibration, loudThreshold } = noise;
   const [showSetup, setShowSetup] = useState(false);
   const [calibrationStage, setCalibrationStage] = useState("idle");
@@ -59,7 +59,7 @@ const NoiseCard = ({ noise, focusMode = false }) => {
   };
 
   return (
-    <section className="card noise-card">
+    <section className={`${embedded ? "embedded-noise-setup" : "card noise-card"}`}>
       <div className="card-heading">
         <div><p className="card-label">Classroom sound</p><h2>{noiseMessage}</h2></div>
         <i className={`status-dot ${noiseTone}`} aria-hidden="true" />

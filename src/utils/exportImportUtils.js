@@ -117,6 +117,7 @@ const validateSaveFile = (data, validIds) => {
     Number.isFinite(settings.preferredMinutes) &&
     settings.preferredMinutes > 0 &&
     (settings.otterName === undefined || typeof settings.otterName === "string") &&
+    (settings.trackSound === undefined || typeof settings.trackSound === "boolean") &&
     (settings.soundThresholds === undefined || (
       Number.isFinite(settings.soundThresholds.independent) &&
       settings.soundThresholds.independent >= 10 &&
@@ -134,6 +135,7 @@ const validateSaveFile = (data, validIds) => {
         favorite.name.length > 0 &&
         Number.isFinite(favorite.minutes) &&
         favorite.minutes > 0 &&
+        (favorite.trackSound === undefined || typeof favorite.trackSound === "boolean") &&
         validIds.activities.includes(favorite.activity)
       )
     ));

@@ -27,6 +27,7 @@ const App = () => {
     otterName: "Otter",
     favoriteSessions: [],
     soundThresholds: { independent: 22, partner: 48 },
+    trackSound: true,
   });
   const [progressData, setProgressData] = useLocalStorage("onTaskOtterProgress", {
     points: 0,
@@ -49,6 +50,7 @@ const App = () => {
     otterName = "Otter",
     favoriteSessions: savedFavoriteSessions = [],
     soundThresholds: savedSoundThresholds = {},
+    trackSound = true,
   } = settings;
   const activity = activities[savedActivity] ? savedActivity : "partner";
   const favoriteSessions = Array.isArray(savedFavoriteSessions) ? savedFavoriteSessions : [];
@@ -93,6 +95,11 @@ const App = () => {
     },
   }));
 
+  const setTrackSound = (value) => setSettings((current) => ({
+    ...current,
+    trackSound: typeof value === "function" ? value(current.trackSound ?? true) : value,
+  }));
+
   const applySoundCalibration = useCallback(() => setSettings((current) => ({
     ...current,
     soundThresholds: { independent: 30, partner: 70 },
@@ -107,6 +114,7 @@ const App = () => {
         name,
         activity: activities[current.activity] ? current.activity : "partner",
         minutes: current.preferredMinutes,
+        trackSound: current.trackSound ?? true,
       },
     ],
   }));
@@ -251,7 +259,7 @@ const App = () => {
       return;
     }
 
-    if (!timer.isRunning || !noisePauseArmed.current) return;
+    if (!trackSound || !timer.isRunning || !noisePauseArmed.current) return;
     noisePauseArmed.current = false;
     setNeedsTeacherResume(true);
     pauseTimer();
@@ -259,7 +267,11 @@ const App = () => {
       redAlertPlayed.current = true;
       playNoiseAlert();
     }
-  }, [hasSustainedLoudNoise, pauseTimer, timer.isRunning]);
+  }, [hasSustainedLoudNoise, pauseTimer, timer.isRunning, trackSound]);
+
+  useEffect(() => {
+    if (!trackSound && microphone.status === "on") microphone.stop();
+  }, [microphone.status, microphone.stop, trackSound]);
 
   const resumeAfterNoise = () => {
     setNeedsTeacherResume(false);
@@ -444,6 +456,14 @@ const App = () => {
     favoriteSessions,
     saveFavoriteSession,
     deleteFavoriteSession,
+    trackSound,
+    setTrackSound,
+    startSession: ({ minutes, activity: nextActivity, trackSound: shouldTrackSound }) => {
+      chooseDuration(minutes * 60);
+      setActivity(nextActivity);
+      setTrackSound(shouldTrackSound);
+      timer.toggle();
+    },
   };
 
   const noise = {
@@ -510,6 +530,7 @@ const App = () => {
         activity: activities[favorite.activity] ? favorite.activity : "partner",
       })),
       soundThresholds,
+      trackSound,
     },
     onTaskOtterProgress: {
       ...progressData,
@@ -589,9 +610,9 @@ const App = () => {
       <HouseCard house={house} rewards={rewards} focusMode={appMode === "focus"} />
 
       <div className="dashboard-grid focus-controls">
-        <TimerCard timerSettings={timerSettings} session={session} focusMode={appMode === "focus"} />
+        <TimerCard timerSettings={timerSettings} session={session} noise={noise} focusMode={appMode === "focus"} />
 
-        <NoiseCard noise={noise} focusMode={appMode === "focus"} />
+        {appMode === "focus" && trackSound && <NoiseCard noise={noise} focusMode />}
 
       </div>
 
