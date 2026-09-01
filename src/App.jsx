@@ -17,9 +17,13 @@ import SessionCompletionModal from "./components/SessionCompleteModal/SessionCom
 import ExportImportModal from "./components/ExportImport/ExportImportModal";
 import ClearDataModal from "./components/ClearData/ClearDataModal";
 import AccountModal from "./components/Account/AccountModal";
+import Footer from "./components/Footer/Footer";
+import AboutPage from "./pages/AboutPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import { useRoute } from "./hooks/useRoute";
 import { clearClassroomData } from "./utils/storage";
 
-const App = () => {
+const Classroom = () => {
   // persistent classroom data
   const [settings, setSettings] = useLocalStorage("onTaskOtterSettings", {
     activity: "independent",
@@ -657,8 +661,17 @@ const App = () => {
           onConfirm={eraseSavedData}
         />
       )}
+
+      <Footer />
     </main>
   );
+};
+
+const App = () => {
+  const route = useRoute();
+  if (route === "/about") return <AboutPage />;
+  if (route === "/privacy") return <PrivacyPage />;
+  return <Classroom />;
 };
 
 export default App;

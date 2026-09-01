@@ -104,6 +104,15 @@ To create a production build, run:
 bun run build
 ```
 
+## About, Privacy, and the Footer
+
+Every screen carries a footer crediting the
+[EdTech-a-thon](https://edtechathon.com) and linking to two shared pages:
+`/about`, which introduces the people behind the project, and `/privacy`, which
+explains what the app stores and what it never collects. Both are reached
+through `src/hooks/useRoute.js`, a small address watcher that keeps the site a
+single page. Teachers who write in are answered at support@ontaskotter.com.
+
 ## Publishing the Website
 
 The website is published on Vercel, and `vercel.json` describes how addresses on
@@ -111,9 +120,10 @@ it are answered:
 
 - Vercel builds the site with `bun run build` and serves the finished `dist`
   folder.
-- The whole app is one page, so every address that is not a real file loads that
-  page. A teacher can refresh, bookmark, or share a link and still land on a
-  working app instead of a "not found" screen.
+- The whole site is one page that swaps between the classroom, `/about`, and
+  `/privacy` as you move around it, so every address that is not a real file
+  loads that page. A teacher can refresh, bookmark, or share any of those links
+  and still land on a working app instead of a "not found" screen.
 - Addresses starting with `/api` and `/_` are left out of that rule, because they
   belong to PocketBase. Without this, a sign-in request would be answered with
   the page itself, and the app would report a confusing error instead of a clear
