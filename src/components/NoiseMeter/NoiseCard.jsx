@@ -16,7 +16,10 @@ const NoiseCard = ({ noise, focusMode = false }) => {
   const [calibrationStage, setCalibrationStage] = useState("idle");
   const [secondsLeft, setSecondsLeft] = useState(SAMPLE_SECONDS);
   const [quietSample, setQuietSample] = useState(null);
+  const [previewActivity, setPreviewActivity] = useState(null);
   const samplesRef = useRef([]);
+  const previewThreshold = previewActivity ? soundThresholds[previewActivity] : expectation.threshold;
+  const previewLabel = previewActivity ? activities[previewActivity].label : expectation.label;
 
   useEffect(() => {
     if (calibrationStage === "quiet" || calibrationStage === "talking") {
@@ -61,8 +64,16 @@ const NoiseCard = ({ noise, focusMode = false }) => {
         <div><p className="card-label">Classroom sound</p><h2>{noiseMessage}</h2></div>
         <i className={`status-dot ${noiseTone}`} aria-hidden="true" />
       </div>
-      <p className="noise-expectation">Goal for {expectation.label.toLowerCase()}: <b>{expectation.detail}</b></p>
-      <NoiseScale microphone={microphone} noiseTone={noiseTone} greenUntil={expectation.threshold} redFrom={loudThreshold}/>
+      <p className="noise-expectation">
+        {previewActivity ? "Previewing" : "Goal for"} {previewLabel.toLowerCase()}:
+        {' '}<b>{previewActivity ? `green through ${previewThreshold}%` : expectation.detail}</b>
+      </p>
+      <NoiseScale
+        microphone={microphone}
+        noiseTone={noiseTone}
+        greenUntil={previewThreshold}
+        redFrom={previewActivity ? Math.min(100, previewThreshold + 18) : loudThreshold}
+      />
 
       <div className="noise-actions">
         {focusMode && <button className="outline" type="button" aria-pressed={microphone.status === "on"} disabled={microphone.status === "starting"} onClick={microphone.status === "on" ? microphone.stop : () => microphone.start()}>
@@ -98,7 +109,15 @@ const NoiseCard = ({ noise, focusMode = false }) => {
                   min="10"
                   max="80"
                   value={soundThresholds[activityId]}
-                  onChange={(event) => setSoundThreshold(activityId, Number(event.target.value))}
+                  onPointerDown={() => setPreviewActivity(activityId)}
+                  onPointerUp={() => setPreviewActivity(null)}
+                  onPointerCancel={() => setPreviewActivity(null)}
+                  onKeyDown={() => setPreviewActivity(activityId)}
+                  onBlur={() => setPreviewActivity(null)}
+                  onChange={(event) => {
+                    setPreviewActivity(activityId);
+                    setSoundThreshold(activityId, Number(event.target.value));
+                  }}
                 />
               </label>
             ))}
