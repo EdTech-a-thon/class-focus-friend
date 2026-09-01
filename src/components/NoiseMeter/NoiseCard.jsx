@@ -11,7 +11,7 @@ const getStableAverage = (samples) => {
 };
 
 const NoiseCard = ({ noise, focusMode = false }) => {
-  const { noiseMessage, noiseTone, expectation, microphone } = noise;
+  const { noiseMessage, noiseTone, expectation, microphone, activities, soundThresholds, setSoundThreshold, applySoundCalibration, loudThreshold } = noise;
   const [showSetup, setShowSetup] = useState(false);
   const [calibrationStage, setCalibrationStage] = useState("idle");
   const [secondsLeft, setSecondsLeft] = useState(SAMPLE_SECONDS);
@@ -36,14 +36,19 @@ const NoiseCard = ({ noise, focusMode = false }) => {
         setQuietSample(average);
         setCalibrationStage("ready");
       } else {
-        setCalibrationStage(microphone.setCalibration(quietSample, average) ? "done" : "retry");
+        const calibrated = microphone.setCalibration(quietSample, average);
+        if (calibrated) {
+          applySoundCalibration();
+          microphone.stop();
+        }
+        setCalibrationStage(calibrated ? "done" : "retry");
       }
     }, SAMPLE_SECONDS * 1000);
     return () => {
       window.clearInterval(countdown);
       window.clearTimeout(finish);
     };
-  }, [calibrationStage, microphone.setCalibration, quietSample]);
+  }, [applySoundCalibration, calibrationStage, microphone.setCalibration, microphone.stop, quietSample]);
 
   const beginCalibration = async () => {
     if (microphone.status !== "on" && !(await microphone.start())) return;
@@ -57,30 +62,46 @@ const NoiseCard = ({ noise, focusMode = false }) => {
         <i className={`status-dot ${noiseTone}`} aria-hidden="true" />
       </div>
       <p className="noise-expectation">Goal for {expectation.label.toLowerCase()}: <b>{expectation.detail}</b></p>
-      <NoiseScale microphone={microphone} noiseTone={noiseTone}/>
+      <NoiseScale microphone={microphone} noiseTone={noiseTone} greenUntil={expectation.threshold} redFrom={loudThreshold}/>
 
       <div className="noise-actions">
         {focusMode && <button className="outline" type="button" aria-pressed={microphone.status === "on"} disabled={microphone.status === "starting"} onClick={microphone.status === "on" ? microphone.stop : () => microphone.start()}>
           {microphone.status === "on" ? "Stop sound meter" : microphone.status === "starting" ? "Starting sound meter..." : "Turn on sound meter"}
         </button>}
-        {!focusMode && <button className="plain-button" type="button" onClick={() => setShowSetup((value) => !value)} aria-expanded={showSetup}>Microphone setup</button>}
+        {!focusMode && <button className="plain-button" type="button" onClick={() => setShowSetup((value) => !value)} aria-expanded={showSetup}>{showSetup ? "Hide microphone choice" : "Choose microphone"}</button>}
       </div>
 
-      {!focusMode && showSetup && (
+      {!focusMode && (
         <div className="microphone-setup">
-          <label htmlFor="microphone-choice">Microphone</label>
-          <select id="microphone-choice" value={microphone.selectedDeviceId} onChange={(event) => microphone.selectDevice(event.target.value)}>
-            {!microphone.devices.length && <option value="">Default microphone</option>}
-            {microphone.devices.map((device, index) => <option key={device.deviceId} value={device.deviceId}>{device.label || `Microphone ${index + 1}`}</option>)}
-          </select>
+          {showSetup && <><label htmlFor="microphone-choice">Microphone</label>
+            <select id="microphone-choice" value={microphone.selectedDeviceId} onChange={(event) => microphone.selectDevice(event.target.value)}>
+              {!microphone.devices.length && <option value="">Default microphone</option>}
+              {microphone.devices.map((device, index) => <option key={device.deviceId} value={device.deviceId}>{device.label || `Microphone ${index + 1}`}</option>)}
+            </select></>}
 
           <div className="calibration-panel" aria-live="polite">
-            {calibrationStage === "idle" && <><p><b>{microphone.calibration ? "Sound meter calibrated." : "Calibrate for this room"}</b> This helps the meter match your microphone and classroom.</p><button className="outline" type="button" onClick={beginCalibration}>{microphone.calibration ? "Calibrate again" : "Start calibration"}</button></>}
+            {calibrationStage === "idle" && <><p><b>Calibrate classroom sound</b> Measure this room so the colored ranges match what quiet and group work actually sound like.</p><button className="outline" type="button" onClick={beginCalibration}>{microphone.calibration ? "Calibrate again" : "Start calibration"}</button></>}
             {calibrationStage === "quiet" && <p><b>Step 1 of 2:</b> Keep the room quiet for {secondsLeft} seconds…</p>}
             {calibrationStage === "ready" && <><p><b>Step 2 of 2:</b> Ask the class to talk at a normal group-work volume.</p><button className="primary" type="button" onClick={() => setCalibrationStage("talking")}>Measure normal voices</button></>}
             {calibrationStage === "talking" && <p><b>Listening:</b> Keep talking normally for {secondsLeft} seconds…</p>}
             {calibrationStage === "done" && <><p><b>Calibration complete.</b> The meter is ready for this room.</p><button className="outline" type="button" onClick={() => setCalibrationStage("idle")}>Done</button></>}
             {calibrationStage === "retry" && <><p><b>Let’s try that again.</b> The two sound levels were too similar.</p><button className="outline" type="button" onClick={() => setCalibrationStage("quiet")}>Restart calibration</button></>}
+          </div>
+
+          <div className="sound-thresholds">
+            <p><b>Fine-tune the colored ranges</b> Move a slider right if normal sound is triggering too soon, or left if loud sound is not triggering.</p>
+            {Object.entries(activities).map(([activityId, item]) => (
+              <label key={activityId}>
+                <span><b>{item.label}</b><small>Green through {soundThresholds[activityId]}%</small></span>
+                <input
+                  type="range"
+                  min="10"
+                  max="80"
+                  value={soundThresholds[activityId]}
+                  onChange={(event) => setSoundThreshold(activityId, Number(event.target.value))}
+                />
+              </label>
+            ))}
           </div>
         </div>
       )}

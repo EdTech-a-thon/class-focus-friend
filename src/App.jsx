@@ -26,6 +26,7 @@ const App = () => {
     preferredMinutes: 15,
     otterName: "Otter",
     favoriteSessions: [],
+    soundThresholds: { independent: 22, partner: 48 },
   });
   const [progressData, setProgressData] = useLocalStorage("onTaskOtterProgress", {
     points: 0,
@@ -43,12 +44,18 @@ const App = () => {
   });
 
   const {
-    activity,
+    activity: savedActivity,
     preferredMinutes,
     otterName = "Otter",
     favoriteSessions: savedFavoriteSessions = [],
+    soundThresholds: savedSoundThresholds = {},
   } = settings;
+  const activity = activities[savedActivity] ? savedActivity : "partner";
   const favoriteSessions = Array.isArray(savedFavoriteSessions) ? savedFavoriteSessions : [];
+  const soundThresholds = {
+    independent: savedSoundThresholds.independent ?? activities.independent.threshold,
+    partner: savedSoundThresholds.partner ?? activities.partner.threshold,
+  };
   const { points, history = [] } = progressData;
   // Older saved classrooms may only have session history, not this total.
   const completedSessions = progressData.completedSessions ?? history.length;
@@ -77,6 +84,20 @@ const App = () => {
     (current) => ({ ...current, otterName: value })
   );
 
+  const setSoundThreshold = (activityId, value) => setSettings((current) => ({
+    ...current,
+    soundThresholds: {
+      independent: current.soundThresholds?.independent ?? activities.independent.threshold,
+      partner: current.soundThresholds?.partner ?? activities.partner.threshold,
+      [activityId]: value,
+    },
+  }));
+
+  const applySoundCalibration = useCallback(() => setSettings((current) => ({
+    ...current,
+    soundThresholds: { independent: 30, partner: 70 },
+  })), [setSettings]);
+
   const saveFavoriteSession = (name) => setSettings((current) => ({
     ...current,
     favoriteSessions: [
@@ -84,7 +105,7 @@ const App = () => {
       {
         id: Date.now(),
         name,
-        activity: current.activity,
+        activity: activities[current.activity] ? current.activity : "partner",
         minutes: current.preferredMinutes,
       },
     ],
@@ -169,7 +190,7 @@ const App = () => {
   const [appMode, setAppMode] = useState("configure");
 
   // runtime state
-  const expectation = activities[activity];
+  const expectation = { ...activities[activity], threshold: soundThresholds[activity] };
   const microphone = useMicrophone();
   const loudThreshold = expectation.threshold + 18;
   const noiseSamples = useRef([]);
@@ -429,7 +450,13 @@ const App = () => {
     noiseMessage,
     noiseTone,
     expectation,
-    microphone
+    microphone,
+    activity,
+    activities,
+    soundThresholds,
+    setSoundThreshold,
+    applySoundCalibration,
+    loudThreshold,
   };
 
   const timerSettings = {
@@ -476,7 +503,13 @@ const App = () => {
   const classroomData = {
     onTaskOtterSettings: {
       ...settings,
+      activity,
       otterName,
+      favoriteSessions: favoriteSessions.map((favorite) => ({
+        ...favorite,
+        activity: activities[favorite.activity] ? favorite.activity : "partner",
+      })),
+      soundThresholds,
     },
     onTaskOtterProgress: {
       ...progressData,
@@ -504,7 +537,7 @@ const App = () => {
   };
 
   const validSaveIds = {
-    activities: Object.keys(activities),
+    activities: [...Object.keys(activities), "presentation"],
     accessories: accessories.map((item) => item.id),
     houseItems: houseItems.map((item) => item.id),
     rooms: houseRooms.map((room) => room.id),

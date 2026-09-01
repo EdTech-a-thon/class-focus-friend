@@ -11,7 +11,6 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     saveFavoriteSession,
     deleteFavoriteSession,
   } = session;
-  const [view, setView] = useState("new");
   const [favoriteName, setFavoriteName] = useState("");
 
   const {
@@ -42,13 +41,11 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     if (!name) return;
     saveFavoriteSession(name);
     setFavoriteName("");
-    setView("favorites");
   };
 
   const chooseFavorite = (favorite) => {
     chooseDuration(favorite.minutes * 60);
-    setActivity(favorite.activity);
-    setView("new");
+    setActivity(activities[favorite.activity] ? favorite.activity : "partner");
   };
 
   return (
@@ -59,32 +56,10 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
           <h2 id="settings-title">Set the room up for success.</h2>
         </div>
       </div>
-      <div className="session-view-tabs" role="tablist" aria-label="Session setup view">
-        <button
-          className={view === "new" ? "selected" : ""}
-          type="button"
-          role="tab"
-          aria-selected={view === "new"}
-          onClick={() => setView("new")}
-        >
-          Start new
-        </button>
-        <button
-          className={view === "favorites" ? "selected" : ""}
-          type="button"
-          role="tab"
-          aria-selected={view === "favorites"}
-          onClick={() => setView("favorites")}
-        >
-          Select favorite
-        </button>
-      </div>
-
-      {view === "favorites" ? (
-        <section className="favorite-sessions" role="tabpanel">
-          <p>Choose a saved setup to use its activity and length.</p>
-          {favoriteSessions.length ? (
-            <ul>
+      {favoriteSessions.length > 0 && (
+        <section className="favorite-sessions">
+          <h3>Favorite setups</h3>
+          <ul>
               {favoriteSessions.map((favorite) => (
                 <li key={favorite.id}>
                   <button
@@ -93,7 +68,7 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
                     onClick={() => chooseFavorite(favorite)}
                   >
                     <b>{favorite.name}</b>
-                    <span>{favorite.minutes} min · {activities[favorite.activity].label}</span>
+                    <span>{favorite.minutes} min · {(activities[favorite.activity] ?? activities.partner).label}</span>
                   </button>
                   <button
                     className="favorite-delete"
@@ -105,17 +80,26 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
                   </button>
                 </li>
               ))}
-            </ul>
-          ) : (
-            <p className="empty-state">Save a setup from Start new to find it here.</p>
-          )}
+          </ul>
         </section>
-      ) : <>
+      )}
       <fieldset disabled={timer.isRunning}>
         <legend>Length</legend>
+        <div className="quick-durations" aria-label="Common session lengths">
+          {[5, 10, 15, 20, 30].map((minutes) => (
+            <button
+              className={durationMinutes === minutes ? "selected" : ""}
+              type="button"
+              key={minutes}
+              onClick={() => chooseDuration(minutes * 60)}
+            >
+              {minutes} min
+            </button>
+          ))}
+        </div>
         <div className="duration-inputs">
           <label>
-            Minutes
+            Custom minutes
             <input
               type="number"
               name="minutes"
@@ -246,7 +230,6 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
           Save favorite
         </button>
       </form>
-      </>}
     </>
 
   )

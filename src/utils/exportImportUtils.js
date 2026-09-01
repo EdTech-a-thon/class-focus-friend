@@ -117,6 +117,14 @@ const validateSaveFile = (data, validIds) => {
     Number.isFinite(settings.preferredMinutes) &&
     settings.preferredMinutes > 0 &&
     (settings.otterName === undefined || typeof settings.otterName === "string") &&
+    (settings.soundThresholds === undefined || (
+      Number.isFinite(settings.soundThresholds.independent) &&
+      settings.soundThresholds.independent >= 10 &&
+      settings.soundThresholds.independent <= 80 &&
+      Number.isFinite(settings.soundThresholds.partner) &&
+      settings.soundThresholds.partner >= 10 &&
+      settings.soundThresholds.partner <= 80
+    )) &&
     (settings.favoriteSessions === undefined || (
       Array.isArray(settings.favoriteSessions) &&
       settings.favoriteSessions.every((favorite) =>
@@ -168,6 +176,7 @@ const validateSaveFile = (data, validIds) => {
     ...settings,
     otterName: settings.otterName ?? "Otter",
     favoriteSessions: settings.favoriteSessions ?? [],
+    soundThresholds: settings.soundThresholds ?? { independent: 22, partner: 48 },
   };
   data.data.onTaskOtterHouse = {
     activeRoom: house.activeRoom,
