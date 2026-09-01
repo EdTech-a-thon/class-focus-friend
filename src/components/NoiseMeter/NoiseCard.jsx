@@ -11,7 +11,7 @@ const getStableAverage = (samples) => {
 };
 
 const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
-  const { noiseMessage, noiseTone, expectation, microphone, activities, soundThresholds, setSoundThreshold, applySoundCalibration, loudThreshold } = noise;
+  const { noiseMessage, noiseTone, expectation, microphone, activity, activities, setActivity, soundThresholds, trackSound, setTrackSound, setSoundThreshold, applySoundCalibration, loudThreshold } = noise;
   const [showSetup, setShowSetup] = useState(false);
   const [calibrationStage, setCalibrationStage] = useState("idle");
   const [secondsLeft, setSecondsLeft] = useState(SAMPLE_SECONDS);
@@ -61,9 +61,24 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
   return (
     <section className={`${embedded ? "embedded-noise-setup" : "card noise-card"}`}>
       <div className="card-heading">
-        <div><p className="card-label">Classroom sound</p><h2>{noiseMessage}</h2></div>
+        <div><p className="card-label">Classroom sound</p><h2>{!focusMode && !trackSound ? "Sound meter off" : noiseMessage}</h2></div>
         <i className={`status-dot ${noiseTone}`} aria-hidden="true" />
       </div>
+      {!focusMode && <label className="checkbox-option sound-tracking-option">
+        <input type="checkbox" checked={trackSound} onChange={(event) => setTrackSound(event.target.checked)} />
+        Track classroom sound during this session
+      </label>}
+      {!focusMode && trackSound && <fieldset className="sound-profile-choice">
+        <legend>Acceptable volume</legend>
+        <div>
+          {Object.entries(activities).map(([activityId, item]) => (
+            <button className={activity === activityId ? "selected" : ""} type="button" key={activityId} onClick={() => setActivity(activityId)}>
+              <b>{item.label} default</b><span>{item.detail}</span>
+            </button>
+          ))}
+        </div>
+      </fieldset>}
+      {(focusMode || trackSound) && <>
       <p className="noise-expectation">
         {previewActivity ? "Previewing" : "Goal for"} {previewLabel.toLowerCase()}:
         {' '}<b>{previewActivity ? `green through ${previewThreshold}%` : expectation.detail}</b>
@@ -124,6 +139,7 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
           </div>
         </div>
       )}
+      </>}
 
       {microphone.status === "denied" && <p className="help-text">Microphone access was not available. You can still run a focus session.</p>}
       {microphone.status === "missing" && <p className="help-text">That microphone is no longer available. Choose another microphone in setup.</p>}

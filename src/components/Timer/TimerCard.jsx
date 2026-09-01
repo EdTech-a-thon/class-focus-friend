@@ -21,7 +21,7 @@ const TimerCard = ({ timerSettings, session, noise, focusMode = false }) => {
       {focusMode
         ? <TimerControls timerSettings={timerSettings} session={session} displayCountdown={displayCountdown} focusMode />
         : <>
-            <SessionSettingsCard session={session} displayCountdown={displayCountdown} />
+            <div className="session-setup-fields"><SessionSettingsCard session={session} displayCountdown={displayCountdown} /></div>
             <NoiseCard noise={noise} embedded />
           </>}
     </section>

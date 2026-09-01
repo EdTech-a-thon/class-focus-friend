@@ -220,6 +220,14 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .sound-thresholds label > span { align-items: baseline; display: flex; justify-content: space-between; }
 .sound-thresholds small { color: #667a73; font-weight: 500; }
 .sound-thresholds input { accent-color: #527b70; cursor: pointer; width: 100%; }
+.sound-tracking-option { color: #526a63; font-size: .9rem; font-weight: 700; margin: 18px 0; }
+.sound-profile-choice { margin-bottom: 18px; }
+.sound-profile-choice > div { display: grid; gap: 8px; grid-template-columns: repeat(2, 1fr); }
+.sound-profile-choice button { background: #f4eee3; border: 1px solid transparent; border-radius: 14px; color: #526a63; cursor: pointer; display: grid; font: inherit; gap: 3px; padding: 11px; text-align: left; }
+.sound-profile-choice button span { font-size: .8rem; }
+.sound-profile-choice button.selected { background: #dce9d9; border-color: #6e9588; color: #25433d; }
+.quick-sound-limit { margin: 0; }
+.quick-sound-limit label { color: #dce9d9; font-size: .86rem; margin-right: 14px; }
 .help-text { color: #a94d3c; font-size: .88rem; line-height: 1.5; margin: 13px 0 0; }
 .shop-card { background: transparent; }
 .points-badge { background: #25433d; border-radius: 999px; color: #f8d97a; font-size: .8rem; font-weight: 700; padding: 8px 12px; white-space: nowrap; }

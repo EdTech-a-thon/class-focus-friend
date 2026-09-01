@@ -2,7 +2,7 @@ import EncouragementMessage from "./EncouragementMessage";
 import { useState } from "react";
 
 const TimerControls = ({ timerSettings, session, displayCountdown, focusMode = false }) => {
-  const { timer, expectation, noiseTone, formatTime, needsTeacherResume, resumeAfterNoise, resetTimer } = timerSettings;
+  const { timer, noiseTone, formatTime, needsTeacherResume, resumeAfterNoise, resetTimer } = timerSettings;
   const {
     showCountdown,
     setShowCountdown,
@@ -37,7 +37,7 @@ const TimerControls = ({ timerSettings, session, displayCountdown, focusMode = f
                 showCountdown: true,
               })}>
                 <b>{favorite.name}</b>
-                <span>{favorite.minutes} min · {(session.activities[favorite.activity] ?? session.activities.partner).label}</span>
+                <span>{favorite.minutes} min · {favorite.trackSound === false ? "No sound meter" : "Tracks sound"}</span>
               </button>
             ))}
           </div>}
@@ -48,12 +48,13 @@ const TimerControls = ({ timerSettings, session, displayCountdown, focusMode = f
           }}>
             <h2>Quick start</h2>
             <label>Minutes<input type="number" min="1" value={quickMinutes} onChange={(event) => setQuickMinutes(Math.max(1, Number(event.target.value) || 1))} /></label>
-            <div className="quick-work-types">
-              {Object.entries(session.activities).map(([id, item]) => <label key={id}>
-                <input type="radio" name="quick-activity" checked={quickActivity === id} onChange={() => setQuickActivity(id)} /> {item.label}
-              </label>)}
-            </div>
             <label className="checkbox-option"><input type="checkbox" checked={quickTrackSound} onChange={(event) => setQuickTrackSound(event.target.checked)} /> Track classroom sound</label>
+            {quickTrackSound && <fieldset className="quick-sound-limit">
+              <legend>Acceptable volume</legend>
+              {Object.entries(session.activities).map(([id, item]) => <label key={id}>
+                <input type="radio" name="quick-sound-limit" checked={quickActivity === id} onChange={() => setQuickActivity(id)} /> {item.label} limit
+              </label>)}
+            </fieldset>}
             <label className="checkbox-option"><input type="checkbox" checked={quickShowCountdown} onChange={(event) => setQuickShowCountdown(event.target.checked)} /> Show countdown</label>
             <button className="primary" type="submit">Start focus session</button>
           </form>
@@ -70,8 +71,8 @@ const TimerControls = ({ timerSettings, session, displayCountdown, focusMode = f
           : timer.isRunning
           ? "Your class is building focus stamina." 
           : showCountdown
-          ? `${timer.durationSeconds / 60} minute ${expectation.label.toLowerCase()} session`
-          : `${expectation.label} focus session`}
+          ? `${timer.durationSeconds / 60} minute focus session`
+          : "Focus session"}
       </p>
 
       {focusMode && <div className="button-row">

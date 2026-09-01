@@ -3,15 +3,11 @@ import { useState } from "react";
 const SessionSettingsCard = ({ session, displayCountdown }) => {
   const {
     timer,
-    activity,
     activities,
     chooseDuration,
-    setActivity,
     favoriteSessions,
     saveFavoriteSession,
     deleteFavoriteSession,
-    trackSound,
-    setTrackSound,
   } = session;
   const [favoriteName, setFavoriteName] = useState("");
 
@@ -47,8 +43,8 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
 
   const chooseFavorite = (favorite) => {
     chooseDuration(favorite.minutes * 60);
-    setActivity(activities[favorite.activity] ? favorite.activity : "partner");
-    setTrackSound(favorite.trackSound ?? true);
+    session.setActivity(activities[favorite.activity] ? favorite.activity : "partner");
+    session.setTrackSound(favorite.trackSound ?? true);
   };
 
   return (
@@ -71,7 +67,7 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
                     onClick={() => chooseFavorite(favorite)}
                   >
                     <b>{favorite.name}</b>
-                    <span>{favorite.minutes} min · {(activities[favorite.activity] ?? activities.partner).label} · {favorite.trackSound === false ? "No sound meter" : "Tracks sound"}</span>
+                    <span>{favorite.minutes} min · {favorite.trackSound === false ? "No sound meter" : "Tracks sound"}</span>
                   </button>
                   <button
                     className="favorite-delete"
@@ -114,23 +110,6 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
             />
           </label>
         </div>
-      </fieldset>
-      <fieldset disabled={timer.isRunning}>
-        <legend>Activity</legend>
-        <div className="activity-list">
-          {Object.entries(activities).map(([key, item]) => (
-            <button className={activity === key ? "selected" : ""} aria-pressed={activity === key} type="button" key={key} onClick={() => setActivity(key)}>
-              <b>{item.label}</b><span>{item.detail}</span>
-            </button>
-          ))}
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>Classroom sound</legend>
-        <label className="checkbox-option">
-          <input type="checkbox" checked={trackSound} onChange={(event) => setTrackSound(event.target.checked)} />
-          Track acceptable volume during this session
-        </label>
       </fieldset>
       <fieldset>
         <legend>Countdown Display</legend>
