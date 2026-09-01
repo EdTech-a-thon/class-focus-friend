@@ -16,7 +16,7 @@ button:focus-visible, a:focus-visible { outline: 3px solid #efad4f; outline-offs
 .app-header { align-items: center; display: flex; justify-content: space-between; margin: 0 auto; max-width: 1180px; padding: 24px 32px; }
 .app-header p { color: #60756e; font-size: .92rem; margin: 0; }
 .brand { align-items: center; color: inherit; display: inline-flex; font-size: 1.05rem; font-weight: 700; gap: 9px; text-decoration: none; }
-.brand span { align-items: center; background: #e98769; border-radius: 50%; color: #fffaf0; display: inline-flex; font-size: .8rem; height: 29px; justify-content: center; width: 29px; }
+.otter-mark { border-radius: 50%; display: block; height: 30px; width: 30px; }
 .mode-switcher { background: #e8e0d3; border-radius: 999px; display: grid; gap: 4px; grid-template-columns: repeat(2, 1fr); margin: 4px auto 22px; max-width: 360px; padding: 5px; width: calc(100% - 48px); }
 .mode-switcher button { background: transparent; border: 0; border-radius: 999px; color: #526a63; cursor: pointer; font-weight: 800; padding: 11px 20px; }
 .mode-switcher button.selected { background: #25433d; box-shadow: 0 3px 10px rgba(37, 67, 61, .2); color: #fffaf0; }

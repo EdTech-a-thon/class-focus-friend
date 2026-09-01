@@ -1,3 +1,5 @@
+import OtterMark from "../Otter/OtterMark";
+
 const accountButtonText = ({ teacher, saveState, isBusy }) => {
   if (isBusy && teacher) return "☁ Opening your classroom…";
   if (!teacher) return "☁ Sign in to save";
@@ -11,7 +13,7 @@ const Header = ({ header }) => {
   return (
     <header className="app-header">
       <a className="brand" href="#dashboard">
-        <span>✦</span>
+        <OtterMark />
         On-task Otter
       </a>
 
