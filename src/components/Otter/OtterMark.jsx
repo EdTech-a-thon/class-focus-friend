@@ -1,0 +1,48 @@
+// The app icon: the same otter from the dashboard, cropped into a round badge.
+// Kept in sync with public/favicon.svg.
+const OtterMark = ({ className = "otter-mark", title = "On-task Otter" }) => (
+  <svg className={className} viewBox="18 -7 184 184" role="img" aria-label={title}>
+    <clipPath id="otter-mark-badge"><circle cx="110" cy="85" r="92" /></clipPath>
+    <circle cx="110" cy="85" r="92" fill="#25433d" />
+    <g clipPath="url(#otter-mark-badge)">
+      <g fill="#a06f47" stroke="#25433d" strokeWidth="5">
+        <circle cx="59" cy="45" r="17" />
+        <circle cx="161" cy="45" r="17" />
+      </g>
+      <path
+        fill="#b98155"
+        stroke="#25433d"
+        strokeWidth="5"
+        strokeLinejoin="round"
+        d="M110 24C77 24 47 47 43 85c-3 22 7 43 19 53-14 10-19 28-11 42 11 16 107 16 118 0 8-14 3-32-11-42 12-10 22-31 19-53-4-38-34-61-67-61Z"
+      />
+      <circle cx="59" cy="45" r="8" fill="#e8a98a" />
+      <circle cx="161" cy="45" r="8" fill="#e8a98a" />
+      <ellipse cx="110" cy="120" rx="31" ry="22" fill="#f8ead3" stroke="#25433d" strokeWidth="4" />
+      <path
+        fill="none"
+        stroke="#7a5233"
+        strokeWidth="4"
+        strokeLinecap="round"
+        opacity=".8"
+        d="M82 116 57 109M82 124 57 126M138 116l25-7M138 124l25 2"
+      />
+      <g fill="#25433d">
+        <ellipse cx="86" cy="91" rx="7" ry="10" />
+        <ellipse cx="137" cy="89" rx="7" ry="10" />
+        <path d="M110 100c9 0 13 4 10 9-3 5-7 7-10 7s-7-2-10-7c-3-5 1-9 10-9Z" />
+      </g>
+      <circle cx="84" cy="88" r="2.4" fill="#fffaf0" />
+      <circle cx="135" cy="86" r="2.4" fill="#fffaf0" />
+      <path
+        fill="none"
+        stroke="#25433d"
+        strokeWidth="5"
+        strokeLinecap="round"
+        d="M110 116v5M110 121c-3 9-13 9-16 1M110 121c3 9 13 9 16 1"
+      />
+    </g>
+  </svg>
+);
+
+export default OtterMark;

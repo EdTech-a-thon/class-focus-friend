@@ -1,4 +1,4 @@
-import { exportClassroomSave, importClassroomSave } from "./storage.js";
+import { exportClassroomSave, importClassroomSave, SAVE_FILE_APP_NAME } from "./storage.js";
 
 const isFiniteNonNegativeNumber = (value) => {
   return Number.isFinite(value) && value >= 0;
@@ -13,7 +13,7 @@ const createSaveFile = (data) => {
 };
 
 const getSaveFileName = () => {
-  return `Focus-Friend-Classroom-Save-${new Date().toISOString().slice(0, 10)}.json`;
+  return `On-task-Otter-Classroom-Save-${new Date().toISOString().slice(0, 10)}.json`;
 };
 
 const downloadSaveFile = (data, filename = getSaveFileName()) => {
@@ -38,13 +38,13 @@ const openSubstituteHandoff = (filename) => {
 
   const instructions = `Hello,
 
-Thank you for covering our class today. Focus Friend is ready to use at:
-https://class-focus-friend.edtechathon.com
+Thank you for covering our class today. On-task Otter is ready to use at:
+${window.location.origin}
 
-The classroom's saved setup is in the Focus Friend Classroom Save JSON file that was shared with you. Please do not edit or rename that file.
+The classroom's saved setup is in the On-task Otter Classroom Save JSON file that was shared with you. Please do not edit or rename that file.
 
 To use it:
-1. Open the Focus Friend webpage above.
+1. Open the On-task Otter webpage above.
 2. Select "Save Classroom Setup" near the top of the page.
 3. Select "Restore Classroom Save."
 4. Choose the downloaded file named "${filename}".
@@ -54,10 +54,10 @@ When you are finished, you can create a new Classroom Save File from the same me
 
 Thank you!`;
 
-  handoffWindow.document.title = "Focus Friend Substitute Handoff";
+  handoffWindow.document.title = "On-task Otter Substitute Handoff";
   handoffWindow.document.body.innerHTML = `
     <main>
-      <p class="label">Focus Friend Substitute Handoff</p>
+      <p class="label">On-task Otter Substitute Handoff</p>
       <h1>Ready-to-send instructions</h1>
       <p>Copy this message into an email, text, or substitute plan. The classroom save file is downloading separately.</p>
       <textarea aria-label="Substitute teacher instructions" readonly>${instructions}</textarea>
@@ -92,18 +92,17 @@ Thank you!`;
 const validateSaveFile = (data, validIds) => {
   if (
     !data
-    || data.app !== "Focus Friend" 
+    || data.app !== SAVE_FILE_APP_NAME
     || data.version !== 1
     || !data.data
   ) {
     throw new Error("Invalid classroom save file");
   }
 
-  const settings = data.data.focusFriendSettings;
-  const progress = data.data.focusFriendProgress;
-  const rewards = data.data.focusFriendRewards;
-  const house = data.data.focusFriendHouse;
-  const preferences = data.data.focusFriendPreferences;
+  const settings = data.data.onTaskOtterSettings;
+  const progress = data.data.onTaskOtterProgress;
+  const rewards = data.data.onTaskOtterRewards;
+  const house = data.data.onTaskOtterHouse;
   const validHistory = Array.isArray(progress?.history) && progress.history.every((session) =>
     session &&
     isFiniteNonNegativeNumber(session.minutes) &&
@@ -117,7 +116,16 @@ const validateSaveFile = (data, validIds) => {
     validIds.activities.includes(settings.activity) &&
     Number.isFinite(settings.preferredMinutes) &&
     settings.preferredMinutes > 0 &&
-    (settings.friendName === undefined || typeof settings.friendName === "string") &&
+    (settings.otterName === undefined || typeof settings.otterName === "string") &&
+    (settings.trackSound === undefined || typeof settings.trackSound === "boolean") &&
+    (settings.soundThresholds === undefined || (
+      Number.isFinite(settings.soundThresholds.independent) &&
+      settings.soundThresholds.independent >= 10 &&
+      settings.soundThresholds.independent <= 80 &&
+      Number.isFinite(settings.soundThresholds.partner) &&
+      settings.soundThresholds.partner >= 10 &&
+      settings.soundThresholds.partner <= 80
+    )) &&
     (settings.favoriteSessions === undefined || (
       Array.isArray(settings.favoriteSessions) &&
       settings.favoriteSessions.every((favorite) =>
@@ -127,16 +135,10 @@ const validateSaveFile = (data, validIds) => {
         favorite.name.length > 0 &&
         Number.isFinite(favorite.minutes) &&
         favorite.minutes > 0 &&
+        (favorite.trackSound === undefined || typeof favorite.trackSound === "boolean") &&
         validIds.activities.includes(favorite.activity)
       )
     ));
-
-  const validPreferences =
-    preferences &&
-    typeof preferences.musicEnabled === "boolean" &&
-    Number.isFinite(preferences.musicVolume) &&
-    preferences.musicVolume >= 0 &&
-    preferences.musicVolume <= 100;
 
   const validProgress =
     progress &&
@@ -161,7 +163,6 @@ const validateSaveFile = (data, validIds) => {
 
   if (
     !validSettings 
-    || !validPreferences 
     || !validProgress 
     || !validRewards 
     || !validHouse
@@ -169,16 +170,17 @@ const validateSaveFile = (data, validIds) => {
     throw new Error("Invalid classroom save file");
   }
 
-  data.data.focusFriendRewards = {
+  data.data.onTaskOtterRewards = {
     unlocked: [...new Set(rewards.unlocked)],
     equipped: [...new Set(rewards.equipped)],
   };
-  data.data.focusFriendSettings = {
+  data.data.onTaskOtterSettings = {
     ...settings,
-    friendName: settings.friendName ?? "Focus Friend",
+    otterName: settings.otterName ?? "Otter",
     favoriteSessions: settings.favoriteSessions ?? [],
+    soundThresholds: settings.soundThresholds ?? { independent: 22, partner: 48 },
   };
-  data.data.focusFriendHouse = {
+  data.data.onTaskOtterHouse = {
     activeRoom: house.activeRoom,
     houseItemsOwned: [...new Set(house.houseItemsOwned)],
   };

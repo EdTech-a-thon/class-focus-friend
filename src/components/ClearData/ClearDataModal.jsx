@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { createSaveFile, downloadSaveFile } from "../../utils/exportImportUtils";
 import Modal from "../Modal/Modal";
 
-const ClearDataModal = ({ classroomData, onClose, onConfirm }) => {
+const ClearDataModal = ({ classroomData, isSignedIn, onClose, onConfirm }) => {
   useEffect(() => {
     const closeOnEscape = (event) => {
       if (event.key === "Escape") onClose();
@@ -27,6 +27,12 @@ const ClearDataModal = ({ classroomData, onClose, onConfirm }) => {
         <p className="clear-data-label">Permanent action</p>
         <h2 id="clear-data-title">Are you super sure you want to erase the data?</h2>
         <p className="clear-data-copy">There&apos;s no going back. We recommend saving first.</p>
+        {isSignedIn && (
+          <p className="clear-data-copy">
+            This also empties the classroom saved to your teacher account, so it will not come
+            back on your other computers.
+          </p>
+        )}
 
         <button className="clear-data-save" type="button" onClick={saveBeforeErasing}>
           Save classroom setup first

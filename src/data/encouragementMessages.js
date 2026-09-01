@@ -1,6 +1,6 @@
 const encouragementMessages = {
   none: [
-    "You're helping Friend focus!"
+    "You're helping Otter focus!"
   ],
   
   generic: [

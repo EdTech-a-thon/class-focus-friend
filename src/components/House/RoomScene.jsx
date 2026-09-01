@@ -1,13 +1,20 @@
-import Friend from "../Friend/Friend";
+import Otter from "../Otter/Otter";
 
-const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isMusicPlaying, noiseTone, friendName }) => {
+const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = [], unlockedAccessories = [], equipped, isCelebrating, isFocusing, noiseTone, otterName, focusMode = false, editingMode, points, isPreviewing, selectedItem, onChooseItem, onConfirmItem, onCloseEditor }) => {
+  const visibleItems = editingMode === "decorations" ? availableItems : decorations;
+  const selectedIsOwned = selectedItem && (
+    editingMode === "decorations"
+      ? decorations.some((item) => item.id === selectedItem.id)
+      : unlockedAccessories.includes(selectedItem.id)
+  );
+  const selectedX = selectedItem?.roomPosition?.x ?? 40;
   
   return (
     <section
       className="room-scene"
-      aria-label={`${room.name} in the friend's house`}
+      aria-label={`${room.name} in the otter's house`}
     >
-      <div className="room-scene-label">
+      {!focusMode && <div className="room-scene-label">
         <span>
           {room.icon}
         </span>
@@ -16,47 +23,114 @@ const RoomScene = ({ room, decorations, equipped, isCelebrating, isFocusing, isM
           <b>{room.name}</b>
           <small>{room.description}</small>
         </div>
-      </div>
+      </div>}
 
       <div className="room-window" aria-hidden="true">
         <span className="window-sun" />
         <span className="window-cloud cloud-one" />
         <span className="window-cloud cloud-two" />
       </div>
-      <div className="friend-at-home">
-        <Friend
+      <div className="otter-at-home">
+        <Otter
           equipped={equipped}
+          showAccessorySlots={editingMode === "accessories"}
           isCelebrating={isCelebrating}
           isFocusing={isFocusing}
-          isMusicPlaying={isMusicPlaying}
           noiseTone={noiseTone}
         />
+        {editingMode === "accessories" && (
+          <div className="accessory-price-spots" aria-label="Clothing choices">
+            {accessoryItems.filter((item) => !equipped.includes(item.id)).map((item) => (
+              <button
+                className={`accessory-price-spot accessory-${item.id}`}
+                key={item.id}
+                type="button"
+                aria-label={`${item.name}, ${unlockedAccessories.includes(item.id) ? "owned" : `$${item.cost}`}`}
+                onClick={() => onChooseItem(item)}
+              >
+                <span>{unlockedAccessories.includes(item.id) ? "Owned" : `$${item.cost}`}</span>
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      {decorations.length ? (
+      {editingMode && (
+        <div className="scene-shop-toolbar">
+          <b>{editingMode === "decorations" ? "Choose a gray room item" : "Choose a gray clothing spot"}</b>
+          <span>{isPreviewing ? "Preview" : `$${points} budget`}</span>
+          <button type="button" onClick={onCloseEditor}>Done</button>
+        </div>
+      )}
+
+      {visibleItems.length ? (
         <div
           className="placed-decorations"
           aria-label="Decorations in this room"
         >
-          {decorations.map((item, index) => (
-            <div
-              key={item.id}
-              className={`room-item room-item-${item.sceneType}`}
-              style={{
-                "--item-position": index % 4,
-                "--item-rise": index % 3,
-              }}
-              aria-label={item.name}
-              role="img"
-            >
-              <span aria-hidden="true">{item.symbol}</span>
-            </div>
-          ))}
+          {visibleItems.map((item) => {
+            const pos = item.roomPosition;
+            const isAnchorTop = pos.anchor === "top";
+            const owned = decorations.some((decoration) => decoration.id === item.id);
+            return (
+              <button
+                key={item.id}
+                className={`room-item ${owned ? "" : "room-item-placeholder"}`}
+                style={{
+                  left: pos.x + "%",
+                  [isAnchorTop ? "top" : "bottom"]: pos.y + "%",
+                  width: pos.w + "%",
+                }}
+                aria-label={item.name}
+                type="button"
+                disabled={editingMode !== "decorations" || owned}
+                onClick={() => onChooseItem(item)}
+              >
+                <img
+                  src={item.roomImage}
+                  alt={item.name}
+                  style={{ width: "100%", height: "auto" }}
+                  draggable={false}
+                />
+                {!owned && (
+                  <span className="room-item-price">
+                    <b>+</b>
+                    <small>${item.cost}</small>
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
-      ) : (
+      ) : !focusMode ? (
         <p className="empty-room">
-          {friendName} is settling in. Decorate this room to make it your own.
+          {otterName} is settling in. Decorate this room to make it your own.
         </p>
+      ) : null}
+
+      {selectedItem && (
+        <aside className={`scene-purchase-card ${selectedX < 50 ? "side-right" : "side-left"}`} aria-live="polite">
+          <button className="scene-purchase-close" type="button" aria-label="Close item details" onClick={() => onChooseItem(null)}>×</button>
+          {selectedItem.image ? (
+            <img src={selectedItem.image} alt="" />
+          ) : (
+            <span className="scene-purchase-icon" aria-hidden="true">{selectedItem.icon}</span>
+          )}
+          <div>
+            <small>{editingMode === "decorations" ? "Room decoration" : "Otter clothing"}</small>
+            <h3>{selectedItem.name}</h3>
+            <b>{selectedIsOwned ? "Already owned" : `$${selectedItem.cost}`}</b>
+            {!isPreviewing && !selectedIsOwned && <p>${Math.max(0, points - selectedItem.cost)} left after purchase</p>}
+          </div>
+          <button
+            className="scene-purchase-button"
+            type="button"
+            disabled={!isPreviewing && !selectedIsOwned && points < selectedItem.cost}
+            onClick={() => onConfirmItem(selectedItem)}
+          >
+            {isPreviewing ? "Place in preview" : selectedIsOwned ? "Wear it" : points < selectedItem.cost ? "Not enough budget" : `Buy for $${selectedItem.cost}`}
+          </button>
+        </aside>
       )}
     </section>
   );

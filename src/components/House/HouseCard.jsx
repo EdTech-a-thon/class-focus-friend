@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import RewardShop from "../Rewards/RewardShop";
 import RoomTabs from "./RoomTabs";
 import RoomScene from "./RoomScene";
-import HouseCatalog from "./HouseCatalog";
 import Modal from "../Modal/Modal";
 
-const HouseCard = ({ house, rewards }) => {
+const HouseCard = ({ house, rewards, focusMode = false }) => {
   const [openShop, setOpenShop] = useState(null);
+  const [editingMode, setEditingMode] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [showActions, setShowActions] = useState(true);
   const {
     points,
@@ -18,17 +18,19 @@ const HouseCard = ({ house, rewards }) => {
     houseItems,
     houseItemsOwned,
     buyHouseItem,
-    completedSessions,
+    unlockedRoomIds,
     equipped,
     isCelebrating,
     isFocusing,
-    isMusicPlaying,
     noiseTone,
-    friendName,
-    setFriendName,
+    otterName,
+    setOtterName,
+    isPreviewing,
   } = house;
 
-  const nextRoom = houseRooms.find((room) => completedSessions < room.sessionsRequired);
+  const activeRoomItems = houseItems.filter((item) => item.room === activeRoomDetails.id);
+  const itemsStillNeeded = activeRoomItems.filter((item) => !houseItemsOwned.includes(item.id)).length;
+  const allRoomsUnlocked = unlockedRoomIds.length === houseRooms.length;
 
   useEffect(() => {
     if (!openShop) return;
@@ -43,24 +45,24 @@ const HouseCard = ({ house, rewards }) => {
 
   return (
     <section className="house-card" id="dashboard">
-      <div className="house-heading">
+      {!focusMode && <div className="house-heading">
         <div>
-          <p className="card-label">{friendName || "Focus Friend"}'s house</p>
-          <h2>{friendName || "Focus Friend"} is ready to focus</h2>
+          <p className="card-label">{otterName || "Otter"}'s house</p>
+          <h2>{otterName || "Otter"} is ready to focus</h2>
         </div>
         <div className="house-progress">
-          <span><b>{completedSessions}</b> total sessions completed</span>
-          <small>{nextRoom ? `${nextRoom.sessionsRequired - completedSessions} until ${nextRoom.name}` : "Every room unlocked!"}</small>
+          <span><b>{activeRoomItems.length - itemsStillNeeded}</b> of {activeRoomItems.length} room items bought</span>
+          <small>{allRoomsUnlocked ? "Every room is available!" : "Buy every item to open the next room"}</small>
         </div>
-      </div>
+      </div>}
 
-      <div className={`house-actions ${showActions ? "" : "collapsed"}`}>
+      {!focusMode && <div className={`house-actions ${showActions ? "" : "collapsed"}`}>
         {showActions && (
           <>
             <button className="outline" type="button" onClick={() => setOpenShop("rooms")}>Choose room</button>
-            <button className="outline" type="button" disabled={completedSessions < activeRoomDetails.sessionsRequired} onClick={() => setOpenShop("decorations")}>Decorate room</button>
-            <button className="outline" type="button" onClick={() => setOpenShop("accessories")}>Dress up friend</button>
-            <button className="outline" type="button" onClick={() => setOpenShop("name")}>Name your friend</button>
+            <button className="outline" type="button" onClick={() => { setEditingMode((mode) => mode === "decorations" ? null : "decorations"); setSelectedItem(null); }}>Decorate room</button>
+            <button className="outline" type="button" onClick={() => { setEditingMode((mode) => mode === "accessories" ? null : "accessories"); setSelectedItem(null); }}>Dress up otter</button>
+            <button className="outline" type="button" onClick={() => setOpenShop("name")}>Name your otter</button>
           </>
         )}
         <button
@@ -71,20 +73,34 @@ const HouseCard = ({ house, rewards }) => {
         >
           {showActions ? "Hide house actions" : "Show house actions"}
         </button>
-      </div>
+      </div>}
 
       <RoomScene
         room={activeRoomDetails}
         decorations={roomDecorations}
+        availableItems={houseItems.filter((item) => item.room === activeRoomDetails.id)}
         equipped={equipped}
         isCelebrating={isCelebrating}
         isFocusing={isFocusing}
-        isMusicPlaying={isMusicPlaying}
         noiseTone={noiseTone}
-        friendName={friendName || "Focus Friend"}
+        otterName={otterName || "Otter"}
+        focusMode={focusMode}
+        editingMode={focusMode ? null : editingMode}
+        accessoryItems={rewards.accessories}
+        unlockedAccessories={rewards.unlocked}
+        points={points}
+        isPreviewing={isPreviewing}
+        selectedItem={selectedItem}
+        onChooseItem={setSelectedItem}
+        onCloseEditor={() => { setEditingMode(null); setSelectedItem(null); }}
+        onConfirmItem={(item) => {
+          if (editingMode === "decorations") buyHouseItem(item);
+          else rewards.buyOrEquip(item);
+          setSelectedItem(null);
+        }}
       />
 
-      {openShop && (
+      {!focusMode && openShop && (
         <Modal
           isOpen={Boolean(openShop)}
           onClose={() => setOpenShop(null)}
@@ -93,28 +109,28 @@ const HouseCard = ({ house, rewards }) => {
           closeLabel="Close shop"
         >
             {openShop === "name" ? (
-              <form className="friend-name-modal" onSubmit={(event) => {
+              <form className="otter-name-modal" onSubmit={(event) => {
                 event.preventDefault();
                 setOpenShop(null);
               }}>
-                <p className="card-label">Focus friend</p>
-                <h2 id="shop-title">What should we call your friend?</h2>
-                <label className="friend-name-field">
-                  <span>Friend&apos;s name</span>
+                <p className="card-label">Your otter</p>
+                <h2 id="shop-title">What should we call your otter?</h2>
+                <label className="otter-name-field">
+                  <span>Otter&apos;s name</span>
                   <input
                     type="text"
-                    value={friendName}
+                    value={otterName}
                     maxLength="30"
                     autoFocus
-                    onChange={(event) => setFriendName(event.target.value)}
-                    placeholder="Focus Friend"
+                    onChange={(event) => setOtterName(event.target.value)}
+                    placeholder="Otter"
                   />
                 </label>
                 <button className="outline" type="submit">Save name</button>
               </form>
             ) : openShop === "rooms" ? (
               <div className="room-picker">
-                <p className="card-label">Focus friend&apos;s house</p>
+                <p className="card-label">Otter&apos;s house</p>
                 <h2 id="shop-title">Choose a room to focus in</h2>
                 <RoomTabs
                   rooms={houseRooms}
@@ -123,21 +139,11 @@ const HouseCard = ({ house, rewards }) => {
                     setActiveRoom(room);
                     setOpenShop(null);
                   }}
-                  completedSessions={completedSessions}
+                  unlockedRoomIds={unlockedRoomIds}
+                  unlockAll={isPreviewing}
                 />
               </div>
-            ) : openShop === "decorations" ? (
-              <HouseCatalog
-                room={activeRoomDetails}
-                items={houseItems}
-                ownedItems={houseItemsOwned}
-                points={points}
-                buyHouseItem={buyHouseItem}
-                titleId="shop-title"
-              />
-            ) : (
-              <RewardShop rewards={rewards} titleId="shop-title" />
-            )}
+            ) : null}
         </Modal>
       )}
     </section>

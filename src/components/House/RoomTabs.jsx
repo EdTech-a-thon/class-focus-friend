@@ -1,13 +1,13 @@
-const RoomTabs = ({ rooms, activeRoom, setActiveRoom, completedSessions }) => {
+const RoomTabs = ({ rooms, activeRoom, setActiveRoom, unlockedRoomIds, unlockAll }) => {
   
   return (
     <div 
       className="room-tabs" 
       role="tablist" 
-      aria-label="Rooms in the friend's house"
+      aria-label="Rooms in the otter's house"
     >
       {rooms.map((room) => {
-        const isLocked = completedSessions < room.sessionsRequired;
+        const isLocked = !unlockedRoomIds.includes(room.id) && !unlockAll;
 
         return (
         <button 
@@ -25,7 +25,9 @@ const RoomTabs = ({ rooms, activeRoom, setActiveRoom, completedSessions }) => {
           
           <span className="room-tab-copy">
             <b>{room.name}</b>
-            <small>{isLocked ? `${room.sessionsRequired} sessions` : "Unlocked"}</small>
+            <small>
+              {isLocked ? "Buy everything in the previous room" : "Available"}
+            </small>
           </span>
 
           </button>

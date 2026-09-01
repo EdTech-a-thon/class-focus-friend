@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { accessories } from "./data/accessories";
 import { activities } from "./data/activities";
-import { classMilestones, houseItems, houseRooms } from "./data/houseItems";
+import { houseItems, houseRooms } from "./data/houseItems";
 import { useLocalStorage } from "./hooks/useLocalStorage";
+import { useTeacherAccount } from "./hooks/useTeacherAccount";
 import { useMicrophone } from "./hooks/useMicrophone";
 import { useTimer } from "./hooks/useTimer";
 import { formatTime } from "./utils/formatTime";
@@ -12,52 +13,60 @@ import Header from "./components/Header/Header";
 import NoiseCard from "./components/NoiseMeter/NoiseCard";
 import TimerCard from "./components/Timer/TimerCard";
 import HouseCard from "./components/House/HouseCard";
-import ProgressCard from "./components/Progress/ProgressCard";
 import SessionCompletionModal from "./components/SessionCompleteModal/SessionCompletionModal";
 import ExportImportModal from "./components/ExportImport/ExportImportModal";
 import ClearDataModal from "./components/ClearData/ClearDataModal";
-import { clearFocusFriendData } from "./utils/storage";
+import AccountModal from "./components/Account/AccountModal";
+import Footer from "./components/Footer/Footer";
+import AboutPage from "./pages/AboutPage";
+import PrivacyPage from "./pages/PrivacyPage";
+import { useRoute } from "./hooks/useRoute";
+import { clearClassroomData } from "./utils/storage";
 
-const App = () => {
+const Classroom = () => {
   // persistent classroom data
-  const [settings, setSettings] = useLocalStorage("focusFriendSettings", {
+  const [settings, setSettings] = useLocalStorage("onTaskOtterSettings", {
     activity: "independent",
     preferredMinutes: 15,
-    friendName: "Focus Friend",
+    otterName: "Otter",
     favoriteSessions: [],
+    soundThresholds: { independent: 22, partner: 48 },
+    trackSound: true,
   });
-  const [progressData, setProgressData] = useLocalStorage("focusFriendProgress", {
+  const [progressData, setProgressData] = useLocalStorage("onTaskOtterProgress", {
     points: 0,
     totalPoints: 0,
     completedSessions: 0,
     history: [],
   });
-  const [rewardData, setRewardData] = useLocalStorage("focusFriendRewards", {
+  const [rewardData, setRewardData] = useLocalStorage("onTaskOtterRewards", {
     unlocked: [],
     equipped: [],
   });
-  const [houseData, setHouseData] = useLocalStorage("focusFriendHouse", {
+  const [houseData, setHouseData] = useLocalStorage("onTaskOtterHouse", {
     activeRoom: "living",
     houseItemsOwned: [],
   });
-  const [preferences, setPreferences] = useLocalStorage("focusFriendPreferences", {
-    musicEnabled: false,
-    musicVolume: 55,
-  });
 
   const {
-    activity,
+    activity: savedActivity,
     preferredMinutes,
-    friendName = "Focus Friend",
+    otterName = "Otter",
     favoriteSessions: savedFavoriteSessions = [],
+    soundThresholds: savedSoundThresholds = {},
+    trackSound = true,
   } = settings;
+  const activity = activities[savedActivity] ? savedActivity : "partner";
   const favoriteSessions = Array.isArray(savedFavoriteSessions) ? savedFavoriteSessions : [];
-  const { points, totalPoints, history = [] } = progressData;
+  const soundThresholds = {
+    independent: savedSoundThresholds.independent ?? activities.independent.threshold,
+    partner: savedSoundThresholds.partner ?? activities.partner.threshold,
+  };
+  const { points, history = [] } = progressData;
   // Older saved classrooms may only have session history, not this total.
   const completedSessions = progressData.completedSessions ?? history.length;
   const { unlocked, equipped } = rewardData;
   const { activeRoom, houseItemsOwned } = houseData;
-  const { musicEnabled, musicVolume } = preferences;
 
   const setActivity = (value) => setSettings(
     (current) => (
@@ -77,9 +86,28 @@ const App = () => {
       }
     ));
 
-  const setFriendName = (value) => setSettings(
-    (current) => ({ ...current, friendName: value })
+  const setOtterName = (value) => setSettings(
+    (current) => ({ ...current, otterName: value })
   );
+
+  const setSoundThreshold = (activityId, value) => setSettings((current) => ({
+    ...current,
+    soundThresholds: {
+      independent: current.soundThresholds?.independent ?? activities.independent.threshold,
+      partner: current.soundThresholds?.partner ?? activities.partner.threshold,
+      [activityId]: value,
+    },
+  }));
+
+  const setTrackSound = (value) => setSettings((current) => ({
+    ...current,
+    trackSound: typeof value === "function" ? value(current.trackSound ?? true) : value,
+  }));
+
+  const applySoundCalibration = useCallback(() => setSettings((current) => ({
+    ...current,
+    soundThresholds: { independent: 30, partner: 70 },
+  })), [setSettings]);
 
   const saveFavoriteSession = (name) => setSettings((current) => ({
     ...current,
@@ -88,8 +116,9 @@ const App = () => {
       {
         id: Date.now(),
         name,
-        activity: current.activity,
+        activity: activities[current.activity] ? current.activity : "partner",
         minutes: current.preferredMinutes,
+        trackSound: current.trackSound ?? true,
       },
     ],
   }));
@@ -164,43 +193,56 @@ const App = () => {
           : value
       }
     ));
-  const setMusicEnabled = (value) => setPreferences(
-    (current) => (
-      {
-        ...current, musicEnabled: typeof value === "function"
-          ? value(current.musicEnabled)
-          : value
-      }
-    ));
-  const setMusicVolume = (value) => setPreferences(
-    (current) => (
-      {
-        ...current, musicVolume: typeof value === "function"
-          ? value(current.musicVolume)
-          : value
-      }
-    ));
 
   // temporary session state
   const [showComplete, setShowComplete] = useState(false);
   const [showExportImport, setShowExportImport] = useState(false);
+  const [showAccount, setShowAccount] = useState(false);
   const [showClearData, setShowClearData] = useState(false);
+  const [appMode, setAppMode] = useState("configure");
 
   // runtime state
-  const expectation = activities[activity];
+  const expectation = { ...activities[activity], threshold: soundThresholds[activity] };
   const microphone = useMicrophone();
+  const loudThreshold = expectation.threshold + 18;
+  const noiseSamples = useRef([]);
+  const [sustainedNoiseLevel, setSustainedNoiseLevel] = useState(0);
+  const [hasSustainedLoudNoise, setHasSustainedLoudNoise] = useState(false);
+  const [needsTeacherResume, setNeedsTeacherResume] = useState(false);
+
+  useEffect(() => {
+    if (microphone.status !== "on") {
+      noiseSamples.current = [];
+      setSustainedNoiseLevel(0);
+      setHasSustainedLoudNoise(false);
+      return;
+    }
+
+    const now = Date.now();
+    noiseSamples.current = [
+      ...noiseSamples.current.filter((sample) => sample.time >= now - 10500),
+      { time: now, level: microphone.level },
+    ];
+    const samples = noiseSamples.current;
+    const average = samples.reduce((sum, sample) => sum + sample.level, 0) / samples.length;
+    const coversTenSeconds = samples[0]?.time <= now - 10000;
+    setSustainedNoiseLevel(average);
+    setHasSustainedLoudNoise(coversTenSeconds && average > loudThreshold);
+  }, [loudThreshold, microphone.level, microphone.rawLevel, microphone.status]);
 
   const noiseTone = microphone.status !== "on"
     ? "neutral"
-    : microphone.level <= expectation.threshold
+    : needsTeacherResume || hasSustainedLoudNoise
+      ? "loud"
+      : sustainedNoiseLevel <= expectation.threshold
       ? "good"
-      : microphone.level <= expectation.threshold + 18
-        ? "warn"
-        : "loud";
+      : "warn";
 
   const noiseMessage = microphone.status !== "on"
     ? "Ready when you are"
-    : noiseTone === "good"
+    : needsTeacherResume
+      ? "Paused for a teacher check-in"
+      : noiseTone === "good"
       ? "On track"
       : noiseTone === "warn"
         ? "Getting loud"
@@ -208,34 +250,48 @@ const App = () => {
 
   const timer = useTimer(preferredMinutes);
   const pauseTimer = timer.pause;
-  const resumeTimer = timer.resume;
   const recordedCompletion = useRef(false);
   const redAlertPlayed = useRef(false);
-  const timerPausedForNoise = useRef(false);
+  const noisePauseArmed = useRef(true);
   const stopTimerAlert = useRef(null);
   const [isTimerAlertPlaying, setIsTimerAlertPlaying] = useState(false);
 
   useEffect(() => {
-    if (noiseTone === "loud") {
-      if (timer.isRunning) {
-        timerPausedForNoise.current = true;
-        pauseTimer();
-      }
-      if (redAlertPlayed.current) return;
-      redAlertPlayed.current = true;
-      playNoiseAlert();
+    if (!hasSustainedLoudNoise) {
+      noisePauseArmed.current = true;
+      redAlertPlayed.current = false;
       return;
     }
 
-    if (noiseTone === "good" && timerPausedForNoise.current && !timer.isComplete) {
-      timerPausedForNoise.current = false;
-      resumeTimer();
+    if (!trackSound || !timer.isRunning || !noisePauseArmed.current) return;
+    noisePauseArmed.current = false;
+    setNeedsTeacherResume(true);
+    pauseTimer();
+    if (!redAlertPlayed.current) {
+      redAlertPlayed.current = true;
+      playNoiseAlert();
     }
+  }, [hasSustainedLoudNoise, pauseTimer, timer.isRunning, trackSound]);
 
-    if (noiseTone !== "loud") {
-      redAlertPlayed.current = false;
-    }
-  }, [noiseTone, pauseTimer, resumeTimer, timer.isComplete, timer.isRunning]);
+  useEffect(() => {
+    if (!trackSound && microphone.status === "on") microphone.stop();
+  }, [microphone.status, microphone.stop, trackSound]);
+
+  const resumeAfterNoise = () => {
+    setNeedsTeacherResume(false);
+    setHasSustainedLoudNoise(false);
+    setSustainedNoiseLevel(microphone.level);
+    noiseSamples.current = [];
+    noisePauseArmed.current = false;
+    redAlertPlayed.current = false;
+    timer.resume();
+  };
+
+  const resetTimer = () => {
+    setNeedsTeacherResume(false);
+    noisePauseArmed.current = true;
+    timer.reset();
+  };
 
   useEffect(() => {
     if (!timer.isComplete) {
@@ -283,11 +339,18 @@ const App = () => {
     return () => window.removeEventListener("keydown", closeOnEscape);
   }, [showComplete, closeCompletionModal]);
 
-  const totalMinutes = history.reduce(
-    (sum, session) => sum + session.minutes, 0
-  );
-
   const sessionCount = completedSessions;
+
+  const unlockedRoomIds = houseRooms
+    .filter((room, index) => {
+      const earlierRooms = houseRooms.slice(0, index);
+      return earlierRooms.every((earlierRoom) =>
+        houseItems
+          .filter((item) => item.room === earlierRoom.id)
+          .every((item) => houseItemsOwned.includes(item.id))
+      );
+    })
+    .map((room) => room.id);
 
   const buyOrEquip = (item) => {
     if (unlocked.includes(item.id)) {
@@ -310,9 +373,8 @@ const App = () => {
   };
 
   const buyHouseItem = (item) => {
-    const room = houseRooms.find((room) => room.id === item.room);
     if (
-      sessionCount < room.sessionsRequired 
+      !unlockedRoomIds.includes(item.room)
       || houseItemsOwned.includes(item.id) 
       || points < item.cost
     ) return;
@@ -321,9 +383,72 @@ const App = () => {
     setHouseItemsOwned((items) => [...items, item.id]);
   }
 
-  const activeRoomDetails = houseRooms.find((room) => room.id === activeRoom);
+  // Preview mode lets a teacher walk through every room and every customization
+  // at once, so they can show a class where the year is heading. Nothing chosen
+  // in preview is saved: the class keeps the points, rooms, and decorations it
+  // actually earned.
+  const [preview, setPreview] = useState(null);
+  const isPreviewing = preview !== null;
+
+  const startPreview = () => setPreview({
+    activeRoom: houseRooms[0].id,
+    houseItemsOwned: houseItems.map((item) => item.id),
+    equipped: accessories.map((item) => item.id),
+    otterName,
+  });
+
+  const stopPreview = () => setPreview(null);
+
+  const enterFocusMode = () => {
+    stopPreview();
+    setAppMode("focus");
+  };
+
+  const togglePreviewId = (ids, id) =>
+    ids.includes(id) ? ids.filter((current) => current !== id) : [...ids, id];
+
+  // What the screen shows: the preview classroom while previewing, the real one
+  // the rest of the time.
+  const shownActiveRoom = isPreviewing
+    ? preview.activeRoom
+    : unlockedRoomIds.includes(activeRoom)
+      ? activeRoom
+      : unlockedRoomIds.at(-1);
+  const shownHouseItemsOwned = isPreviewing ? preview.houseItemsOwned : houseItemsOwned;
+  const shownEquipped = isPreviewing ? preview.equipped : equipped;
+  const shownUnlocked = isPreviewing ? accessories.map((item) => item.id) : unlocked;
+  const shownOtterName = isPreviewing ? preview.otterName : otterName;
+
+  const changeOtterName = (name) => {
+    if (!isPreviewing) return setOtterName(name);
+    setPreview((current) => ({ ...current, otterName: name }));
+  };
+
+  const chooseRoom = (room) => {
+    if (!isPreviewing) return setActiveRoom(room);
+    setPreview((current) => ({ ...current, activeRoom: room }));
+  };
+
+  /** In preview every piece is free to place or take away again. */
+  const placeOrBuyHouseItem = (item) => {
+    if (!isPreviewing) return buyHouseItem(item);
+    setPreview((current) => ({
+      ...current,
+      houseItemsOwned: togglePreviewId(current.houseItemsOwned, item.id),
+    }));
+  };
+
+  const wearOrBuyAccessory = (item) => {
+    if (!isPreviewing) return buyOrEquip(item);
+    setPreview((current) => ({
+      ...current,
+      equipped: togglePreviewId(current.equipped, item.id),
+    }));
+  };
+
+  const activeRoomDetails = houseRooms.find((room) => room.id === shownActiveRoom);
   const roomDecorations = houseItems.filter(
-    (item) => item.room === activeRoom && houseItemsOwned.includes(item.id)
+    (item) => item.room === shownActiveRoom && shownHouseItemsOwned.includes(item.id)
   );
 
   const session = {
@@ -335,13 +460,30 @@ const App = () => {
     favoriteSessions,
     saveFavoriteSession,
     deleteFavoriteSession,
+    trackSound,
+    setTrackSound,
+    startSession: ({ minutes, activity: nextActivity, trackSound: shouldTrackSound }) => {
+      chooseDuration(minutes * 60);
+      setActivity(nextActivity);
+      setTrackSound(shouldTrackSound);
+      timer.toggle();
+    },
   };
 
   const noise = {
     noiseMessage,
     noiseTone,
     expectation,
-    microphone
+    microphone,
+    activity,
+    activities,
+    setActivity,
+    soundThresholds,
+    trackSound,
+    setTrackSound,
+    setSoundThreshold,
+    applySoundCalibration,
+    loudThreshold,
   };
 
   const timerSettings = {
@@ -349,113 +491,159 @@ const App = () => {
     expectation,
     noiseTone,
     formatTime,
-  };
-
-  const music = {
-    musicEnabled,
-    setMusicEnabled,
-    musicVolume,
-    setMusicVolume,
+    needsTeacherResume,
+    resumeAfterNoise,
+    resetTimer,
   };
 
   const rewards = {
     points,
     accessories,
-    unlocked,
-    equipped,
-    buyOrEquip,
-  };
-
-  const progress = {
-    totalMinutes,
-    history,
-    totalPoints,
-    points,
-    activities,
-    classMilestones,
-    houseItems,
-    houseItemsOwned,
-    houseRooms,
+    unlocked: shownUnlocked,
+    equipped: shownEquipped,
+    buyOrEquip: wearOrBuyAccessory,
+    isPreviewing,
   };
 
   const house = {
     points,
     houseRooms,
-    activeRoom,
-    setActiveRoom,
+    activeRoom: shownActiveRoom,
+    setActiveRoom: chooseRoom,
     activeRoomDetails,
     roomDecorations,
     houseItems,
-    houseItemsOwned,
-    buyHouseItem,
-    completedSessions: sessionCount,
-    equipped,
+    houseItemsOwned: shownHouseItemsOwned,
+    buyHouseItem: placeOrBuyHouseItem,
+    unlockedRoomIds: isPreviewing ? houseRooms.map((room) => room.id) : unlockedRoomIds,
+    equipped: shownEquipped,
+    isPreviewing,
+    startPreview,
+    stopPreview,
     isCelebrating: showComplete,
-    isFocusing: timer.isRunning,
-    isMusicPlaying: musicEnabled,
+    isFocusing: appMode === "focus",
     noiseTone,
-    friendName,
-    setFriendName,
-  };
-
-  const header = {
-    points,
-    onOpenExportImport: () => setShowExportImport(true),
+    otterName: shownOtterName,
+    setOtterName: changeOtterName,
   };
 
   const classroomData = {
-    focusFriendSettings: {
+    onTaskOtterSettings: {
       ...settings,
-      friendName,
+      activity,
+      otterName,
+      favoriteSessions: favoriteSessions.map((favorite) => ({
+        ...favorite,
+        activity: activities[favorite.activity] ? favorite.activity : "partner",
+      })),
+      soundThresholds,
+      trackSound,
     },
-    focusFriendProgress: {
+    onTaskOtterProgress: {
       ...progressData,
       completedSessions: sessionCount,
     },
-    focusFriendRewards: rewardData,
-    focusFriendHouse: houseData,
-    focusFriendPreferences: preferences,
+    onTaskOtterRewards: rewardData,
+    onTaskOtterHouse: houseData,
+  };
+
+  // Puts a classroom loaded from a teacher's account onto the screen.
+  const applyClassroom = useCallback((classroom) => {
+    setSettings(classroom.onTaskOtterSettings);
+    setProgressData(classroom.onTaskOtterProgress);
+    setRewardData(classroom.onTaskOtterRewards);
+    setHouseData(classroom.onTaskOtterHouse);
+  }, [setHouseData, setProgressData, setRewardData, setSettings]);
+
+  const account = useTeacherAccount({ classroomData, applyClassroom });
+
+  const header = {
+    points,
+    account,
+    onOpenAccount: () => setShowAccount(true),
+    onOpenExportImport: () => setShowExportImport(true),
   };
 
   const validSaveIds = {
-    activities: Object.keys(activities),
+    activities: [...Object.keys(activities), "presentation"],
     accessories: accessories.map((item) => item.id),
     houseItems: houseItems.map((item) => item.id),
     rooms: houseRooms.map((room) => room.id),
   };
 
-  const eraseSavedData = () => {
-    clearFocusFriendData();
+  const eraseSavedData = async () => {
+    // A signed-in teacher's account is emptied too, so the erased classroom
+    // cannot come back the next time they open On-task Otter.
+    try {
+      await account.eraseSavedClassroom();
+    } catch {
+      // This device is still erased even if the account could not be reached.
+    }
+    clearClassroomData();
     window.location.reload();
   };
 
   return (
-    <main className="app-shell">
+    <main className={`app-shell mode-${appMode} ${isPreviewing ? "previewing" : ""}`}>
+      {isPreviewing && (
+        <div className="preview-bar" role="status">
+          <b>Preview mode</b>
+          <small>Every room and decoration is switched on. Nothing here is saved.</small>
+          <button className="outline" type="button" onClick={stopPreview}>Exit preview</button>
+        </div>
+      )}
+
       <Header header={header} />
-      <HouseCard house={house} rewards={rewards} />
 
-        <div className="dashboard-grid focus-controls">
-        <TimerCard timerSettings={timerSettings} music={music} session={session} />
+      <nav className="mode-switcher" aria-label="Classroom mode">
+        <button
+          className={appMode === "configure" ? "selected" : ""}
+          type="button"
+          aria-pressed={appMode === "configure"}
+          onClick={() => setAppMode("configure")}
+        >
+          Configure
+        </button>
+        <button
+          className={appMode === "focus" ? "selected" : ""}
+          type="button"
+          aria-pressed={appMode === "focus"}
+          onClick={enterFocusMode}
+        >
+          Focus
+        </button>
+      </nav>
 
-        <NoiseCard noise={noise} />
+      <HouseCard house={house} rewards={rewards} focusMode={appMode === "focus"} />
 
-        <ProgressCard progress={progress} />
+      <div className="dashboard-grid focus-controls">
+        <TimerCard timerSettings={timerSettings} session={session} noise={noise} focusMode={appMode === "focus"} />
+
+        {appMode === "focus" && trackSound && <NoiseCard noise={noise} focusMode />}
+
       </div>
 
-      <div className="clear-data-section">
+      {appMode === "configure" && <div className="clear-data-section">
+        <button className="preview-trigger" type="button" onClick={isPreviewing ? stopPreview : startPreview}>
+          {isPreviewing ? "Exit preview mode" : "Preview everything"}
+        </button>
         <button className="clear-data-trigger" type="button" onClick={() => setShowClearData(true)}>
           Erase saved data
         </button>
-      </div>
+      </div>}
 
       <SessionCompletionModal
-        equipped={equipped}
+        equipped={shownEquipped}
         showComplete={showComplete}
         isTimerAlertPlaying={isTimerAlertPlaying}
         onClose={closeCompletionModal}
         onSilenceAlert={silenceTimerAlert}
         duration={`${timer.durationSeconds / 60} minutes`}
       />
+
+      {showAccount && (
+        <AccountModal account={account} onClose={() => setShowAccount(false)} />
+      )}
 
       {showExportImport && (
         <ExportImportModal
@@ -468,12 +656,22 @@ const App = () => {
       {showClearData && (
         <ClearDataModal
           classroomData={classroomData}
+          isSignedIn={Boolean(account.teacher)}
           onClose={() => setShowClearData(false)}
           onConfirm={eraseSavedData}
         />
       )}
+
+      <Footer />
     </main>
   );
+};
+
+const App = () => {
+  const route = useRoute();
+  if (route === "/about") return <AboutPage />;
+  if (route === "/privacy") return <PrivacyPage />;
+  return <Classroom />;
 };
 
 export default App;

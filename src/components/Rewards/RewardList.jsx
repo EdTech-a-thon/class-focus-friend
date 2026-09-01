@@ -1,4 +1,4 @@
-const RewardList = ({ points, accessories, unlocked, equipped, buyOrEquip }) => {
+const RewardList = ({ points, accessories, unlocked, equipped, buyOrEquip, isPreviewing }) => {
     const rewardItems = accessories.map((item) => {
     const owned = unlocked.includes(item.id);
     const wearing = equipped.includes(item.id);
@@ -16,13 +16,13 @@ const RewardList = ({ points, accessories, unlocked, equipped, buyOrEquip }) => 
               ? wearing
                 ? "Wearing now"
                 : "Unlocked"
-              : `${item.cost} points`}
+              : `$${item.cost}`}
           </small>
         </div>
 
         <button
           type="button"
-          disabled={!owned && points < item.cost}
+          disabled={!isPreviewing && !owned && points < item.cost}
           onClick={() => buyOrEquip(item)}
         >
           {owned

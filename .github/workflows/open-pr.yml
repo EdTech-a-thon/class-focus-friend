@@ -1,0 +1,37 @@
+name: Open publish pull request
+
+# Pushes made with a deploy key trigger workflows (unlike pushes made with the
+# automatic GITHUB_TOKEN), so a push from the project VM lands here. `main` is
+# protected by the `protect-main` ruleset and only accepts changes through a
+# pull request, which this workflow keeps open.
+on:
+  push:
+    branches-ignore:
+      - main
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  open-pull-request:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Open or update the pull request into main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          # `gh pr create` fails harmlessly when a pull request is already open
+          # for this branch, or when the branch has no commits ahead of `main`
+          # (which is the case for the very first push right after setup).
+          gh pr create \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head "$BRANCH" \
+            --title "Publish $BRANCH" \
+            --body "Opened automatically when \`$BRANCH\` was updated. Merging publishes this work to \`main\`." \
+            || true
+
+          gh pr view "$BRANCH" --repo "$GITHUB_REPOSITORY" --json url --jq .url \
+            >> "$GITHUB_STEP_SUMMARY" || true
