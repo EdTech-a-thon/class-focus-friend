@@ -589,7 +589,7 @@ const App = () => {
         </div>
       )}
 
-      {appMode === "configure" && <Header header={header} />}
+      <Header header={header} />
 
       <nav className="mode-switcher" aria-label="Classroom mode">
         <button

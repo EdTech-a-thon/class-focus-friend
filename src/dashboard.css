@@ -21,7 +21,6 @@ button:focus-visible, a:focus-visible { outline: 3px solid #efad4f; outline-offs
 .mode-switcher button { background: transparent; border: 0; border-radius: 999px; color: #526a63; cursor: pointer; font-weight: 800; padding: 11px 20px; }
 .mode-switcher button.selected { background: #25433d; box-shadow: 0 3px 10px rgba(37, 67, 61, .2); color: #fffaf0; }
 .mode-focus { background: #dce9d9; }
-.mode-focus .mode-switcher { margin-top: 18px; }
 .mode-focus .house-card { background: transparent; border: 0; padding-bottom: 0; padding-top: 0; }
 .mode-focus .room-scene { box-shadow: 0 12px 35px rgba(37, 67, 61, .1); }
 
