@@ -647,8 +647,26 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 /* Keep shop instructions above the stage so they never cover floor rewards. */
 .scene-shop-toolbar { position: static; transform: none; width: max-content; max-width: 100%; margin: 10px auto 0; }
 
-.session-setup-fields > fieldset, .session-setup-fields > .embedded-noise-setup { margin: 22px 0; padding: 22px; border: 1px solid #ded7ca; border-radius: 16px; }
-.session-setup-fields > fieldset legend { font-weight: 700; padding: 0 8px; }
+.session-setup-fields > fieldset { margin: 0 0 16px; padding: 0; border: 0; }
 .sound-calibration-dialog { width: min(520px, calc(100vw - 40px)); box-sizing: border-box; max-height: 85vh; overflow: auto; padding: 28px; border: 1px solid #ded7ca; border-radius: 22px; background: #fffaf0; color: #25433d; text-align: left; }
 .sound-calibration-dialog::backdrop { background: rgba(20, 40, 34, .55); }
 .sound-calibration-dialog h2 { margin-top: 0; }
+
+.session-duration { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.session-duration .quick-durations { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; }
+.session-duration .quick-durations button { padding: 9px 14px; }
+.session-duration .duration-inputs { max-width: none; }
+.session-duration .duration-inputs label { display: flex; align-items: center; gap: 8px; }
+.session-duration .duration-inputs input { width: 76px; box-sizing: border-box; }
+.countdown-option { color: #526a63; font-size: .9rem; font-weight: 700; }
+.hidden-countdown-choice { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 10px; color: #526a63; font-size: .9rem; }
+.hidden-countdown-choice select { padding: 7px; border: 1px solid #b8c6bf; border-radius: 8px; background: #fffaf0; color: inherit; font: inherit; }
+.embedded-noise-setup { display: flex; flex-direction: column; gap: 12px; margin: 14px 0; }
+.embedded-noise-setup .sound-tracking-option { margin: 0; }
+.embedded-noise-setup .sound-profile-choice { margin: 0; }
+.embedded-noise-setup .sound-profile-choice > div { display: flex; flex-wrap: wrap; }
+.embedded-noise-setup .sound-profile-choice button { border-radius: 999px; padding: 8px 16px; }
+.embedded-noise-setup .microphone-setup { background: none; padding: 0; margin: 0; }
+.embedded-noise-setup .sound-thresholds { border: 0; margin: 0; padding: 0; max-width: 480px; }
+.embedded-noise-setup .noise-actions { order: 1; }
+.embedded-noise-setup .noise-actions .outline { font-size: .84rem; padding: 7px 12px; }

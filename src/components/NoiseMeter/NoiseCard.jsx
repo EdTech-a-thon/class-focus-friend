@@ -58,26 +58,26 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
 
   return (
     <section className={`${embedded ? "embedded-noise-setup" : "card noise-card"}`}>
-      <div className="card-heading">
+      {focusMode && <div className="card-heading">
         <div><p className="card-label">{focusMode ? "Classroom sound" : "3. Sound tracking"}</p><h2>{focusMode ? noiseMessage : "Track sound for this session?"}</h2></div>
         <i className={`status-dot ${noiseTone}`} aria-hidden="true" />
-      </div>
+      </div>}
       {!focusMode && <label className="checkbox-option sound-tracking-option">
         <input type="checkbox" checked={trackSound} onChange={(event) => setTrackSound(event.target.checked)} />
-        Track classroom sound during this session
+        Track classroom sound
       </label>}
       {!focusMode && trackSound && <fieldset className="sound-profile-choice">
         <legend>Acceptable volume</legend>
         <div>
           {Object.entries(activities).map(([activityId, item]) => (
             <button className={activity === activityId ? "selected" : ""} type="button" key={activityId} onClick={() => setActivity(activityId)}>
-              <b>{item.label} default</b><span>{item.detail}</span>
+              <b>{item.label}</b>
             </button>
           ))}
         </div>
       </fieldset>}
       {(focusMode || trackSound) && <>
-      <p className="noise-expectation">
+      {focusMode && <><p className="noise-expectation">
         Goal for {previewLabel.toLowerCase()}:
         {' '}<b>{expectation.detail}</b>
       </p>
@@ -86,7 +86,7 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
         noiseTone={noiseTone}
         greenUntil={previewThreshold}
         redFrom={loudThreshold}
-      />
+      /></>}
 
       <div className="noise-actions">
         {!focusMode && <button className="outline" type="button" onClick={() => dialogRef.current.showModal()}>Microphone & calibration…</button>}
@@ -121,7 +121,7 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
               <span><b>Sound limit for this session</b><small>Green through {soundThresholds[activity]}%</small></span>
               <input type="range" min="10" max="80" value={soundThresholds[activity]} onChange={(event) => setSoundThreshold(activity, Number(event.target.value))} />
             </label>
-            <p>This level is included when you save the session. The percentage is a relative meter level.</p>
+
           </div>
         </div>
       )}
