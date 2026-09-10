@@ -522,7 +522,7 @@ const Classroom = () => {
     startPreview,
     stopPreview,
     isCelebrating: showComplete,
-    isFocusing: appMode === "focus",
+    isFocusing: appMode === "focus" && timer.isRunning,
     noiseTone,
     otterName: shownOtterName,
     setOtterName: changeOtterName,
