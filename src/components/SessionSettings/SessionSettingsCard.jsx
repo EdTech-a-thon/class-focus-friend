@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SessionSettingsCard = ({ session, displayCountdown }) => {
+const SessionSettingsCard = ({ session, displayCountdown, children }) => {
   const {
     timer,
     activities,
@@ -37,12 +37,15 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     event.preventDefault();
     const name = favoriteName.trim();
     if (!name) return;
-    saveFavoriteSession(name);
+    saveFavoriteSession(name, { showCountdown, hiddenTimerMode });
     setFavoriteName("");
   };
 
   const chooseFavorite = (favorite) => {
     chooseDuration(favorite.minutes * 60);
+    setShowCountdown(favorite.showCountdown ?? true);
+    setHiddenTimerMode(favorite.hiddenTimerMode ?? "none");
+    if (Number.isFinite(favorite.soundThreshold)) session.setSoundThreshold(favorite.activity, favorite.soundThreshold);
     session.setActivity(activities[favorite.activity] ? favorite.activity : "partner");
     session.setTrackSound(favorite.trackSound ?? true);
   };
@@ -52,7 +55,7 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
       <div className="settings-heading">
         <div>
           <p className="card-label">Session settings</p>
-          <h2 id="settings-title">Set the room up for success.</h2>
+          <h2 id="settings-title">Set up a session.</h2>
         </div>
       </div>
       {favoriteSessions.length > 0 && (
@@ -67,7 +70,7 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
                     onClick={() => chooseFavorite(favorite)}
                   >
                     <b>{favorite.name}</b>
-                    <span>{favorite.minutes} min · {favorite.trackSound === false ? "No sound meter" : "Tracks sound"}</span>
+                    <span>{favorite.minutes} min · {favorite.trackSound === false ? "No sound meter" : (Number.isFinite(favorite.soundThreshold) ? `Sound limit ${favorite.soundThreshold}%` : "Tracks sound")}</span>
                   </button>
                   <button
                     className="favorite-delete"
@@ -83,7 +86,7 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
         </section>
       )}
       <fieldset disabled={timer.isRunning}>
-        <legend>Length</legend>
+        <legend>1. Session length</legend>
         <div className="quick-durations" aria-label="Common session lengths">
           {[5, 10, 15, 20, 30].map((minutes) => (
             <button
@@ -112,7 +115,7 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
         </div>
       </fieldset>
       <fieldset>
-        <legend>Countdown Display</legend>
+        <legend>2. Time display</legend>
         <div>
           <label>
             <input
@@ -204,6 +207,8 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
             </span>
           </label>
       </fieldset>}
+      {children}
+      <p className="help-text">Saved sessions include the length, countdown display, and sound level. Microphone calibration is saved separately on this device.</p>
       <form className="save-favorite" onSubmit={saveFavorite}>
         <label>
           Save this setup as a favorite

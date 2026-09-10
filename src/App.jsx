@@ -104,18 +104,15 @@ const Classroom = () => {
     trackSound: typeof value === "function" ? value(current.trackSound ?? true) : value,
   }));
 
-  const applySoundCalibration = useCallback(() => setSettings((current) => ({
-    ...current,
-    soundThresholds: { independent: 30, partner: 70 },
-  })), [setSettings]);
-
-  const saveFavoriteSession = (name) => setSettings((current) => ({
+  const saveFavoriteSession = (name, display) => setSettings((current) => ({
     ...current,
     favoriteSessions: [
       ...(Array.isArray(current.favoriteSessions) ? current.favoriteSessions : []),
       {
         id: Date.now(),
         name,
+        ...display,
+        soundThreshold: soundThresholds[activity],
         activity: activities[current.activity] ? current.activity : "partner",
         minutes: current.preferredMinutes,
         trackSound: current.trackSound ?? true,
@@ -274,8 +271,8 @@ const Classroom = () => {
   }, [hasSustainedLoudNoise, pauseTimer, timer.isRunning, trackSound]);
 
   useEffect(() => {
-    if (!trackSound && microphone.status === "on") microphone.stop();
-  }, [microphone.status, microphone.stop, trackSound]);
+    if (timer.isComplete && microphone.status === "on") microphone.stop();
+  }, [microphone.status, microphone.stop, timer.isComplete]);
 
   const resumeAfterNoise = () => {
     setNeedsTeacherResume(false);
@@ -288,6 +285,7 @@ const Classroom = () => {
   };
 
   const resetTimer = () => {
+    microphone.stop();
     setNeedsTeacherResume(false);
     noisePauseArmed.current = true;
     timer.reset();
@@ -462,7 +460,11 @@ const Classroom = () => {
     deleteFavoriteSession,
     trackSound,
     setTrackSound,
-    startSession: ({ minutes, activity: nextActivity, trackSound: shouldTrackSound }) => {
+    setSoundThreshold,
+    startSession: ({ minutes, activity: nextActivity, trackSound: shouldTrackSound, soundThreshold }) => {
+      if (Number.isFinite(soundThreshold)) setSoundThreshold(nextActivity, soundThreshold);
+      if (shouldTrackSound) microphone.start();
+      else microphone.stop();
       chooseDuration(minutes * 60);
       setActivity(nextActivity);
       setTrackSound(shouldTrackSound);
@@ -482,7 +484,6 @@ const Classroom = () => {
     trackSound,
     setTrackSound,
     setSoundThreshold,
-    applySoundCalibration,
     loudThreshold,
   };
 
@@ -619,7 +620,7 @@ const Classroom = () => {
       <div className="dashboard-grid focus-controls">
         <TimerCard timerSettings={timerSettings} session={session} noise={noise} focusMode={appMode === "focus"} />
 
-        {appMode === "focus" && trackSound && <NoiseCard noise={noise} focusMode />}
+        {appMode === "focus" && trackSound && !timer.isComplete && (timer.isRunning || timer.secondsRemaining < timer.durationSeconds) && <NoiseCard noise={noise} focusMode />}
 
       </div>
 

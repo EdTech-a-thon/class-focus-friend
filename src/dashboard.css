@@ -128,7 +128,7 @@ h2 { font-size: 1.65rem; }
 .primary:disabled { cursor: default; opacity: .55; }
 .timer-card { align-items: center; background: #25433d; color: #fffaf0; display: flex; flex-direction: column; justify-content: center; min-height: 410px; position: relative; text-align: center; }
 .timer-setup-card { align-items: stretch; background: #fffaf0; color: #25433d; justify-content: flex-start; text-align: left; }
-.combined-session-setup { display: grid; gap: 30px; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+.combined-session-setup { display: grid; gap: 30px; grid-column: 1 / -1; grid-template-columns: minmax(0, 1fr); }
 .combined-session-setup > .embedded-noise-setup { border-left: 1px solid #ded7ca; padding-left: 30px; }
 .focus-controls > .timer-card:only-child { grid-column: 1 / -1; }
 .timer-setup-card .card-label { color: #cb654e; }
@@ -646,3 +646,9 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 
 /* Keep shop instructions above the stage so they never cover floor rewards. */
 .scene-shop-toolbar { position: static; transform: none; width: max-content; max-width: 100%; margin: 10px auto 0; }
+
+.session-setup-fields > fieldset, .session-setup-fields > .embedded-noise-setup { margin: 22px 0; padding: 22px; border: 1px solid #ded7ca; border-radius: 16px; }
+.session-setup-fields > fieldset legend { font-weight: 700; padding: 0 8px; }
+.sound-calibration-dialog { width: min(520px, calc(100vw - 40px)); box-sizing: border-box; max-height: 85vh; overflow: auto; padding: 28px; border: 1px solid #ded7ca; border-radius: 22px; background: #fffaf0; color: #25433d; text-align: left; }
+.sound-calibration-dialog::backdrop { background: rgba(20, 40, 34, .55); }
+.sound-calibration-dialog h2 { margin-top: 0; }
