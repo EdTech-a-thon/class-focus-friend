@@ -5,6 +5,7 @@ import { houseItems, houseRooms } from "./data/houseItems";
 import { useLocalStorage } from "./hooks/useLocalStorage";
 import { useTeacherAccount } from "./hooks/useTeacherAccount";
 import { useMicrophone } from "./hooks/useMicrophone";
+import { useFullScreen } from "./hooks/useFullScreen";
 import { useTimer } from "./hooks/useTimer";
 import { formatTime } from "./utils/formatTime";
 import { playNoiseAlert } from "./utils/playNoiseAlert";
@@ -197,6 +198,8 @@ const Classroom = () => {
   const [showAccount, setShowAccount] = useState(false);
   const [showClearData, setShowClearData] = useState(false);
   const [appMode, setAppMode] = useState("configure");
+  const fullScreen = useFullScreen();
+  const isFocusFullScreen = appMode === "focus" && fullScreen.isFullScreen;
 
   // runtime state
   const expectation = { ...activities[activity], threshold: soundThresholds[activity] };
@@ -585,7 +588,7 @@ const Classroom = () => {
   };
 
   return (
-    <main className={`app-shell mode-${appMode} ${isPreviewing ? "previewing" : ""}`}>
+    <main className={`app-shell mode-${appMode} ${isPreviewing ? "previewing" : ""} ${isFocusFullScreen ? "full-screen" : ""}`}>
       {isPreviewing && (
         <div className="preview-bar" role="status">
           <b>Preview mode</b>
@@ -614,6 +617,16 @@ const Classroom = () => {
           Focus
         </button>
       </nav>
+
+      {appMode === "focus" && fullScreen.isSupported && (
+        <button
+          className="outline full-screen-toggle"
+          type="button"
+          onClick={isFocusFullScreen ? fullScreen.exit : fullScreen.enter}
+        >
+          {isFocusFullScreen ? "Exit full screen" : "⛶ Full screen"}
+        </button>
+      )}
 
       <HouseCard house={house} rewards={rewards} focusMode={appMode === "focus"} />
 

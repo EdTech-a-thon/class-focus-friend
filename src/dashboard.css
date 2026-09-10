@@ -22,6 +22,15 @@ button:focus-visible, a:focus-visible { outline: 3px solid #efad4f; outline-offs
 .mode-focus { background: #dce9d9; }
 .mode-focus .house-card { background: transparent; border: 0; padding-bottom: 0; padding-top: 0; }
 .mode-focus .room-scene { box-shadow: 0 12px 35px rgba(37, 67, 61, .1); }
+.mode-focus .full-screen-toggle { background: #fffaf0; display: block; font-size: .84rem; margin: -8px auto 12px; padding: 7px 14px; }
+/* In full screen the room shrinks with the screen height so the room and the timer fit without scrolling. */
+.full-screen { --full-screen-width: clamp(560px, calc((100vh - 440px) * 900 / 440), 1116px); padding-block: 20px; }
+.full-screen .house-card, .full-screen .focus-controls { max-width: var(--full-screen-width); }
+.full-screen .house-card { margin-block: 0 16px; }
+.full-screen .timer-card, .full-screen .noise-card { min-height: 0; }
+.full-screen .app-header, .full-screen .mode-switcher, .full-screen .site-footer { display: none; }
+.full-screen .full-screen-toggle { margin: 0; opacity: .75; position: fixed; right: 16px; top: 16px; z-index: 50; }
+.full-screen .full-screen-toggle:hover, .full-screen .full-screen-toggle:focus-visible { opacity: 1; }
 
 .eyebrow, .card-label { color: #cb654e; font-size: .82rem; font-weight: 700; letter-spacing: .03em; margin: 0 0 12px; }
 h1, h2 { font-family: inherit; letter-spacing: .01em; line-height: 1.2; margin: 0; }
