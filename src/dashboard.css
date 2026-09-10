@@ -14,7 +14,6 @@ button:focus-visible, a:focus-visible { outline: 3px solid #efad4f; outline-offs
 
 .app-shell { min-height: 100vh; overflow: hidden; padding-bottom: 64px; }
 .app-header { align-items: center; display: flex; justify-content: space-between; margin: 0 auto; max-width: 1180px; padding: 24px 32px; }
-.app-header p { color: #60756e; font-size: .92rem; margin: 0; }
 .brand { align-items: center; color: inherit; display: inline-flex; font-size: 1.05rem; font-weight: 700; gap: 9px; text-decoration: none; }
 .otter-mark { border-radius: 50%; display: block; height: 30px; width: 30px; }
 .mode-switcher { background: #e8e0d3; border-radius: 999px; display: grid; gap: 4px; grid-template-columns: repeat(2, 1fr); margin: 4px auto 22px; max-width: 360px; padding: 5px; width: calc(100% - 48px); }
@@ -240,6 +239,9 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .house-card { background: #e8dfcf; border: 1px solid #d7c8b3; border-radius: 34px; margin: 12px auto 30px; max-width: 1116px; padding: 36px 32px 32px; width: calc(100% - 48px); }
 .house-heading { align-items: end; display: flex; gap: 24px; justify-content: space-between; margin-bottom: 22px; }
 .house-heading .card-label { margin-bottom: 7px; }
+.house-class-points { align-items: center; background: #25433d; border-radius: 999px; color: #fffaf0; display: flex; font-size: 1rem; gap: 7px; justify-content: center; margin: 22px auto; padding: 10px 22px; width: fit-content; }
+.house-class-points span { color: #f8d97a; }
+.house-class-points strong { font-size: 1.3rem; }
 .otter-name-field { align-items: center; color: #526a63; display: flex; font-size: .8rem; font-weight: 700; gap: 8px; }
 .otter-name-field input { background: #fffaf0; border: 1px solid #c6b69e; border-radius: 8px; color: #304b42; font: inherit; font-weight: 500; padding: 7px 9px; width: 160px; }
 .otter-name-field input:focus { border-color: #526a63; outline: 2px solid #a5c6ba; outline-offset: 1px; }
@@ -477,7 +479,6 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 
 @media (max-width: 760px) {
   .app-header { padding: 20px; }
-  .app-header p { display: none; }
   .otter-scene { height: 220px; transform: scale(.86); transform-origin: bottom center; }
   .dashboard-grid, .dashboard-placeholder { grid-template-columns: 1fr; margin: 0 18px; width: auto; }
   .focus-controls { padding: 12px; }

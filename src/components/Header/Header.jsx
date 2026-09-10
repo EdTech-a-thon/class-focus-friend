@@ -9,10 +9,10 @@ const accountButtonText = ({ teacher, saveState, isBusy }) => {
   return "☁ Saved to your account";
 };
 
-// The About and Privacy pages share this header, so the classroom's points and
-// buttons only appear when a classroom was handed to it.
+// The About and Privacy pages share this header, so classroom buttons only
+// appear when a classroom was handed to it.
 const Header = ({ header, rightLink }) => {
-  const { points, onOpenExportImport, onOpenAccount, account } = header ?? {};
+  const { onOpenExportImport, onOpenAccount, account } = header ?? {};
   return (
     <header className="app-header">
       <Link className="brand" href="/">
@@ -22,10 +22,6 @@ const Header = ({ header, rightLink }) => {
 
       {header && (
         <>
-          <p>
-            <b>★</b>
-            {points} class points
-          </p>
           <div className="app-header-actions">
             <button
               className={`account-trigger ${account.saveState === "error" ? "warning" : ""}`}
