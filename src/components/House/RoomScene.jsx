@@ -11,7 +11,7 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
   
   return (
     <section
-      className="room-scene"
+      className={`room-scene room-${room.id}`}
       aria-label={`${room.name} in the otter's house`}
     >
       {!focusMode && <div className="room-scene-label">
@@ -25,6 +25,8 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
         </div>
       </div>}
 
+      {(room.id === "kitchen" || room.id === "bathroom") && <div className="room-counter" aria-hidden="true" />}
+      {room.id === "bathroom" && <div className="room-toiletry-shelf" aria-hidden="true" />}
       <div className="room-window" aria-hidden="true">
         <span className="window-sun" />
         <span className="window-cloud cloud-one" />
@@ -75,11 +77,12 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
             return (
               <button
                 key={item.id}
-                className={`room-item ${owned ? "" : "room-item-placeholder"}`}
+                className={`room-item room-item-${item.id} ${owned ? "" : "room-item-placeholder"}`}
                 style={{
                   left: pos.x + "%",
                   [isAnchorTop ? "top" : "bottom"]: pos.y + "%",
                   width: pos.w + "%",
+                  zIndex: pos.z,
                 }}
                 aria-label={item.name}
                 type="button"

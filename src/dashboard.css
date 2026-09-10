@@ -597,3 +597,47 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; scroll-behavior: auto !important; transition: none !important; }
 }
+
+/* One proportional stage keeps furniture and its surfaces aligned on phones too. */
+.room-scene { --wall: #dce8d8; --floor: #c99e77; aspect-ratio: 900 / 440; min-height: 0; padding: 0; container-type: inline-size; background: linear-gradient(var(--wall) 0 68%, var(--floor) 68%); }
+.room-bedroom { --wall: #e3dff0; --floor: #baa087; }
+.room-kitchen { --wall: #f3e4c5; --floor: #c9a17b; }
+.room-bathroom { --wall: #d9ebea; --floor: #acc5be; }
+.room-office { --wall: #e5e7d9; --floor: #bc997a; }
+.room-scene::after { height: 1.8%; background: #a48062; }
+.room-bathroom::before { transform: none; background: repeating-linear-gradient(90deg, transparent 0 11%, #ffffff40 11% 11.3%), repeating-linear-gradient(0deg, transparent 0 30%, #ffffff40 30% 31%); }
+.room-scene-label { position: absolute; top: 4%; left: 3%; padding: 6px 10px; }
+.room-window { top: 17%; right: 5%; width: 21%; height: 30%; border-width: 6px; border-radius: 8px; transform: none; }
+.room-window::before { top: 49%; height: 5px; }
+.room-window::after { left: 49%; width: 5px; }
+.room-bedroom .room-window { background: #8d9dbb; }
+.room-bedroom .window-sun { background: #fff1c7; box-shadow: -10px -4px 0 #8d9dbb inset; }
+.room-counter { position: absolute; left: 3%; bottom: 23%; width: 94%; height: 17%; background: repeating-linear-gradient(90deg, #d2b18a 0 15.8%, #ac8767 16% 16.3%); border: 2px solid #8b7358; border-top: 7px solid #fff5df; border-radius: 5px; z-index: 1; }
+.room-bathroom .room-counter { width: 26%; background: #85b2aa; }
+.room-toiletry-shelf { position: absolute; left: 51%; bottom: 61%; width: 18%; height: 1.5%; background: #a48062; border-radius: 3px; z-index: 1; }
+.room-item img { filter: drop-shadow(0 3px 1px #36554c20); }
+.room-item-placeholder img { filter: grayscale(1); opacity: .2; }
+.otter-at-home { left: 33%; bottom: 4%; width: 25%; height: 54%; transform: none; }
+.otter-at-home .otter-scene { position: absolute; left: 50%; bottom: 0; width: 230px; height: 230px; margin-left: -115px; transform: scale(.9); transform: scale(calc(100cqw / 1000px)); }
+@media (max-width: 600px) {
+  .room-scene { border-width: 4px; border-radius: 16px; }
+  .room-scene-label { padding: 3px 6px; font-size: .65rem; gap: 4px; }
+  .room-scene-label small { display: none; }
+  .room-scene-label > span { font-size: .8rem; }
+  .room-window { border-width: 3px; }
+  .window-sun { width: 20px; height: 20px; right: 8px; top: 5px; }
+  .window-cloud { transform: scale(.5); transform-origin: left top; }
+  .scene-shop-toolbar { bottom: 3px; gap: 4px; padding: 3px 5px; }
+  .scene-shop-toolbar b, .scene-shop-toolbar span, .scene-shop-toolbar button { font-size: .6rem; }
+  .room-item-price { padding: 1px 3px; border-width: 1px; }
+  .room-item-price small { font-size: .55rem; }
+  .room-item-price b { font-size: .65rem; }
+  .scene-purchase-card { top: 8px; max-width: 215px; padding: 8px; gap: 4px 8px; }
+  .scene-purchase-card.side-left { left: 8px; }
+  .scene-purchase-card.side-right { right: 8px; }
+  .empty-room { font-size: .65rem; bottom: 7px; left: 10px; max-width: 130px; }
+}
+.otter-at-home { pointer-events: none; }
+.accessory-price-spot { pointer-events: auto; }
+.accessory-price-spots { inset: auto; bottom: 0; left: 50%; width: 230px; height: 230px; margin-left: -115px; transform: scale(.9); transform: scale(calc(100cqw / 1000px)); }
+.room-item-sunny-sofa .room-item-price, .room-item-cozy-bed .room-item-price { top: 80%; }
