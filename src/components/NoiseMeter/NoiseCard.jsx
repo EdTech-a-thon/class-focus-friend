@@ -16,6 +16,7 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
   const [calibrationStage, setCalibrationStage] = useState("idle");
   const [secondsLeft, setSecondsLeft] = useState(SAMPLE_SECONDS);
   const [quietSample, setQuietSample] = useState(null);
+  const [showSoundBar, setShowSoundBar] = useState(true);
   const samplesRef = useRef([]);
   const previewThreshold = expectation.threshold;
   const previewLabel = expectation.label;
@@ -57,8 +58,8 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
   };
 
   return (
-    <section className={`${embedded ? "embedded-noise-setup" : "card noise-card"}`}>
-      {focusMode && <div className="card-heading">
+    <section className={`${embedded ? "embedded-noise-setup" : "card noise-card"} ${focusMode && !showSoundBar ? "sound-bar-hidden" : ""}`}>
+      {focusMode && showSoundBar && <div className="card-heading">
         <div><p className="card-label">{focusMode ? "Classroom sound" : "3. Sound tracking"}</p><h2>{focusMode ? noiseMessage : "Track sound for this session?"}</h2></div>
         <i className={`status-dot ${noiseTone}`} aria-hidden="true" />
       </div>}
@@ -77,7 +78,7 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
         </div>
       </fieldset>}
       {(focusMode || trackSound) && <>
-      {focusMode && <><p className="noise-expectation">
+      {focusMode && showSoundBar && <><p className="noise-expectation">
         Goal for {previewLabel.toLowerCase()}:
         {' '}<b>{expectation.detail}</b>
       </p>
@@ -89,9 +90,25 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
       /></>}
 
       <div className="noise-actions">
+        {focusMode && <label className="checkbox-option">
+          <input type="checkbox" checked={showSoundBar} onChange={(event) => setShowSoundBar(event.target.checked)} />
+          Show sound bar
+        </label>}
         {!focusMode && <button className="outline" type="button" onClick={() => dialogRef.current.showModal()}>Microphone & calibration…</button>}
 
       </div>
+
+      {focusMode && <div className="microphone-setup">
+        <label htmlFor="focus-microphone-choice">Microphone</label>
+        <select id="focus-microphone-choice" value={microphone.selectedDeviceId} disabled={microphone.status === "starting"} onChange={(event) => microphone.selectDevice(event.target.value, true)}>
+          <option value="">Default microphone</option>
+          {microphone.devices.filter((device) => device.deviceId).map((device, index) => <option key={device.deviceId} value={device.deviceId}>{device.label || `Microphone ${index + 1}`}</option>)}
+        </select>
+        <button className="outline" type="button" disabled={microphone.status === "starting"} onClick={() => microphone.start()}>
+          {microphone.status === "starting" ? "Connecting…" : microphone.status === "on" ? "Reconnect microphone" : "Connect microphone"}
+        </button>
+        <p className="help-text">{showSoundBar ? "Choose a microphone or reconnect if no sound appears." : "Sound tracking stays on while the bar is hidden."}</p>
+      </div>}
 
       {!focusMode && (
         <div className="microphone-setup">
@@ -136,7 +153,7 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
       </>}
 
       {microphone.status === "denied" && <p className="help-text">Microphone access was not available. You can still run a focus session.</p>}
-      {microphone.status === "missing" && <p className="help-text">That microphone is no longer available. Choose another microphone in setup.</p>}
+      {microphone.status === "missing" && <p className="help-text">That microphone is no longer available. Choose another microphone{focusMode ? " above" : " in setup"}.</p>}
       {microphone.status === "unsupported" && <p className="help-text">This browser cannot use the sound meter. The other classroom tools still work.</p>}
     </section>
   );
