@@ -46,36 +46,21 @@ const SessionSettingsCard = ({ session, displayCountdown, children }) => {
     <>
       <div className="settings-heading">
         <div>
-          <h2 id="settings-title">Set up a session.</h2>
+          <h2 id="settings-title">Create a session preset.</h2>
         </div>
       </div>
-      {favoriteSessions.length > 0 && (
-        <section className="favorite-sessions">
-          <h3>Favorite setups</h3>
-          <ul>
-              {favoriteSessions.map((favorite) => (
-                <li key={favorite.id}>
-                  <button
-                    type="button"
-                    disabled={timer.isRunning}
-                    onClick={() => chooseFavorite(favorite)}
-                  >
-                    <b>{favorite.name}</b>
-                    <span>{favorite.minutes} min · {favorite.trackSound === false ? "No sound meter" : (Number.isFinite(favorite.soundThreshold) ? `Sound limit ${favorite.soundThreshold}%` : "Tracks sound")}</span>
-                  </button>
-                  <button
-                    className="favorite-delete"
-                    type="button"
-                    aria-label={`Delete ${favorite.name}`}
-                    onClick={() => deleteFavoriteSession(favorite.id)}
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-          </ul>
-        </section>
-      )}
+      <label className="preset-name">
+        Preset name
+        <input
+          type="text"
+          form="save-session-preset"
+          required
+          value={favoriteName}
+          maxLength="50"
+          placeholder="e.g. Quiet reading"
+          onChange={(event) => setFavoriteName(event.target.value)}
+        />
+      </label>
       <fieldset className="session-duration" disabled={timer.isRunning} aria-label="Session length">
         <div className="quick-durations" aria-label="Common session lengths">
           {[5, 10, 15, 20, 30].map((minutes) => (
@@ -117,21 +102,39 @@ const SessionSettingsCard = ({ session, displayCountdown, children }) => {
         </select>
       </label>}
       {children}
-      <form className="save-favorite" onSubmit={saveFavorite}>
-        <label>
-          Save this setup as a favorite
-          <input
-            type="text"
-            value={favoriteName}
-            maxLength="50"
-            placeholder="e.g. Quiet reading"
-            onChange={(event) => setFavoriteName(event.target.value)}
-          />
-        </label>
+      <form id="save-session-preset" className="save-favorite" onSubmit={saveFavorite}>
         <button className="outline" type="submit" disabled={timer.isRunning || !favoriteName.trim()}>
-          Save favorite
+          Save preset
         </button>
       </form>
+      {favoriteSessions.length > 0 && (
+        <section className="favorite-sessions">
+          <h3>Saved presets</h3>
+          <ul>
+              {favoriteSessions.map((favorite) => (
+                <li key={favorite.id}>
+                  <button
+                    type="button"
+                    disabled={timer.isRunning}
+                    onClick={() => chooseFavorite(favorite)}
+                  >
+                    <b>{favorite.name}</b>
+                    <span>{favorite.minutes} min · {favorite.trackSound === false ? "No sound meter" : (Number.isFinite(favorite.soundThreshold) ? `Sound limit ${favorite.soundThreshold}%` : "Tracks sound")}</span>
+                  </button>
+                  <button
+                    className="favorite-delete"
+                    type="button"
+                    aria-label={`Delete ${favorite.name}`}
+                    onClick={() => deleteFavoriteSession(favorite.id)}
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))}
+          </ul>
+        </section>
+      )}
+
     </>
 
   )

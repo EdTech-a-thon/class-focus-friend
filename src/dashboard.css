@@ -680,3 +680,8 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .calibration-recommendations > div { padding: 16px; background: #dce9d9; border-radius: 12px; }
 .calibration-recommendations dt { font-size: .9rem; }
 .calibration-recommendations dd { margin: 8px 0 0; font-size: 1.8rem; font-weight: 700; }
+
+.preset-name { display: grid; gap: 6px; max-width: 480px; margin-bottom: 18px; color: #526a63; font-size: .9rem; font-weight: 700; }
+.preset-name input { min-width: 0; background: #fffaf0; border: 1px solid #b8c6bf; border-radius: 10px; color: #25433d; font: inherit; padding: 9px 10px; }
+.session-setup-fields .save-favorite { border: 0; margin-top: 18px; padding-top: 0; }
+.session-setup-fields .favorite-sessions { margin-top: 24px; }
