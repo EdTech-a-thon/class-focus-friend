@@ -17,6 +17,7 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
   const [secondsLeft, setSecondsLeft] = useState(SAMPLE_SECONDS);
   const [quietSample, setQuietSample] = useState(null);
   const [showSoundBar, setShowSoundBar] = useState(true);
+  const [showMicrophoneControls, setShowMicrophoneControls] = useState(false);
   const samplesRef = useRef([]);
   const previewThreshold = expectation.threshold;
   const previewLabel = expectation.label;
@@ -94,11 +95,12 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
           <input type="checkbox" checked={showSoundBar} onChange={(event) => setShowSoundBar(event.target.checked)} />
           Show sound bar
         </label>}
+        {focusMode && <button className="outline microphone-toggle" type="button" aria-expanded={showMicrophoneControls} aria-controls="focus-microphone-controls" onClick={() => setShowMicrophoneControls((visible) => !visible)}>Select Microphone</button>}
         {!focusMode && <button className="outline" type="button" onClick={() => dialogRef.current.showModal()}>Microphone & calibration…</button>}
 
       </div>
 
-      {focusMode && <div className="microphone-setup">
+      {focusMode && <div className="microphone-setup" id="focus-microphone-controls" hidden={!showMicrophoneControls}>
         <label htmlFor="focus-microphone-choice">Microphone</label>
         <select id="focus-microphone-choice" value={microphone.selectedDeviceId} disabled={microphone.status === "starting"} onChange={(event) => microphone.selectDevice(event.target.value, true)}>
           <option value="">Default microphone</option>
@@ -153,7 +155,7 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
       </>}
 
       {microphone.status === "denied" && <p className="help-text">Microphone access was not available. You can still run a focus session.</p>}
-      {microphone.status === "missing" && <p className="help-text">That microphone is no longer available. Choose another microphone{focusMode ? " above" : " in setup"}.</p>}
+      {microphone.status === "missing" && <p className="help-text">That microphone is no longer available. {focusMode ? 'Use “Select Microphone” to choose another.' : "Choose another microphone in setup."}</p>}
       {microphone.status === "unsupported" && <p className="help-text">This browser cannot use the sound meter. The other classroom tools still work.</p>}
     </section>
   );
