@@ -80,10 +80,6 @@ const HouseCard = ({ house, rewards, focusMode = false }) => {
         </button>
       </div>}
 
-      {focusMode && <p className="house-class-points">
-        <span aria-hidden="true">★</span> <strong>{points}</strong> class points
-      </p>}
-
       <RoomScene
         room={activeRoomDetails}
         decorations={roomDecorations}
