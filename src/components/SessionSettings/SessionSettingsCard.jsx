@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const SessionSettingsCard = ({ session, displayCountdown }) => {
+const SessionSettingsCard = ({ session, displayCountdown, children }) => {
   const {
     timer,
     activities,
@@ -18,14 +18,6 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     setHiddenTimerMode
   } = displayCountdown;
 
-  const handleShowCountdown = (event) => {
-    setShowCountdown(!showCountdown);
-  };
-
-  const handleHiddenTimerMode = (event) => {
-    setHiddenTimerMode(event.target.value);
-  };
-
   const durationMinutes = timer.durationSeconds / 60;
 
   const handleDurationChange = (event) => {
@@ -37,12 +29,15 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     event.preventDefault();
     const name = favoriteName.trim();
     if (!name) return;
-    saveFavoriteSession(name);
+    saveFavoriteSession(name, { showCountdown, hiddenTimerMode });
     setFavoriteName("");
   };
 
   const chooseFavorite = (favorite) => {
     chooseDuration(favorite.minutes * 60);
+    setShowCountdown(favorite.showCountdown ?? true);
+    setHiddenTimerMode(favorite.hiddenTimerMode ?? "none");
+    if (Number.isFinite(favorite.soundThreshold)) session.setSoundThreshold(favorite.activity, favorite.soundThreshold);
     session.setActivity(activities[favorite.activity] ? favorite.activity : "partner");
     session.setTrackSound(favorite.trackSound ?? true);
   };
@@ -51,39 +46,22 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
     <>
       <div className="settings-heading">
         <div>
-          <p className="card-label">Session settings</p>
-          <h2 id="settings-title">Set the room up for success.</h2>
+          <h2 id="settings-title">Create a session preset.</h2>
         </div>
       </div>
-      {favoriteSessions.length > 0 && (
-        <section className="favorite-sessions">
-          <h3>Favorite setups</h3>
-          <ul>
-              {favoriteSessions.map((favorite) => (
-                <li key={favorite.id}>
-                  <button
-                    type="button"
-                    disabled={timer.isRunning}
-                    onClick={() => chooseFavorite(favorite)}
-                  >
-                    <b>{favorite.name}</b>
-                    <span>{favorite.minutes} min · {favorite.trackSound === false ? "No sound meter" : "Tracks sound"}</span>
-                  </button>
-                  <button
-                    className="favorite-delete"
-                    type="button"
-                    aria-label={`Delete ${favorite.name}`}
-                    onClick={() => deleteFavoriteSession(favorite.id)}
-                  >
-                    Delete
-                  </button>
-                </li>
-              ))}
-          </ul>
-        </section>
-      )}
-      <fieldset disabled={timer.isRunning}>
-        <legend>Length</legend>
+      <label className="preset-name">
+        Preset name
+        <input
+          type="text"
+          form="save-session-preset"
+          required
+          value={favoriteName}
+          maxLength="50"
+          placeholder="e.g. Quiet reading"
+          onChange={(event) => setFavoriteName(event.target.value)}
+        />
+      </label>
+      <fieldset className="session-duration" disabled={timer.isRunning} aria-label="Session length">
         <div className="quick-durations" aria-label="Common session lengths">
           {[5, 10, 15, 20, 30].map((minutes) => (
             <button
@@ -111,114 +89,52 @@ const SessionSettingsCard = ({ session, displayCountdown }) => {
           </label>
         </div>
       </fieldset>
-      <fieldset>
-        <legend>Countdown Display</legend>
-        <div>
-          <label>
-            <input
-              type="radio"
-              name="showCountdown"
-              value={true}
-              checked={showCountdown}
-              onChange={handleShowCountdown}
-            />
-            Show countdown
-          </label>
-
-          <br></br>
-
-          <label>
-            <input
-              type="radio"
-              name="showCountdown"
-              value={false}
-              checked={!showCountdown}
-              onChange={handleShowCountdown}
-            />
-            Hide countdown
-          </label>
-        </div>
-      </fieldset>
-
-      {!showCountdown && <fieldset>
-        <legend>When countdown is hidden...</legend>
-
-          <label>
-            <input
-              type="radio"
-              name="hiddenTimerMode"
-              value="none"
-              checked={hiddenTimerMode === "none"}
-              onChange={handleHiddenTimerMode}
-            />
-            No messages
-          </label>
-
-          <br />
-
-          <label>
-            <input
-              type="radio"
-              name="hiddenTimerMode"
-              value="generic"
-              checked={hiddenTimerMode === "generic"}
-              onChange={handleHiddenTimerMode}
-            />
-            General encouragements
-          </label>
-
-          <br />
-
-          <label className="tooltip-label">
-            <input
-              type="radio"
-              name="hiddenTimerMode"
-              value="progress"
-              checked={hiddenTimerMode === "progress"}
-              onChange={handleHiddenTimerMode}
-            />
-
-            <span className="label-text">
-              Session-aware encouragements
-
-              <span
-                className="info-icon"
-                tabIndex={0}
-                aria-label="Learn more about session-aware encouragements"
-              >
-                ⓘ
-
-                <span className="tooltip">
-                  <strong>Messages change as the session progresses.</strong>
-                  <br /><br />
-                  🌱 Beginning: "Let's get started!"
-                  <br />
-                  📚 Middle: "You're making great progress."
-                  <br />
-                  🌟 End: "Finish strong!"
-                  <br /><br />
-                  Encouragements help students stay motivated without revealing how much
-                  time remains.
-                </span>
-              </span>
-            </span>
-          </label>
-      </fieldset>}
-      <form className="save-favorite" onSubmit={saveFavorite}>
-        <label>
-          Save this setup as a favorite
-          <input
-            type="text"
-            value={favoriteName}
-            maxLength="50"
-            placeholder="e.g. Quiet reading"
-            onChange={(event) => setFavoriteName(event.target.value)}
-          />
-        </label>
+      <label className="checkbox-option countdown-option">
+        <input type="checkbox" checked={showCountdown} onChange={(event) => setShowCountdown(event.target.checked)} />
+        Show countdown
+      </label>
+      {!showCountdown && <label className="hidden-countdown-choice">
+        While time is hidden
+        <select value={hiddenTimerMode} onChange={(event) => setHiddenTimerMode(event.target.value)}>
+          <option value="none">No messages</option>
+          <option value="generic">General encouragements</option>
+          <option value="progress">Encouragements that follow progress</option>
+        </select>
+      </label>}
+      {children}
+      <form id="save-session-preset" className="save-favorite" onSubmit={saveFavorite}>
         <button className="outline" type="submit" disabled={timer.isRunning || !favoriteName.trim()}>
-          Save favorite
+          Save preset
         </button>
       </form>
+      {favoriteSessions.length > 0 && (
+        <section className="favorite-sessions">
+          <h3>Saved presets</h3>
+          <ul>
+              {favoriteSessions.map((favorite) => (
+                <li key={favorite.id}>
+                  <button
+                    type="button"
+                    disabled={timer.isRunning}
+                    onClick={() => chooseFavorite(favorite)}
+                  >
+                    <b>{favorite.name}</b>
+                    <span>{favorite.minutes} min · {favorite.trackSound === false ? "No sound meter" : (Number.isFinite(favorite.soundThreshold) ? `Sound limit ${favorite.soundThreshold}%` : "Tracks sound")}</span>
+                  </button>
+                  <button
+                    className="favorite-delete"
+                    type="button"
+                    aria-label={`Delete ${favorite.name}`}
+                    onClick={() => deleteFavoriteSession(favorite.id)}
+                  >
+                    Delete
+                  </button>
+                </li>
+              ))}
+          </ul>
+        </section>
+      )}
+
     </>
 
   )

@@ -11,7 +11,7 @@ const RewardShop = ({ rewards, titleId }) => {
           <h2 id={titleId}>Dress up your class otter.</h2>
         </div>
 
-        <span className="points-badge">{isPreviewing ? "Preview" : `$${points} budget`}</span>
+        <span className="points-badge">{isPreviewing ? "Preview" : `★ ${points} stars`}</span>
       </div>
 
       <RewardList

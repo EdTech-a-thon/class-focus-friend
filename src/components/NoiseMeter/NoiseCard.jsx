@@ -11,15 +11,16 @@ const getStableAverage = (samples) => {
 };
 
 const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
-  const { noiseMessage, noiseTone, expectation, microphone, activity, activities, setActivity, soundThresholds, trackSound, setTrackSound, setSoundThreshold, applySoundCalibration, loudThreshold } = noise;
-  const [showSetup, setShowSetup] = useState(false);
+  const { noiseMessage, noiseTone, expectation, microphone, activity, activities, setActivity, soundThresholds, trackSound, setTrackSound, setSoundThreshold, loudThreshold } = noise;
+  const dialogRef = useRef(null);
   const [calibrationStage, setCalibrationStage] = useState("idle");
   const [secondsLeft, setSecondsLeft] = useState(SAMPLE_SECONDS);
   const [quietSample, setQuietSample] = useState(null);
-  const [previewActivity, setPreviewActivity] = useState(null);
+  const [showSoundBar, setShowSoundBar] = useState(true);
+  const [showMicrophoneControls, setShowMicrophoneControls] = useState(false);
   const samplesRef = useRef([]);
-  const previewThreshold = previewActivity ? soundThresholds[previewActivity] : expectation.threshold;
-  const previewLabel = previewActivity ? activities[previewActivity].label : expectation.label;
+  const previewThreshold = expectation.threshold;
+  const previewLabel = expectation.label;
 
   useEffect(() => {
     if (calibrationStage === "quiet" || calibrationStage === "talking") {
@@ -41,7 +42,6 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
       } else {
         const calibrated = microphone.setCalibration(quietSample, average);
         if (calibrated) {
-          applySoundCalibration();
           microphone.stop();
         }
         setCalibrationStage(calibrated ? "done" : "retry");
@@ -51,7 +51,7 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
       window.clearInterval(countdown);
       window.clearTimeout(finish);
     };
-  }, [applySoundCalibration, calibrationStage, microphone.setCalibration, microphone.stop, quietSample]);
+  }, [calibrationStage, microphone.setCalibration, microphone.stop, quietSample]);
 
   const beginCalibration = async () => {
     if (microphone.status !== "on" && !(await microphone.start())) return;
@@ -59,48 +59,66 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
   };
 
   return (
-    <section className={`${embedded ? "embedded-noise-setup" : "card noise-card"}`}>
-      <div className="card-heading">
-        <div><p className="card-label">Classroom sound</p><h2>{!focusMode && !trackSound ? "Sound meter off" : noiseMessage}</h2></div>
+    <section className={`${embedded ? "embedded-noise-setup" : "card noise-card"} ${focusMode && !showSoundBar ? "sound-bar-hidden" : ""}`}>
+      {focusMode && showSoundBar && <div className="card-heading">
+        <div><p className="card-label">{focusMode ? "Classroom sound" : "3. Sound tracking"}</p><h2>{focusMode ? noiseMessage : "Track sound for this session?"}</h2></div>
         <i className={`status-dot ${noiseTone}`} aria-hidden="true" />
-      </div>
+      </div>}
       {!focusMode && <label className="checkbox-option sound-tracking-option">
         <input type="checkbox" checked={trackSound} onChange={(event) => setTrackSound(event.target.checked)} />
-        Track classroom sound during this session
+        Track classroom sound
       </label>}
       {!focusMode && trackSound && <fieldset className="sound-profile-choice">
         <legend>Acceptable volume</legend>
         <div>
           {Object.entries(activities).map(([activityId, item]) => (
             <button className={activity === activityId ? "selected" : ""} type="button" key={activityId} onClick={() => setActivity(activityId)}>
-              <b>{item.label} default</b><span>{item.detail}</span>
+              <b>{item.label}</b>
             </button>
           ))}
         </div>
       </fieldset>}
       {(focusMode || trackSound) && <>
-      <p className="noise-expectation">
-        {previewActivity ? "Previewing" : "Goal for"} {previewLabel.toLowerCase()}:
-        {' '}<b>{previewActivity ? `green through ${previewThreshold}%` : expectation.detail}</b>
+      {focusMode && showSoundBar && <><p className="noise-expectation">
+        Goal for {previewLabel.toLowerCase()}:
+        {' '}<b>{expectation.detail}</b>
       </p>
       <NoiseScale
         microphone={microphone}
         noiseTone={noiseTone}
         greenUntil={previewThreshold}
-        redFrom={previewActivity ? Math.min(100, previewThreshold + 18) : loudThreshold}
-      />
+        redFrom={loudThreshold}
+      /></>}
 
       <div className="noise-actions">
-        {focusMode && <button className="outline" type="button" aria-pressed={microphone.status === "on"} disabled={microphone.status === "starting"} onClick={microphone.status === "on" ? microphone.stop : () => microphone.start()}>
-          {microphone.status === "on" ? "Stop sound meter" : microphone.status === "starting" ? "Starting sound meter..." : "Turn on sound meter"}
-        </button>}
-        {!focusMode && <button className="plain-button" type="button" onClick={() => setShowSetup((value) => !value)} aria-expanded={showSetup}>{showSetup ? "Hide microphone choice" : "Choose microphone"}</button>}
+        {focusMode && <label className="checkbox-option">
+          <input type="checkbox" checked={showSoundBar} onChange={(event) => setShowSoundBar(event.target.checked)} />
+          Show sound bar
+        </label>}
+        {focusMode && <button className="outline microphone-toggle" type="button" aria-expanded={showMicrophoneControls} aria-controls="focus-microphone-controls" onClick={() => setShowMicrophoneControls((visible) => !visible)}>Select Microphone</button>}
+        {!focusMode && <button className="outline" type="button" onClick={() => dialogRef.current.showModal()}>Microphone & calibration…</button>}
+
       </div>
+
+      {focusMode && <div className="microphone-setup" id="focus-microphone-controls" hidden={!showMicrophoneControls}>
+        <label htmlFor="focus-microphone-choice">Microphone</label>
+        <select id="focus-microphone-choice" value={microphone.selectedDeviceId} disabled={microphone.status === "starting"} onChange={(event) => microphone.selectDevice(event.target.value, true)}>
+          <option value="">Default microphone</option>
+          {microphone.devices.filter((device) => device.deviceId).map((device, index) => <option key={device.deviceId} value={device.deviceId}>{device.label || `Microphone ${index + 1}`}</option>)}
+        </select>
+        <button className="outline" type="button" disabled={microphone.status === "starting"} onClick={() => microphone.start()}>
+          {microphone.status === "starting" ? "Connecting…" : microphone.status === "on" ? "Reconnect microphone" : "Connect microphone"}
+        </button>
+      </div>}
 
       {!focusMode && (
         <div className="microphone-setup">
-          {showSetup && <><label htmlFor="microphone-choice">Microphone</label>
-            <select id="microphone-choice" value={microphone.selectedDeviceId} onChange={(event) => microphone.selectDevice(event.target.value)}>
+          <dialog className="sound-calibration-dialog" aria-labelledby="calibration-title" ref={dialogRef} onClose={() => { setCalibrationStage("idle"); microphone.stop(); }}>
+            <h2 id="calibration-title">{calibrationStage === "done" ? "Your recommended sound levels" : "Microphone calibration"}</h2>
+            {calibrationStage !== "done" && <>
+            <p className="help-text">Adjust the meter for this room and device. This does not change your saved session sound limits.</p>
+            <label htmlFor="microphone-choice">Microphone</label>
+            <select id="microphone-choice" value={microphone.selectedDeviceId} onChange={(event) => { setCalibrationStage("idle"); microphone.selectDevice(event.target.value); }}>
               {!microphone.devices.length && <option value="">Default microphone</option>}
               {microphone.devices.map((device, index) => <option key={device.deviceId} value={device.deviceId}>{device.label || `Microphone ${index + 1}`}</option>)}
             </select></>}
@@ -110,39 +128,33 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
             {calibrationStage === "quiet" && <p><b>Step 1 of 2:</b> Keep the room quiet for {secondsLeft} seconds…</p>}
             {calibrationStage === "ready" && <><p><b>Step 2 of 2:</b> Ask the class to talk at a normal group-work volume.</p><button className="primary" type="button" onClick={() => setCalibrationStage("talking")}>Measure normal voices</button></>}
             {calibrationStage === "talking" && <p><b>Listening:</b> Keep talking normally for {secondsLeft} seconds…</p>}
-            {calibrationStage === "done" && <><p><b>Calibration complete.</b> The meter is ready for this room.</p><button className="outline" type="button" onClick={() => setCalibrationStage("idle")}>Done</button></>}
+            {calibrationStage === "done" && <>
+              <p>Calibration complete. Try these starting limits on your calibrated meter:</p>
+              <dl className="calibration-recommendations">
+                <div><dt>Individual work</dt><dd>30%</dd></div>
+                <div><dt>Group work</dt><dd>70%</dd></div>
+              </dl>
+              <p>Use these percentages when setting up a session, then adjust to suit your class. Your saved session limits stay as they are.</p>
+            </>}
             {calibrationStage === "retry" && <><p><b>Let’s try that again.</b> The two sound levels were too similar.</p><button className="outline" type="button" onClick={() => setCalibrationStage("quiet")}>Restart calibration</button></>}
           </div>
 
+            <div className="calibration-footer"><button className="outline" type="button" onClick={() => dialogRef.current.close()}>{calibrationStage === "done" ? "Done" : "Close calibration"}</button></div>
+            {["denied", "missing", "unsupported"].includes(microphone.status) && <p role="alert">Microphone unavailable. Check browser permission or choose another microphone.</p>}
+          </dialog>
           <div className="sound-thresholds">
-            <p><b>Fine-tune the colored ranges</b> Move a slider right if normal sound is triggering too soon, or left if loud sound is not triggering.</p>
-            {Object.entries(activities).map(([activityId, item]) => (
-              <label key={activityId}>
-                <span><b>{item.label}</b><small>Green through {soundThresholds[activityId]}%</small></span>
-                <input
-                  type="range"
-                  min="10"
-                  max="80"
-                  value={soundThresholds[activityId]}
-                  onPointerDown={() => setPreviewActivity(activityId)}
-                  onPointerUp={() => setPreviewActivity(null)}
-                  onPointerCancel={() => setPreviewActivity(null)}
-                  onKeyDown={() => setPreviewActivity(activityId)}
-                  onBlur={() => setPreviewActivity(null)}
-                  onChange={(event) => {
-                    setPreviewActivity(activityId);
-                    setSoundThreshold(activityId, Number(event.target.value));
-                  }}
-                />
-              </label>
-            ))}
+            <label>
+              <span><b>Sound limit for this session</b><small>Green through {soundThresholds[activity]}%</small></span>
+              <input type="range" min="10" max="80" value={soundThresholds[activity]} onChange={(event) => setSoundThreshold(activity, Number(event.target.value))} />
+            </label>
+
           </div>
         </div>
       )}
       </>}
 
       {microphone.status === "denied" && <p className="help-text">Microphone access was not available. You can still run a focus session.</p>}
-      {microphone.status === "missing" && <p className="help-text">That microphone is no longer available. Choose another microphone in setup.</p>}
+      {microphone.status === "missing" && <p className="help-text">That microphone is no longer available. {focusMode ? 'Use “Select Microphone” to choose another.' : "Choose another microphone in setup."}</p>}
       {microphone.status === "unsupported" && <p className="help-text">This browser cannot use the sound meter. The other classroom tools still work.</p>}
     </section>
   );

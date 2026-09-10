@@ -7,6 +7,7 @@ const TimerControls = ({ timerSettings, session, displayCountdown, focusMode = f
     showCountdown,
     setShowCountdown,
     hiddenTimerMode,
+    setHiddenTimerMode,
   } = displayCountdown
   const [quickMinutes, setQuickMinutes] = useState(timer.durationSeconds / 60);
   const [quickActivity, setQuickActivity] = useState(session.activity);
@@ -16,13 +17,14 @@ const TimerControls = ({ timerSettings, session, displayCountdown, focusMode = f
 
   const launchSession = (setup) => {
     setShowCountdown(setup.showCountdown ?? true);
+    setHiddenTimerMode(setup.hiddenTimerMode ?? "none");
     session.startSession(setup);
   };
 
   const message = <EncouragementMessage mode={hiddenTimerMode} timer={timer} noiseTone={noiseTone}/>
 
   return (
-    <section>
+    <section className="timer-controls">
       <p className="card-label">Focus session</p>
 
       {!hasStarted && (
@@ -34,7 +36,9 @@ const TimerControls = ({ timerSettings, session, displayCountdown, focusMode = f
                 minutes: favorite.minutes,
                 activity: session.activities[favorite.activity] ? favorite.activity : "partner",
                 trackSound: favorite.trackSound ?? true,
-                showCountdown: true,
+                showCountdown: favorite.showCountdown ?? true,
+                hiddenTimerMode: favorite.hiddenTimerMode,
+                soundThreshold: favorite.soundThreshold,
               })}>
                 <b>{favorite.name}</b>
                 <span>{favorite.minutes} min · {favorite.trackSound === false ? "No sound meter" : "Tracks sound"}</span>

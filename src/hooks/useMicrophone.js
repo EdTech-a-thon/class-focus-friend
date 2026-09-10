@@ -71,7 +71,8 @@ export const useMicrophone = () => {
         const measuredLevel = Math.min(100, volume * 7);
         const now = performance.now();
         const elapsed = Math.min(250, now - lastUpdate);
-        const smoothingTime = measuredLevel > smoothedLevel ? 1400 : 2400;
+        // Let the bar settle promptly when voices stop, without making it jumpy.
+        const smoothingTime = 1400;
         const weight = 1 - Math.exp(-elapsed / smoothingTime);
         smoothedLevel += (measuredLevel - smoothedLevel) * weight;
         lastUpdate = now;
@@ -96,8 +97,8 @@ export const useMicrophone = () => {
     }
   }, [refreshDevices, selectedDeviceId]);
 
-  const selectDevice = useCallback(async (deviceId) => {
-    const wasOn = status === "on";
+  const selectDevice = useCallback(async (deviceId, startImmediately = false) => {
+    const wasOn = status === "on" || startImmediately;
     stop();
     setSelectedDeviceId(deviceId);
     setCalibrationState(null);

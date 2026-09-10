@@ -66,7 +66,7 @@ const ProgressCard = ({ progress }) => {
                 <div className={owned ? "collected" : ""} key={item.id}>
                   <img src={item.image} alt="" />
                   <span>{item.name}</span>
-                  <b>{owned ? "Collected" : `${item.cost} points`}</b>
+                  <b>{owned ? "Collected" : `★ ${item.cost}`}</b>
                 </div>
               );
             })}

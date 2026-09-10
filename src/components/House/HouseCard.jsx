@@ -50,9 +50,14 @@ const HouseCard = ({ house, rewards, focusMode = false }) => {
           <p className="card-label">{otterName || "Otter"}'s house</p>
           <h2>{otterName || "Otter"} is ready to focus</h2>
         </div>
-        <div className="house-progress">
+        <div className="house-stats">
+          <p className="house-class-points">
+            <span aria-hidden="true">★</span> <strong>{points}</strong> class points
+          </p>
+          <div className="house-progress">
           <span><b>{activeRoomItems.length - itemsStillNeeded}</b> of {activeRoomItems.length} room items bought</span>
           <small>{allRoomsUnlocked ? "Every room is available!" : "Buy every item to open the next room"}</small>
+          </div>
         </div>
       </div>}
 
