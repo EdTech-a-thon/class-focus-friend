@@ -24,7 +24,7 @@ const TimerControls = ({ timerSettings, session, displayCountdown, focusMode = f
   const message = <EncouragementMessage mode={hiddenTimerMode} timer={timer} noiseTone={noiseTone}/>
 
   return (
-    <section>
+    <section className="timer-controls">
       <p className="card-label">Focus session</p>
 
       {!hasStarted && (

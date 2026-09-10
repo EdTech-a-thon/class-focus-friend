@@ -95,25 +95,33 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
 
       {!focusMode && (
         <div className="microphone-setup">
-          <dialog className="sound-calibration-dialog" ref={dialogRef} onClose={() => { setCalibrationStage("idle"); microphone.stop(); }}>
-            <h2>Microphone calibration</h2>
+          <dialog className="sound-calibration-dialog" aria-labelledby="calibration-title" ref={dialogRef} onClose={() => { setCalibrationStage("idle"); microphone.stop(); }}>
+            <h2 id="calibration-title">{calibrationStage === "done" ? "Your recommended sound levels" : "Microphone calibration"}</h2>
+            {calibrationStage !== "done" && <>
             <p className="help-text">Adjust the meter for this room and device. This does not change your saved session sound limits.</p>
             <label htmlFor="microphone-choice">Microphone</label>
             <select id="microphone-choice" value={microphone.selectedDeviceId} onChange={(event) => { setCalibrationStage("idle"); microphone.selectDevice(event.target.value); }}>
               {!microphone.devices.length && <option value="">Default microphone</option>}
               {microphone.devices.map((device, index) => <option key={device.deviceId} value={device.deviceId}>{device.label || `Microphone ${index + 1}`}</option>)}
-            </select>
+            </select></>}
 
           <div className="calibration-panel" aria-live="polite">
             {calibrationStage === "idle" && <><p><b>Calibrate classroom sound</b> Measure this room so the colored ranges match what quiet and group work actually sound like.</p><button className="outline" type="button" onClick={beginCalibration}>{microphone.calibration ? "Calibrate again" : "Start calibration"}</button></>}
             {calibrationStage === "quiet" && <p><b>Step 1 of 2:</b> Keep the room quiet for {secondsLeft} seconds…</p>}
             {calibrationStage === "ready" && <><p><b>Step 2 of 2:</b> Ask the class to talk at a normal group-work volume.</p><button className="primary" type="button" onClick={() => setCalibrationStage("talking")}>Measure normal voices</button></>}
             {calibrationStage === "talking" && <p><b>Listening:</b> Keep talking normally for {secondsLeft} seconds…</p>}
-            {calibrationStage === "done" && <><p><b>Calibration complete.</b> The meter is ready for this room.</p><button className="outline" type="button" onClick={() => dialogRef.current.close()}>Done</button></>}
+            {calibrationStage === "done" && <>
+              <p>Calibration complete. Try these starting limits on your calibrated meter:</p>
+              <dl className="calibration-recommendations">
+                <div><dt>Individual work</dt><dd>30%</dd></div>
+                <div><dt>Group work</dt><dd>70%</dd></div>
+              </dl>
+              <p>Use these percentages when setting up a session, then adjust to suit your class. Your saved session limits stay as they are.</p>
+            </>}
             {calibrationStage === "retry" && <><p><b>Let’s try that again.</b> The two sound levels were too similar.</p><button className="outline" type="button" onClick={() => setCalibrationStage("quiet")}>Restart calibration</button></>}
           </div>
 
-            <button className="outline" type="button" onClick={() => dialogRef.current.close()}>Close calibration</button>
+            <div className="calibration-footer"><button className="outline" type="button" onClick={() => dialogRef.current.close()}>{calibrationStage === "done" ? "Done" : "Close calibration"}</button></div>
             {["denied", "missing", "unsupported"].includes(microphone.status) && <p role="alert">Microphone unavailable. Check browser permission or choose another microphone.</p>}
           </dialog>
           <div className="sound-thresholds">

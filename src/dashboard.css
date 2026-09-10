@@ -670,3 +670,13 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .embedded-noise-setup .sound-thresholds { border: 0; margin: 0; padding: 0; max-width: 480px; }
 .embedded-noise-setup .noise-actions { order: 1; }
 .embedded-noise-setup .noise-actions .outline { font-size: .84rem; padding: 7px 12px; }
+
+.timer-controls { width: 100%; min-width: 0; }
+.timer-controls .focus-launcher { width: 100%; max-width: 480px; margin-inline: auto; box-sizing: border-box; }
+.quick-sound-limit > label { display: inline-flex; align-items: center; gap: 5px; margin-bottom: 6px; }
+.sound-calibration-dialog .calibration-panel { margin-top: 20px; padding-top: 18px; }
+.calibration-footer { display: flex; justify-content: flex-end; margin-top: 24px; padding-top: 16px; border-top: 1px solid #ded7ca; }
+.calibration-recommendations { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin: 20px 0; }
+.calibration-recommendations > div { padding: 16px; background: #dce9d9; border-radius: 12px; }
+.calibration-recommendations dt { font-size: .9rem; }
+.calibration-recommendations dd { margin: 8px 0 0; font-size: 1.8rem; font-weight: 700; }

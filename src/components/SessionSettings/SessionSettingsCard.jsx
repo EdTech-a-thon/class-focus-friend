@@ -117,7 +117,6 @@ const SessionSettingsCard = ({ session, displayCountdown, children }) => {
         </select>
       </label>}
       {children}
-      <p className="help-text">Save the time, countdown, and sound choices together. Calibration stays separate.</p>
       <form className="save-favorite" onSubmit={saveFavorite}>
         <label>
           Save this setup as a favorite
