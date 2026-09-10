@@ -239,6 +239,8 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .house-card { background: #e8dfcf; border: 1px solid #d7c8b3; border-radius: 34px; margin: 12px auto 30px; max-width: 1116px; padding: 36px 32px 32px; width: calc(100% - 48px); }
 .house-heading { align-items: end; display: flex; gap: 24px; justify-content: space-between; margin-bottom: 22px; }
 .house-heading .card-label { margin-bottom: 7px; }
+.house-stats { align-items: center; display: flex; gap: 12px; }
+.house-stats .house-class-points { flex-shrink: 0; margin: 0; }
 .house-class-points { align-items: center; background: #25433d; border-radius: 999px; color: #fffaf0; display: flex; font-size: 1rem; gap: 7px; justify-content: center; margin: 22px auto; padding: 10px 22px; width: fit-content; }
 .house-class-points span { color: #f8d97a; }
 .house-class-points strong { font-size: 1.3rem; }
@@ -490,6 +492,10 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
   .history-card { grid-column: auto; }
   .house-card { border-radius: 0 0 28px 28px; margin-top: 0; padding: 28px 18px 20px; width: 100%; }
   .house-heading { align-items: flex-start; flex-direction: column; gap: 14px; }
+  .house-stats { gap: 8px; width: 100%; }
+  .house-stats .house-class-points { font-size: .8rem; gap: 4px; padding: 8px 10px; }
+  .house-stats .house-progress { min-width: 0; }
+  .house-stats .house-progress > span { display: block; }
   .house-progress { text-align: left; width: 100%; }
   .house-progress > span { justify-content: flex-start; }
   .otter-name-field { align-items: flex-start; flex-direction: column; gap: 4px; }
