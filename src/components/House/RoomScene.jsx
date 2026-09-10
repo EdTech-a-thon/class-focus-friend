@@ -15,7 +15,7 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
       {editingMode && (
         <div className="scene-shop-toolbar">
           <b>{editingMode === "decorations" ? "Choose a gray room item" : "Choose a gray clothing spot"}</b>
-          <span>{isPreviewing ? "Preview" : `$${points} budget`}</span>
+          <span>{isPreviewing ? "Preview" : `★ ${points} stars`}</span>
           <button type="button" onClick={onCloseEditor}>Done</button>
         </div>
       )}
@@ -55,10 +55,10 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
                 className={`accessory-price-spot accessory-${item.id}`}
                 key={item.id}
                 type="button"
-                aria-label={`${item.name}, ${unlockedAccessories.includes(item.id) ? "owned" : `$${item.cost}`}`}
+                aria-label={`${item.name}, ${unlockedAccessories.includes(item.id) ? "owned" : `${item.cost} stars`}`}
                 onClick={() => onChooseItem(item)}
               >
-                <span>{unlockedAccessories.includes(item.id) ? "Owned" : `$${item.cost}`}</span>
+                <span>{unlockedAccessories.includes(item.id) ? "Owned" : `★ ${item.cost}`}</span>
               </button>
             ))}
           </div>
@@ -98,7 +98,7 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
                 {!owned && (
                   <span className="room-item-price">
                     <b>+</b>
-                    <small>${item.cost}</small>
+                    <small>★ {item.cost}</small>
                   </span>
                 )}
               </button>
@@ -122,8 +122,8 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
           <div>
             <small>{editingMode === "decorations" ? "Room decoration" : "Otter clothing"}</small>
             <h3>{selectedItem.name}</h3>
-            <b>{selectedIsOwned ? "Already owned" : `$${selectedItem.cost}`}</b>
-            {!isPreviewing && !selectedIsOwned && <p>${Math.max(0, points - selectedItem.cost)} left after purchase</p>}
+            <b>{selectedIsOwned ? "Already owned" : `★ ${selectedItem.cost}`}</b>
+            {!isPreviewing && !selectedIsOwned && <p>★ {Math.max(0, points - selectedItem.cost)} stars left after purchase</p>}
           </div>
           <button
             className="scene-purchase-button"
@@ -131,7 +131,7 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
             disabled={!isPreviewing && !selectedIsOwned && points < selectedItem.cost}
             onClick={() => onConfirmItem(selectedItem)}
           >
-            {isPreviewing ? "Place in preview" : selectedIsOwned ? "Wear it" : points < selectedItem.cost ? "Not enough budget" : `Buy for $${selectedItem.cost}`}
+            {isPreviewing ? "Place in preview" : selectedIsOwned ? "Wear it" : points < selectedItem.cost ? "Not enough stars" : `Buy for ★ ${selectedItem.cost}`}
           </button>
         </aside>
       )}

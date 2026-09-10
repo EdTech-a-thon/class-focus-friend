@@ -18,7 +18,7 @@ const HouseCatalog = ({
           <p className="catalog-label">House shop</p>
           <h2 id={titleId}>Decorate the {room.name.toLowerCase()}</h2>
         </div>
-        <span className="points-badge">{isPreviewing ? "Preview" : `$${points} budget`}</span>
+        <span className="points-badge">{isPreviewing ? "Preview" : `★ ${points} stars`}</span>
       </div>
 
       <div className="reward-list">
@@ -36,7 +36,7 @@ const HouseCatalog = ({
               <div>
                 <b>{item.name}</b>
                 <small>
-                  {owned ? "In this room" : `$${item.cost}`}
+                  {owned ? "In this room" : `★ ${item.cost}`}
                 </small>
               </div>
 
