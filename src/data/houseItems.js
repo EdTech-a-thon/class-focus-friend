@@ -20,14 +20,12 @@ const iconSVG = (id, color = "#e98769") => {
     [["toothbrush-cup", "skin-care"], `<path d="M38 59h44l-5 49H43z" fill="${color}"/><path d="M49 59 45 26M61 59V20M73 59l5-31"/>`],
     [["soap-set", "face-masks"], `<rect x="28" y="67" width="64" height="35" rx="17" fill="${color}"/><path d="M43 64c1-15 33-15 34 0"/><circle cx="39" cy="47" r="7" fill="#bfe3ea"/><circle cx="58" cy="35" r="10" fill="#bfe3ea"/>`],
     [["rubber-duck"], `<circle cx="73" cy="48" r="18" fill="#f8d97a"/><path d="m90 48 16 7-16 6M82 48h1"/><path d="M27 87c8-28 31-33 48-17 9 9 14 25 5 34H38c-10-2-16-8-11-17z" fill="#f8d97a"/>`],
-    [["dream-mobile"], `<path d="M60 20v24M30 45h60M38 45v18M82 45v18M60 45v31"/><path d="m38 64 5 10 11 2-8 8 2 11-10-5-10 5 2-11-8-8 11-2z" fill="#f8d97a"/><path d="M73 72c16 0 22 20 9 29-11 8-27 0-27-14 5 4 14 4 18-1 4-4 4-9 0-14z" fill="${color}"/>`],
     [["kitchen-utensils"], `<path d="M38 24v82M27 24v27c0 15 22 15 22 0V24M71 24v82M71 24c26 8 25 38 0 43"/>`],
-    [["fuzzy-robe"], `<path d="m40 28 20 12 20-12 22 22-13 15-9-8v54H40V57l-9 8-13-15z" fill="${color}"/><path d="M60 40v71M40 76h40M52 40l8 13 8-13"/>`],
     [["coffee-maker"], `<rect x="34" y="25" width="52" height="82" rx="7" fill="${color}"/><path d="M43 54h34M46 68h28v27H46zM52 107h38"/><circle cx="71" cy="40" r="5"/>`],
   ];
   const match = groups.find(([ids]) => ids.includes(id));
   const body = match?.[1] || `<path d="M60 25 70 50l27 3-20 18 6 27-23-13-23 13 6-27-20-18 27-3z" fill="${color}"/>`;
-  return `<g fill="none" stroke="#29453e" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">${body}</g>`;
+  return `<g fill="none" stroke="#29453e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${body}</g>`;
 };
 
 const cartoonRoom = (name, symbol, wall, floor) => {
@@ -51,7 +49,8 @@ const roomPriceCounts = {};
 const nextRoomPrice = (room) => {
   const pricePosition = roomPriceCounts[room] || 0;
   roomPriceCounts[room] = pricePosition + 1;
-  return 30 + pricePosition * 5;
+  const retiredMobileOffset = room === "bedroom" && pricePosition >= 5 ? 1 : 0;
+  return 30 + (pricePosition + retiredMobileOffset) * 5;
 };
 
 const item = (id, name, _cost, room, symbol, color, sceneType = "floor") => ({
@@ -83,7 +82,6 @@ export const houseItems = [
   item("nightstand", "Nightstand", 75, "bedroom", "🗄️", "#cf9668", "furniture"),
   item("moon-lamp", "Moon Lamp", 80, "bedroom", "🌙", "#8d83bd", "lamp"),
   item("soft-blanket", "Soft Blanket", 85, "bedroom", "🧣", "#df92a4", "soft"),
-  item("dream-mobile", "Dream Mobile", 90, "bedroom", "💫", "#75afbc", "hanging"),
   item("art-wall", "Art Wall", 95, "bedroom", "🎨", "#e58969", "wall"),
   item("comfy-chair", "Comfy Chair", 100, "bedroom", "🪑", "#8eb179", "furniture"),
   item("toy-basket", "Toy Basket", 105, "bedroom", "🧸", "#f0b95f", "floor"),
@@ -93,7 +91,7 @@ export const houseItems = [
   item("tea-kettle", "Tea Kettle", 120, "kitchen", "🫖", "#6fa7b0", "surface"),
   item("mixing-bowls", "Mixing Bowls", 125, "kitchen", "🥣", "#d18fbd", "surface"),
   item("cookie-jar", "Cookie Jar", 130, "kitchen", "🍪", "#d3a066", "surface"),
-  item("sunny-table", "Sunny Table", 135, "kitchen", "🍽️", "#eeaf5e", "table"),
+  item("sunny-table", "Serving Cart", 135, "kitchen", "🍽️", "#eeaf5e", "table"),
   item("wall-clock", "Wall Clock", 140, "kitchen", "🕰️", "#87aa81", "wall"),
   item("herb-garden", "Herb Garden", 145, "kitchen", "🌿", "#75aa7d", "surface"),
   item("recipe-board", "Recipe Board", 150, "kitchen", "📝", "#e58369", "wall"),
@@ -116,7 +114,6 @@ export const houseItems = [
   item("bathroom-plant", "Bathroom Plant", 260, "bathroom", "🪴", "#83b68b", "plant"),
   item("face-masks", "Face Masks", 265, "bathroom", "🧖", "#a3c9ae", "surface"),
   item("skin-care", "Skin Care Set", 270, "bathroom", "🧴", "#dfa0ae", "surface"),
-  item("fuzzy-robe", "Fuzzy Robe", 325, "bathroom", "🥋", "#b9a5cb", "hanging"),
 
   item("office-desk", "Focus Desk", 275, "office", "🖥️", "#b9825d", "furniture"),
   item("desk-chair", "Desk Chair", 280, "office", "🪑", "#7198d2", "furniture"),
@@ -164,7 +161,7 @@ export const classMilestones = [
     name: "Stargazing Corner",
     icon: "⭐",
     room: "bedroom",
-    itemIds: ["star-rug", "dream-mobile", "comfy-chair"],
+    itemIds: ["star-rug", "moon-lamp", "comfy-chair"],
   },
   {
     id: "creative-sleepover",
@@ -206,7 +203,7 @@ export const classMilestones = [
     name: "Spa Day",
     icon: "🧖",
     room: "bathroom",
-    itemIds: ["face-masks", "skin-care", "fuzzy-robe", "bubble-bath"],
+    itemIds: ["face-masks", "skin-care", "soft-towels", "bubble-bath"],
   },
   {
     id: "garden-bath",

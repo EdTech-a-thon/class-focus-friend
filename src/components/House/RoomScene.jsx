@@ -1,3 +1,4 @@
+import RoomFixtures from "./RoomFixtures";
 import Otter from "../Otter/Otter";
 
 const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = [], unlockedAccessories = [], equipped, isCelebrating, isFocusing, noiseTone, otterName, focusMode = false, editingMode, points, isPreviewing, selectedItem, onChooseItem, onConfirmItem, onCloseEditor }) => {
@@ -10,6 +11,14 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
   const selectedX = selectedItem?.roomPosition?.x ?? 40;
   
   return (
+    <>
+      {editingMode && (
+        <div className="scene-shop-toolbar">
+          <b>{editingMode === "decorations" ? "Choose a gray room item" : "Choose a gray clothing spot"}</b>
+          <span>{isPreviewing ? "Preview" : `$${points} budget`}</span>
+          <button type="button" onClick={onCloseEditor}>Done</button>
+        </div>
+      )}
     <section
       className={`room-scene room-${room.id}`}
       aria-label={`${room.name} in the otter's house`}
@@ -25,10 +34,9 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
         </div>
       </div>}
 
-      {(room.id === "kitchen" || room.id === "bathroom") && <div className="room-counter" aria-hidden="true" />}
-      {room.id === "bathroom" && <div className="room-toiletry-shelf" aria-hidden="true" />}
+      <RoomFixtures room={room.id} />
       <div className="room-window" aria-hidden="true">
-        <span className="window-sun" />
+        {room.id === "bedroom" ? <svg className="window-moon" viewBox="0 0 60 60"><path d="M39 5A25 25 0 1 0 49 48 27 27 0 0 1 39 5Z" fill="#fff1c7" /></svg> : <span className="window-sun" />}
         <span className="window-cloud cloud-one" />
         <span className="window-cloud cloud-two" />
       </div>
@@ -56,14 +64,6 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
           </div>
         )}
       </div>
-
-      {editingMode && (
-        <div className="scene-shop-toolbar">
-          <b>{editingMode === "decorations" ? "Choose a gray room item" : "Choose a gray clothing spot"}</b>
-          <span>{isPreviewing ? "Preview" : `$${points} budget`}</span>
-          <button type="button" onClick={onCloseEditor}>Done</button>
-        </div>
-      )}
 
       {visibleItems.length ? (
         <div
@@ -136,6 +136,7 @@ const RoomScene = ({ room, decorations, availableItems = [], accessoryItems = []
         </aside>
       )}
     </section>
+    </>
   );
 };
 
