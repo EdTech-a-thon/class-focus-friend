@@ -109,7 +109,6 @@ const NoiseCard = ({ noise, focusMode = false, embedded = false }) => {
         <button className="outline" type="button" disabled={microphone.status === "starting"} onClick={() => microphone.start()}>
           {microphone.status === "starting" ? "Connecting…" : microphone.status === "on" ? "Reconnect microphone" : "Connect microphone"}
         </button>
-        <p className="help-text">{showSoundBar ? "Choose a microphone or reconnect if no sound appears." : "Sound tracking stays on while the bar is hidden."}</p>
       </div>}
 
       {!focusMode && (
