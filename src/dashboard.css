@@ -579,6 +579,11 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .edtechathon-credit { align-items: center; display: inline-flex; font-weight: 700; gap: 8px; }
 .edtechathon-credit img { height: 24px; width: 24px; }
 
+.language-picker { align-items: center; display: inline-flex; gap: 8px; }
+.language-picker-label { font-weight: 700; }
+.language-picker select { background: #fffaf0; border: 2px solid #d8e3da; border-radius: 999px; color: #25433d; font: inherit; padding: 4px 10px; }
+.language-picker select:hover { border-color: #9bceb4; }
+
 .page-shell { display: flex; flex-direction: column; }
 /* The header and footer center themselves, which a column layout would
    otherwise read as a reason to shrink them to their contents. */

@@ -23,9 +23,12 @@ import SupportButton from "./components/Support/SupportButton";
 import AboutPage from "./pages/AboutPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import { useRoute } from "./hooks/useRoute";
+import { useTranslation } from "./i18n";
 import { clearClassroomData } from "./utils/storage";
 
 const Classroom = () => {
+  const { t } = useTranslation();
+
   // persistent classroom data
   const [settings, setSettings] = useLocalStorage("onTaskOtterSettings", {
     activity: "independent",
@@ -53,7 +56,7 @@ const Classroom = () => {
   const {
     activity: savedActivity,
     preferredMinutes,
-    otterName = "Otter",
+    otterName = t("otter.default"),
     favoriteSessions: savedFavoriteSessions = [],
     soundThresholds: savedSoundThresholds = {},
     trackSound = true,
@@ -240,14 +243,14 @@ const Classroom = () => {
       : "warn";
 
   const noiseMessage = microphone.status !== "on"
-    ? "Ready when you are"
+    ? t("noise.ready")
     : needsTeacherResume
-      ? "Paused for a teacher check-in"
+      ? t("noise.paused")
       : noiseTone === "good"
-      ? "On track"
+      ? t("noise.onTrack")
       : noiseTone === "warn"
-        ? "Getting loud"
-        : "Too loud";
+        ? t("noise.gettingLoud")
+        : t("noise.tooLoud");
 
   const timer = useTimer(preferredMinutes);
   const pauseTimer = timer.pause;
@@ -592,22 +595,22 @@ const Classroom = () => {
     <main className={`app-shell mode-${appMode} ${isPreviewing ? "previewing" : ""} ${isFocusFullScreen ? "full-screen" : ""}`}>
       {isPreviewing && (
         <div className="preview-bar" role="status">
-          <b>Preview mode</b>
-          <small>Every room and decoration is switched on. Nothing here is saved.</small>
-          <button className="outline" type="button" onClick={stopPreview}>Exit preview</button>
+          <b>{t("app.preview.title")}</b>
+          <small>{t("app.preview.body")}</small>
+          <button className="outline" type="button" onClick={stopPreview}>{t("app.preview.exit")}</button>
         </div>
       )}
 
       <Header header={header} />
 
-      <nav className="mode-switcher" aria-label="Classroom mode">
+      <nav className="mode-switcher" aria-label={t("app.mode.label")}>
         <button
           className={appMode === "configure" ? "selected" : ""}
           type="button"
           aria-pressed={appMode === "configure"}
           onClick={() => setAppMode("configure")}
         >
-          Configure
+          {t("app.mode.configure")}
         </button>
         <button
           className={appMode === "focus" ? "selected" : ""}
@@ -615,7 +618,7 @@ const Classroom = () => {
           aria-pressed={appMode === "focus"}
           onClick={enterFocusMode}
         >
-          Focus
+          {t("app.mode.focus")}
         </button>
       </nav>
 
@@ -625,7 +628,7 @@ const Classroom = () => {
           type="button"
           onClick={isFocusFullScreen ? fullScreen.exit : fullScreen.enter}
         >
-          {isFocusFullScreen ? "Exit full screen" : "⛶ Full screen"}
+          {isFocusFullScreen ? t("app.fullScreen.exit") : t("app.fullScreen.enter")}
         </button>
       )}
 
@@ -640,10 +643,10 @@ const Classroom = () => {
 
       {appMode === "configure" && <div className="clear-data-section">
         <button className="preview-trigger" type="button" onClick={isPreviewing ? stopPreview : startPreview}>
-          {isPreviewing ? "Exit preview mode" : "Preview everything"}
+          {isPreviewing ? t("app.preview.stop") : t("app.preview.start")}
         </button>
         <button className="clear-data-trigger" type="button" onClick={() => setShowClearData(true)}>
-          Erase saved data
+          {t("app.eraseData")}
         </button>
       </div>}
 
@@ -653,7 +656,7 @@ const Classroom = () => {
         isTimerAlertPlaying={isTimerAlertPlaying}
         onClose={closeCompletionModal}
         onSilenceAlert={silenceTimerAlert}
-        duration={`${timer.durationSeconds / 60} minutes`}
+        duration={t("complete.duration", { minutes: timer.durationSeconds / 60 })}
       />
 
       {showAccount && (
