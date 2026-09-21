@@ -704,3 +704,13 @@ legend { font-size: .88rem; font-weight: 700; margin-bottom: 10px; }
 .preset-name input { min-width: 0; background: #fffaf0; border: 1px solid #b8c6bf; border-radius: 10px; color: #25433d; font: inherit; padding: 9px 10px; }
 .session-setup-fields .save-favorite { border: 0; margin-top: 18px; padding-top: 0; }
 .session-setup-fields .favorite-sessions { margin-top: 24px; }
+
+.support-trigger { align-items: center; background: #fffaf0; border: 1px solid #9eaea8; border-radius: 50%; bottom: 18px; color: #25433d; cursor: pointer; display: flex; font-size: 1.1rem; font-weight: 800; height: 38px; justify-content: center; left: 18px; line-height: 1; padding: 0; position: fixed; width: 38px; z-index: 55; }
+.support-trigger:hover { background: #edf3e9; border-color: #6e9588; }
+/* Full screen is for the class to watch, so the help button steps aside with the rest of the chrome. */
+.app-shell.full-screen ~ .support-trigger { display: none; }
+.support-modal { background: #fffaf0; border: 1px solid #e7ded0; border-radius: 28px; box-shadow: 0 25px 80px rgba(18, 42, 35, .35); max-width: 440px; padding: 38px; position: relative; width: 100%; }
+.support-modal > .modal-close { align-items: center; background: #f4eee3; border: 0; border-radius: 50%; color: #526a63; cursor: pointer; display: flex; font-size: 1.55rem; height: 38px; justify-content: center; line-height: 1; padding: 0 0 3px; width: 38px; }
+.support-modal > .modal-close:hover { background: #eadfd2; color: #25433d; }
+.support-copy { color: #60756e; line-height: 1.6; margin: 15px 0 0; }
+.support-copy a { color: #25433d; font-weight: 700; }

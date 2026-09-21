@@ -19,6 +19,7 @@ import ExportImportModal from "./components/ExportImport/ExportImportModal";
 import ClearDataModal from "./components/ClearData/ClearDataModal";
 import AccountModal from "./components/Account/AccountModal";
 import Footer from "./components/Footer/Footer";
+import SupportButton from "./components/Support/SupportButton";
 import AboutPage from "./pages/AboutPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import { useRoute } from "./hooks/useRoute";
@@ -683,9 +684,18 @@ const Classroom = () => {
 
 const App = () => {
   const route = useRoute();
-  if (route === "/about") return <AboutPage />;
-  if (route === "/privacy") return <PrivacyPage />;
-  return <Classroom />;
+  const page = route === "/about"
+    ? <AboutPage />
+    : route === "/privacy"
+      ? <PrivacyPage />
+      : <Classroom />;
+
+  return (
+    <>
+      {page}
+      <SupportButton />
+    </>
+  );
 };
 
 export default App;
