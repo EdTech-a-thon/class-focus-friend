@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240">
+  <g fill="none" stroke="#36554c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="58" y="18" width="124" height="210" rx="6" fill="#8d83bd"/>
+    <rect x="66" y="26" width="108" height="40" rx="5" fill="#a69dd2"/>
+    <rect x="64" y="72" width="112" height="34" rx="3" fill="#5d5590"/>
+    <path d="M74 100V84h20l4-6h14v22Z" fill="#fff5df"/>
+    <path d="M104 100V80h26l4-6h14v26Z" fill="#f0c56a"/>
+    <path d="M138 100V86h10l4-6h16v20Z" fill="#83a991"/>
+    <rect x="54" y="98" width="132" height="44" rx="6" fill="#a69dd2"/>
+    <rect x="66" y="150" width="108" height="34" rx="5" fill="#a69dd2"/>
+    <rect x="66" y="190" width="108" height="32" rx="5" fill="#a69dd2"/>
+    <g fill="#fff5df">
+      <rect x="105" y="31" width="30" height="11" rx="2"/>
+      <rect x="105" y="105" width="30" height="11" rx="2"/>
+      <rect x="105" y="154" width="30" height="10" rx="2"/>
+      <rect x="105" y="194" width="30" height="10" rx="2"/>
+    </g>
+    <path d="M102 54h36M102 129h36M102 174h36M102 213h36" stroke-width="7"/>
+  </g>
+</svg>

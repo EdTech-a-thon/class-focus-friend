@@ -29,7 +29,7 @@ const layouts = {
     'office-desk': [49, 14, 30, 2], 'desk-chair': [53, 26, 14, 1], 'bookcase': [5, 24, 18],
     'desk-lamp': [52, 45, 12, 3], 'office-plant': [87, 8, 10], 'wall-calendar': [36, 60, 8],
     'filing-cabinet': [82, 25, 13], 'work-rug': [28, 3, 48, 0], 'wall-art': [53, 67, 12],
-    'coffee-maker': [85, 45, 7, 3],
+    'coffee-maker': [85, 49.5, 7, 3],
   },
 };
 
