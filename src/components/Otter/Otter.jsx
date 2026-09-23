@@ -1,19 +1,22 @@
+import { useTranslation } from "../../i18n";
+
 const Otter = ({ equipped, isCelebrating, isFocusing, noiseTone, showAccessorySlots = false }) => {
+  const { t } = useTranslation();
   const isLoud = noiseTone === "loud";
   const state = isCelebrating ? "celebrating" : isLoud ? "loud" : isFocusing ? "focusing" : "idle";
-  const messages = {
-    celebrating: "We did it!",
-    focusing: "In the zone...",
-    idle: "Ready when you are!",
-    loud: "A little quieter, please!",
+  const stateLabels = {
+    celebrating: t("otter.stateCelebrating"),
+    focusing: t("otter.atDesk"),
+    idle: t("otter.stateIdle"),
+    loud: t("otter.stateLoud"),
   };
 
   return (
     <div className={`otter-scene state-${state}`}>
-      <p className="otter-message" aria-live="polite">{messages[state]}</p>
+      <p className="otter-message" aria-live="polite">{t(`otter.${state}`)}</p>
       <span className="sparkle one" aria-hidden="true">✦</span>
       <span className="sparkle two" aria-hidden="true">✦</span>
-      <div className="otter" role="img" aria-label={state === "focusing" ? "Otter is sitting at a desk and writing" : `Otter is ${state}`}>
+      <div className="otter" role="img" aria-label={stateLabels[state]}>
         <svg className="otter-svg" viewBox="0 0 220 220" aria-hidden="true">
           <g className="focus-chair">
             <path d="M48 126 Q42 126 42 135 L42 203" />

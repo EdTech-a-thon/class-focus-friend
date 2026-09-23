@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 110">
+  <g fill="none" stroke="#36554c" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 52H222V90Q222 104 206 104H34Q18 104 18 90z" fill="#df92a4"/>
+    <path d="M20 76Q120 82 220 76" stroke="#c9788c" stroke-width="5"/>
+    <path d="M26 97H214" stroke="#f0c56a" stroke-width="5"/>
+    <path d="M38 8H202Q214 8 217 20L222 50Q222 56 214 56H26Q18 56 18 50L23 20Q26 8 38 8z" fill="#f0c56a"/>
+    <g stroke="none">
+      <rect x="30" y="17" width="30" height="17" fill="#df92a4"/>
+      <rect x="60" y="17" width="30" height="17" fill="#fff5df"/>
+      <rect x="90" y="17" width="30" height="17" fill="#a3c9ae"/>
+      <rect x="120" y="17" width="30" height="17" fill="#df92a4"/>
+      <rect x="150" y="17" width="30" height="17" fill="#fff5df"/>
+      <rect x="180" y="17" width="30" height="17" fill="#a3c9ae"/>
+      <rect x="30" y="34" width="30" height="17" fill="#a3c9ae"/>
+      <rect x="60" y="34" width="30" height="17" fill="#df92a4"/>
+      <rect x="90" y="34" width="30" height="17" fill="#fff5df"/>
+      <rect x="120" y="34" width="30" height="17" fill="#a3c9ae"/>
+      <rect x="150" y="34" width="30" height="17" fill="#df92a4"/>
+      <rect x="180" y="34" width="30" height="17" fill="#fff5df"/>
+    </g>
+    <path d="M30 17h180v34H30z"/>
+    <path d="M60 17v34M90 17v34M120 17v34M150 17v34M180 17v34M30 34h180" stroke-width="1.5" opacity=".5"/>
+    <path d="M57 31l6 6m0-6-6 6M117 31l6 6m0-6-6 6M147 14l6 6m0-6-6 6" stroke-width="2.5"/>
+    <path d="M170 55Q196 60 222 53Q218 80 198 94Q188 74 170 55z" fill="#fff5df"/>
+    <path d="M175 60Q196 64 216 58" stroke="#f0c56a" stroke-width="4"/>
+  </g>
+</svg>
